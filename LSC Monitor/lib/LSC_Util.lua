@@ -27,7 +27,7 @@ function addGraphicalComponents(glasses)
     local textScale = 1
     local miniTextScale = 0.8
     local energyBarOffsetX = 5
-    local energyBarOffsetY = LSC_Util.height - 30*textScale - 5
+    local energyBarOffsetY = LSC_Util.height - 10*GUI_SCALE*miniTextScale - GUI_SCALE*0.5
     local energyBarWidth = 150
     local energyBarHeight = 15
     local triangleRatio = 0.9
