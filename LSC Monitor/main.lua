@@ -14,3 +14,5 @@ end
 
 graphicalComponents = util.addGraphicalComponents(glasses)
 
+util.updateEUStored(graphicalComponents)
+

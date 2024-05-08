@@ -1,8 +1,18 @@
 local component = require("component")
-
+local math = require("math")
 
 local LSC_Util = {}
 local GUI_SCALE = 3
+    
+local textScale = 1
+local miniTextScale = 0.8
+local energyBarOffsetX = 5
+local energyBarOffsetY = LSC_Util.height - 5*GUI_SCALE*miniTextScale - GUI_SCALE*0.5
+local energyBarWidth = 150
+local energyBarHeight = 15
+local triangleRatio = 0.9
+local borderThickness = 5 / 2
+
 LSC_Util.height = 1080 / GUI_SCALE
 LSC_Util.width = 1920 / GUI_SCALE
 function getLSC_List()
@@ -23,15 +33,6 @@ LSC_Util.getLSC_List = getLSC_List
 
 function addGraphicalComponents(glasses)
     local result = {}
-    
-    local textScale = 1
-    local miniTextScale = 0.8
-    local energyBarOffsetX = 5
-    local energyBarOffsetY = LSC_Util.height - 5*GUI_SCALE*miniTextScale - GUI_SCALE*0.5
-    local energyBarWidth = 150
-    local energyBarHeight = 15
-    local triangleRatio = 0.9
-    local borderThickness = 5 / 2
 
 
 
@@ -80,5 +81,26 @@ end
 
 LSC_Util.addGraphicalComponents = addGraphicalComponents
 
+
+function updateEUStored(graphicalComponents)
+    local currentEU = graphicalComponents.currentEU
+    local maxEU = graphicalComponents.maxEU
+    local LSC_List = getLSC_List()
+    local mainLSC = LSC_List[1]
+
+    local curEU_Val = mainLSC.getEUStored()
+    local curEU_Exponent = math.log(curEU_Val, 10) - math.log(curEU_Val, 10) % 3
+    local curEU_String = tostring(curEU_Val / math.pow(10,curEU_Exponent)) .. "e" .. tostring(curEU_Exponent)
+    
+    local maxEU_Val = mainLSC.getEUMaxStored()
+    local maxEU_Exponent = math.log(maxEU_Val, 10) - math.log(maxEU_Val, 10) % 3
+    local maxEU_String = tostring(maxEU_Val / math.pow(10,maxEU_Exponent)) .. "e" .. tostring(maxEU_Exponent)
+
+    local textOffset = currentEU.getText():len() * GUI_SCALE*2 * (miniTextScale+1)
+    currentEU.setText(curEU_String)
+    maxEU.setText(maxEU_String)
+    maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+5*GUI_SCALE/3)
+    
+end
 return LSC_Util
 
