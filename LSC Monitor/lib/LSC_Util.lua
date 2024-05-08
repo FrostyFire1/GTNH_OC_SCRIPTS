@@ -101,7 +101,7 @@ function updateEUStored(graphicalComponents)
 
     local textOffset = currentEU.getText():len() * 3 * (miniTextScale+1)
     maxEU.setText(maxEU_String)
-    maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+5*GUI_SCALE/3)
+    maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+4*GUI_SCALE/3)
 
     local barFillPct = maxEU_Val / curEU_Val
     local maxBottomWidth = energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness
