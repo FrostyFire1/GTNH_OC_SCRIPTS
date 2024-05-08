@@ -1,4 +1,5 @@
 local component = require("component")
+local util = require("util")
 local glasses = component.glasses
 local height = 345
 local width = 640
@@ -6,13 +7,7 @@ local width = 640
 glasses.removeAll()
 print(glasses.getBindPlayers())
 
-local LSC_List = {}
-for address,_ in component.list("gt_machine") do
-    local proxy = component.proxy(address)
-    if proxy.getName() == "multimachine.supercapacitor" then
-        table.insert(LSC_LIST, proxy)
-    end
-end
+local LSC_List = getLSC_List()
 print(LSC_List)
 
 local testWidget = glasses.addTextLabel()
