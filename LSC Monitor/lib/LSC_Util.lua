@@ -2,6 +2,9 @@ local component = require("component")
 local math = require("math")
 
 local LSC_Util = {}
+LSC_Util.height = 1080 / GUI_SCALE
+LSC_Util.width = 1920 / GUI_SCALE
+
 local GUI_SCALE = 3
     
 local textScale = 1
@@ -13,8 +16,7 @@ local energyBarHeight = 15
 local triangleRatio = 0.9
 local borderThickness = 5 / 2
 
-LSC_Util.height = 1080 / GUI_SCALE
-LSC_Util.width = 1920 / GUI_SCALE
+
 function getLSC_List()
     local LSC_LIST = {}
     for address,_ in component.list("gt_machine") do
