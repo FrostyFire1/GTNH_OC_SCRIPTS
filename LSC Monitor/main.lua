@@ -11,7 +11,7 @@ for a,b in pairs(LSC_List) do
     print(a,b)
 end
 
-local energyBarOffsetX = 0
+local energyBarOffsetX = 50
 local energyBarOffsetY = util.height * 0.95
 local energyBarWidth = 150
 local energyBarHeight = 20
@@ -22,7 +22,7 @@ local energyBarText = glasses.addTextLabel()
 energyBarText.setText("Energy Monitor by FrostyFire1")
 energyBarText.setScale(1.3)
 energyBarText.setColor(247, 67, 7)
-energyBarText.setPosition(0,energyBarOffsetY - 30)
+energyBarText.setPosition(enegryBarOffsetX ,energyBarOffsetY - 30)
 
 
 
