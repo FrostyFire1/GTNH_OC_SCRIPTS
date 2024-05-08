@@ -3,7 +3,7 @@ local component = require("component")
 
 local LSC_Util = {}
 
-LSC_Util.height = 350
+LSC_Util.height = 360
 LSC_Util.width = 650
 function getLSC_List()
     local LSC_LIST = {}

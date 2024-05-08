@@ -12,8 +12,8 @@ for a,b in pairs(LSC_List) do
     print(a,b)
 end
 
-local energyBarOffsetX = util.width * 0.03
-local energyBarOffsetY = util.height * 0.99
+local energyBarOffsetX = util.width + 5
+local energyBarOffsetY = util.height - 5
 local energyBarWidth = 150
 local energyBarHeight = 15
 local triangleRatio = 0.9
