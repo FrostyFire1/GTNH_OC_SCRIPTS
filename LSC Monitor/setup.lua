@@ -1,1 +1,1 @@
-os.execute("wget -f https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/LSC%20Monitor/main.lua main.lua")
+os.execute("wget -f https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/LSC%20Monitor/main.lua")
