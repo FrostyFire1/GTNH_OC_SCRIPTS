@@ -11,11 +11,11 @@ for a,b in pairs(LSC_List) do
     print(a,b)
 end
 
-local testWidget = glasses.addTextLabel()
-testWidget.setText("Energy Monitor by FrostyFire1")
-testWidget.setScale(1.3)
-testWidget.setColor()
-testWidget.setPosition(0,util.height * 0.85)
+local energyBarText = glasses.addTextLabel()
+energyBarText.setText("Energy Monitor by FrostyFire1")
+energyBarText.setScale(1.3)
+energyBarText.setColor(247, 67, 7)
+energyBarText.setPosition(0,util.height * 0.85)
 
 local energyBarOffsetX = 0
 local energyBarOffsetY = util.height * 0.95
