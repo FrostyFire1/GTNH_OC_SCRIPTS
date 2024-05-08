@@ -1,8 +1,10 @@
 local component = require("component")
 
 
-local util = {}
+local LSC_Util = {}
 
+LSC_Util.height = 345
+LSC_Util.width = 640
 function getLSC_List()
     local LSC_LIST = {}
     for address,_ in component.list("gt_machine") do
@@ -13,3 +15,7 @@ function getLSC_List()
     end
     return LSC_LIST
 end
+
+LSC_Util.getLSC_List = getLSC_List
+
+return LSC_Util

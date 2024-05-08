@@ -1,8 +1,7 @@
 local component = require("component")
-local util = require("LSC_util")
+local util = require("LSC_Util")
 local glasses = component.glasses
-local height = 345
-local width = 640
+
 
 glasses.removeAll()
 print(glasses.getBindPlayers())
@@ -13,4 +12,5 @@ print(LSC_List)
 local testWidget = glasses.addTextLabel()
 testWidget.setText("This program is working properly")
 testWidget.setScale(1)
-testWidget.setPosition(0,345)
+testWidget.setColor(7,47,247)
+testWidget.setPosition(0,LSC_Util.height * 0.9)
