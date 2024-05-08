@@ -33,12 +33,6 @@ function addGraphicalComponents(glasses)
     local triangleRatio = 0.9
     local borderThickness = 5 / 2
 
-    local energyBarText = glasses.addTextLabel()
-    energyBarText.setText("Energy Monitor by FrostyFire1")
-    energyBarText.setScale(textScale)
-    energyBarText.setColor(247/255, 67/255, 7/255)
-    energyBarText.setPosition(energyBarOffsetX ,energyBarOffsetY - textScale * 30)
-
 
 
     local energyBarBorder = glasses.addQuad()
