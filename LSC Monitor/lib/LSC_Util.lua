@@ -24,14 +24,14 @@ LSC_Util.getLSC_List = getLSC_List
 function addGraphicalComponents(glasses)
     local result = {}
     
+    local textScale = 1
+    local miniTextScale = 0.8
     local energyBarOffsetX = 5
     local energyBarOffsetY = LSC_Util.height - 30*textScale - 5
     local energyBarWidth = 150
     local energyBarHeight = 15
     local triangleRatio = 0.9
     local borderThickness = 5 / 2
-    local textScale = 1
-    local miniTextScale = 0.8
 
     local energyBarText = glasses.addTextLabel()
     energyBarText.setText("Energy Monitor by FrostyFire1")
@@ -63,17 +63,17 @@ function addGraphicalComponents(glasses)
     energyBar.setColor(0/255 , 0/255, 0/255)
 
     local currentEU = glasses.addTextLabel()
-    currentEu.setText("Test")
-    currentEu.setScale(textScale)
-    currentEu.setColor(247/255, 67/255, 7/255)
-    currentEu.setPosition(energyBarOffsetX ,energyBarOffsetY - miniTextScale * 30)
+    currentEU.setText("Test")
+    currentEU.setScale(textScale)
+    currentEU.setColor(247/255, 67/255, 7/255)
+    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY - miniTextScale * 30)
 
     local maxEU = glasses.addTextLabel()
-    energyBarText.setText("Test 2")
-    energyBarText.setScale(textScale)
-    energyBarText.setColor(247/255, 67/255, 7/255)
+    maxEU.setText("Test 2")
+    maxEU.setScale(textScale)
+    maxEU.setColor(247/255, 67/255, 7/255)
     local textOffset = currentEU.getText():len() * 5 * (textScale+1)
-    energyBarText.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY - miniTextScale * 30)
+    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY - miniTextScale * 30)
 
     result.energyBarText = energyBarText
     result.energyBar = energyBar
