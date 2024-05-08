@@ -72,7 +72,7 @@ function addGraphicalComponents(glasses)
     maxEU.setText("Test 2")
     maxEU.setScale(textScale)
     maxEU.setColor(247/255, 67/255, 7/255)
-    local textOffset = currentEU.getText():len() * 5 * (textScale+1)
+    local textOffset = currentEU.getText():len() * 5 * (miniTextScale+1)
     maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY + miniTextScale * 10 * GUI_SCALE)
 
     result.energyBarText = energyBarText
