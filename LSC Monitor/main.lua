@@ -6,11 +6,11 @@ local glasses = component.glasses
 glasses.removeAll()
 print(glasses.getBindPlayers())
 
-local LSC_List = getLSC_List()
+local LSC_List = util.getLSC_List()
 print(LSC_List)
 
 local testWidget = glasses.addTextLabel()
 testWidget.setText("This program is working properly")
 testWidget.setScale(1)
-testWidget.setColor(7,47,247)
-testWidget.setPosition(0,LSC_Util.height * 0.9)
+testWidget.setColor()
+testWidget.setPosition(0,util.height * 0.9)
