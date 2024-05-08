@@ -62,14 +62,14 @@ function addGraphicalComponents(glasses)
     currentEU.setText("Test")
     currentEU.setScale(textScale)
     currentEU.setColor(247/255, 67/255, 7/255)
-    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY+5*GUI_SCALE/3)
+    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY+4*GUI_SCALE/3)
 
     local maxEU = glasses.addTextLabel()
     maxEU.setText("Test 2")
     maxEU.setScale(textScale)
     maxEU.setColor(247/255, 67/255, 7/255)
     local textOffset = currentEU.getText():len() * GUI_SCALE*2 * (miniTextScale+1)
-    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY+5*GUI_SCALE/3)
+    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY+4*GUI_SCALE/3)
 
     result.energyBarText = energyBarText
     result.energyBar = energyBar
@@ -99,7 +99,7 @@ function updateEUStored(graphicalComponents)
 
     currentEU.setText(curEU_String .. "/")
 
-    local textOffset = currentEU.getText():len() * GUI_SCALE * (miniTextScale+1)
+    local textOffset = currentEU.getText():len() * 3 * (miniTextScale+1)
     maxEU.setText(maxEU_String)
     maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+5*GUI_SCALE/3)
 
