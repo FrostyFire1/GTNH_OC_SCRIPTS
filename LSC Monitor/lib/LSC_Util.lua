@@ -51,7 +51,7 @@ function addGraphicalComponents(glasses)
     local energyBarEmpty = glasses.addQuad()
     energyBarEmpty.setVertex(1, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
     energyBarEmpty.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness, energyBarOffsetY - borderThickness)
-    energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2), energyBarOffsetY - energyBarHeight + borderThickness)
+    energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2)*2, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBarEmpty.setColor(0/255 , 0/255, 0/255)
     -- 9, 41, 247
@@ -66,14 +66,14 @@ function addGraphicalComponents(glasses)
     currentEU.setText("Test")
     currentEU.setScale(textScale)
     currentEU.setColor(247/255, 67/255, 7/255)
-    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY + miniTextScale * 10 * GUI_SCALE)
+    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY+5*GUI_SCALE)
 
     local maxEU = glasses.addTextLabel()
     maxEU.setText("Test 2")
     maxEU.setScale(textScale)
     maxEU.setColor(247/255, 67/255, 7/255)
-    local textOffset = currentEU.getText():len() * 5 * (miniTextScale+1)
-    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY + miniTextScale * 10 * GUI_SCALE)
+    local textOffset = currentEU.getText():len() * GUI_SCALE*2 * (miniTextScale+1)
+    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY+5*GUI_SCALE)
 
     result.energyBarText = energyBarText
     result.energyBar = energyBar
