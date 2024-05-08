@@ -1,5 +1,5 @@
 local component = require("component")
-local util = require("util")
+local util = require("LSC_util")
 local glasses = component.glasses
 local height = 345
 local width = 640
@@ -12,4 +12,5 @@ print(LSC_List)
 
 local testWidget = glasses.addTextLabel()
 testWidget.setText("This program is working properly")
+testWidget.setScale(1)
 testWidget.setPosition(0,345)
