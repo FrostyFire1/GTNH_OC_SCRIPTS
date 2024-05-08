@@ -18,12 +18,13 @@ local energyBarWidth = 150
 local energyBarHeight = 15
 local triangleRatio = 0.9
 local borderThickness = 5
+local textScale = 1
 
 local energyBarText = glasses.addTextLabel()
 energyBarText.setText("Energy Monitor by FrostyFire1")
-energyBarText.setScale(1.2)
+energyBarText.setScale(textScale)
 energyBarText.setColor(247/255, 67/255, 7/255)
-energyBarText.setPosition(energyBarOffsetX ,energyBarOffsetY - 40)
+energyBarText.setPosition(energyBarOffsetX ,energyBarOffsetY - textScale * 30)
 
 
 
