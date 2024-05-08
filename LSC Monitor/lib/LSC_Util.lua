@@ -2,9 +2,9 @@ local component = require("component")
 
 
 local LSC_Util = {}
-
-LSC_Util.height = 1080 / 3
-LSC_Util.width = 1920 / 3
+local GUI_SCALE = 3
+LSC_Util.height = 1080 / GUI_SCALE
+LSC_Util.width = 1920 / GUI_SCALE
 function getLSC_List()
     local LSC_LIST = {}
     for address,_ in component.list("gt_machine") do
@@ -31,6 +31,7 @@ function addGraphicalComponents(glasses)
     local triangleRatio = 0.9
     local borderThickness = 5 / 2
     local textScale = 1
+    local miniTextScale = 0.8
 
     local energyBarText = glasses.addTextLabel()
     energyBarText.setText("Energy Monitor by FrostyFire1")
@@ -62,8 +63,18 @@ function addGraphicalComponents(glasses)
     energyBar.setColor(0/255 , 0/255, 0/255)
 
     local currentEU = glasses.addTextLabel()
+    currentEu.setText("Test")
+    currentEu.setScale(textScale)
+    currentEu.setColor(247/255, 67/255, 7/255)
+    currentEu.setPosition(energyBarOffsetX ,energyBarOffsetY - miniTextScale * 30)
 
     local maxEU = glasses.addTextLabel()
+    energyBarText.setText("Test 2")
+    energyBarText.setScale(textScale)
+    energyBarText.setColor(247/255, 67/255, 7/255)
+    local textOffset = currentEU.getText():len() * 5 * (textScale+1)
+    energyBarText.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY - miniTextScale * 30)
+
     result.energyBarText = energyBarText
     result.energyBar = energyBar
     result.energyBarBorder = energyBarBorder
