@@ -97,7 +97,7 @@ function updateEUStored(graphicalComponents)
     local maxEU_Exponent = math.log(maxEU_Val, 10) - math.log(maxEU_Val, 10) % 3
     local maxEU_String = string.format("%.2f",maxEU_Val / math.pow(10,maxEU_Exponent)) .. "e" .. string.format("%.f", maxEU_Exponent)
 
-    currentEU.setText(curEU_String .. " /")
+    currentEU.setText(curEU_String .. "/")
 
     local textOffset = currentEU.getText():len() * GUI_SCALE * (miniTextScale+1)
     maxEU.setText(maxEU_String)
