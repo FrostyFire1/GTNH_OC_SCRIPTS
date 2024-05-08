@@ -7,7 +7,9 @@ glasses.removeAll()
 print(glasses.getBindPlayers())
 
 local LSC_List = util.getLSC_List()
-print(LSC_List)
+for a,b in pairs(LSC_List) do
+    print(a,b)
+end
 
 local testWidget = glasses.addTextLabel()
 testWidget.setText("This program is working properly")
