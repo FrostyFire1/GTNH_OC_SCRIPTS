@@ -3,8 +3,8 @@ local component = require("component")
 
 local LSC_Util = {}
 
-LSC_Util.height = 345
-LSC_Util.width = 640
+LSC_Util.height = 350
+LSC_Util.width = 650
 function getLSC_List()
     local LSC_LIST = {}
     for address,_ in component.list("gt_machine") do
