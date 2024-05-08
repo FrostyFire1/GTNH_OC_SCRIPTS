@@ -49,13 +49,13 @@ function addGraphicalComponents(glasses)
     energyBarEmpty.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness, energyBarOffsetY - borderThickness)
     energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2)*2, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
-    energyBarEmpty.setColor(0/255 , 0/255, 0/255)
+    energyBarEmpty.setColor(9/255 , 41/255, 247/255)
     -- 9, 41, 247
     local energyBar = glasses.addQuad()
-    energyBar.setVertex(1, energyBarOffsetX, energyBarOffsetY)
-    energyBar.setVertex(2, energyBarOffsetX, energyBarOffsetY)
-    energyBar.setVertex(3, energyBarOffsetX, energyBarOffsetY)
-    energyBar.setVertex(4, energyBarOffsetX, energyBarOffsetY)
+    energyBar.setVertex(1, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
+    energyBar.setVertex(2, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
+    energyBar.setVertex(3, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
+    energyBar.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBar.setColor(0/255 , 0/255, 0/255)
 
     local currentEU = glasses.addTextLabel()
@@ -102,6 +102,14 @@ function updateEUStored(graphicalComponents)
     local textOffset = currentEU.getText():len() * GUI_SCALE * (miniTextScale+1)
     maxEU.setText(maxEU_String)
     maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+5*GUI_SCALE/3)
+
+    local barFillPct = maxEU_Val / curEU_Val
+    local maxBottomWidth = energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness
+    local maxTopWidth = energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2)*2
+
+    local energyBar = graphicalComponents.energyBar
+    energyBar.setVertex(2, math.min(maxBottomWidth, maxTopWidth*barFillPct), energyBarOffsetY - borderThickness)
+    energyBar.setVertex(3, maxTopWidth*barFillPct, energyBarOffsetY - borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
     
 end
 LSC_Util.updateEUStored = updateEUStored
