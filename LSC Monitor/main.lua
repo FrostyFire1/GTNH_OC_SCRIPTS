@@ -12,7 +12,22 @@ for a,b in pairs(LSC_List) do
 end
 
 local testWidget = glasses.addTextLabel()
-testWidget.setText("This program is working properly")
-testWidget.setScale(1)
+testWidget.setText("Energy Monitor by FrostyFire1")
+testWidget.setScale(1.3)
 testWidget.setColor()
-testWidget.setPosition(0,util.height * 0.9)
+testWidget.setPosition(0,util.height * 0.85)
+
+local energyBarOffsetX = 0
+local energyBarOffsetY = util.height * 0.95
+local energyBarWidth = 150
+local energyBarHeight = 20
+local triangleRatio = 0.9
+
+local energyBarBorder = glasses.addQuad()
+local borderThickness = 5
+
+energyBarBorder.setVertex(1, energyBarOffsetX, energyBarOffsetY)
+energyBarBorder.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio, energyBarOffsetY)
+energyBarBorder.setVertex(3, energyBarOffsetX, energyBarOffsetY - energyBarHeight)
+energyBarBorder.setVertex(4, energyBarOffsetX + energyBarWidth, energyBarOffsetY)
+energyBarBorder.setColor(87 , 7, 247)
