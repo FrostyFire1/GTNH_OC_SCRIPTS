@@ -9,7 +9,7 @@ print(glasses.getBindPlayers())
 local LSC_List = {}
 for address,_ in component.list("gt_machine") do
     local proxy = component.proxy(address)
-    if address.getName() == "multimachine.supercapacitor" then
+    if proxy.getName() == "multimachine.supercapacitor" then
         table.insert(LSC_LIST, proxy)
     end
 end
