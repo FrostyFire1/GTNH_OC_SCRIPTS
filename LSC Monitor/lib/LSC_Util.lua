@@ -49,14 +49,14 @@ function addGraphicalComponents(glasses)
     energyBarEmpty.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness, energyBarOffsetY - borderThickness)
     energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2)*2, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
-    energyBarEmpty.setColor(9/255 , 41/255, 247/255)
+    energyBarEmpty.setColor(0/255 , 0/255, 0/255)
     -- 9, 41, 247
     local energyBar = glasses.addQuad()
     energyBar.setVertex(1, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
     energyBar.setVertex(2, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
     energyBar.setVertex(3, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBar.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
-    energyBar.setColor(0/255 , 0/255, 0/255)
+    energyBar.setColor(9/255 , 41/255, 247/255)
 
     local currentEU = glasses.addTextLabel()
     currentEU.setText("Test")
@@ -109,7 +109,7 @@ function updateEUStored(graphicalComponents)
 
     local energyBar = graphicalComponents.energyBar
     energyBar.setVertex(2, math.min(maxBottomWidth, maxTopWidth*barFillPct), energyBarOffsetY - borderThickness)
-    energyBar.setVertex(3, maxTopWidth*barFillPct, energyBarOffsetY - borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
+    energyBar.setVertex(3, maxTopWidth*barFillPct, energyBarOffsetY - energyBarHeight + borderThickness)
     
 end
 LSC_Util.updateEUStored = updateEUStored
