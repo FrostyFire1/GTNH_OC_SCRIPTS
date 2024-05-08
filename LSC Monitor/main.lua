@@ -6,8 +6,6 @@ local width = 640
 
 glasses.removeAll()
 
-for a,b in pairs(glasses.getBindPlayers()) do
-    print(a,b)
-end
+print(glasses.getBindPlayers())
 testWidget.setText("This program is working properly")
 testWidget.setPosition(0,345)
