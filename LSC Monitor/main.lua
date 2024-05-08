@@ -11,7 +11,7 @@ for a,b in pairs(LSC_List) do
     print(a,b)
 end
 
-local energyBarOffsetX = 50
+local energyBarOffsetX = util.width * 0.1
 local energyBarOffsetY = util.height * 0.95
 local energyBarWidth = 150
 local energyBarHeight = 20
