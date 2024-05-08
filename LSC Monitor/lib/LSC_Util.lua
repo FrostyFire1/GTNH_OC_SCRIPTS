@@ -23,13 +23,13 @@ LSC_Util.getLSC_List = getLSC_List
 
 function addGraphicalComponents(glasses)
     local energyBarOffsetX = 5
-    local energyBarOffsetY = util.height - 5
+    local energyBarOffsetY = LSC_Util.height - 5
     local energyBarWidth = 150
     local energyBarHeight = 15
     local triangleRatio = 0.9
     local borderThickness = 5
     local textScale = 1
-    
+
     local energyBarText = glasses.addTextLabel()
     energyBarText.setText("Energy Monitor by FrostyFire1")
     energyBarText.setScale(textScale)
@@ -52,6 +52,12 @@ function addGraphicalComponents(glasses)
     energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness / 2, energyBarOffsetY - energyBarHeight + borderThickness / 2)
     energyBarEmpty.setColor(0/255 , 0/255, 0/255)
     -- 9, 41, 247
+    local energyBar = glasses.addQuad()
+    energyBar.setVertex(1, energyBarOffsetX, energyBarOffsetY)
+    energyBar.setVertex(2, energyBarOffsetX, energyBarOffsetY)
+    energyBar.setVertex(3, energyBarOffsetX, energyBarOffsetY)
+    energyBar.setVertex(4, energyBarOffsetX, energyBarOffsetY)
+    energyBar.setColor(0/255 , 0/255, 0/255)
 end
 
 LSC_Util.addGraphicalComponents = addGraphicalComponents
