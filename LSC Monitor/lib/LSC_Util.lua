@@ -3,8 +3,8 @@ local component = require("component")
 
 local LSC_Util = {}
 
-LSC_Util.height = 360
-LSC_Util.width = 650
+LSC_Util.height = 1080 / 3
+LSC_Util.width = 1920 / 3
 function getLSC_List()
     local LSC_LIST = {}
     for address,_ in component.list("gt_machine") do
@@ -22,12 +22,14 @@ LSC_Util.getLSC_List = getLSC_List
 
 
 function addGraphicalComponents(glasses)
+    local result = {}
+    
     local energyBarOffsetX = 5
-    local energyBarOffsetY = LSC_Util.height - 5
+    local energyBarOffsetY = LSC_Util.height - 30*textScale - 5
     local energyBarWidth = 150
     local energyBarHeight = 15
     local triangleRatio = 0.9
-    local borderThickness = 5
+    local borderThickness = 5 / 2
     local textScale = 1
 
     local energyBarText = glasses.addTextLabel()
@@ -46,10 +48,10 @@ function addGraphicalComponents(glasses)
     energyBarBorder.setColor(247/255 , 9/255, 41/255)
 
     local energyBarEmpty = glasses.addQuad()
-    energyBarEmpty.setVertex(1, energyBarOffsetX + borderThickness / 2, energyBarOffsetY - borderThickness / 2)
-    energyBarEmpty.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness / 2, energyBarOffsetY - borderThickness / 2)
-    energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2), energyBarOffsetY - energyBarHeight + borderThickness / 2)
-    energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness / 2, energyBarOffsetY - energyBarHeight + borderThickness / 2)
+    energyBarEmpty.setVertex(1, energyBarOffsetX + borderThickness, energyBarOffsetY - borderThickness)
+    energyBarEmpty.setVertex(2, energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness, energyBarOffsetY - borderThickness)
+    energyBarEmpty.setVertex(3, energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2), energyBarOffsetY - energyBarHeight + borderThickness)
+    energyBarEmpty.setVertex(4, energyBarOffsetX + borderThickness, energyBarOffsetY - energyBarHeight + borderThickness)
     energyBarEmpty.setColor(0/255 , 0/255, 0/255)
     -- 9, 41, 247
     local energyBar = glasses.addQuad()
@@ -58,6 +60,17 @@ function addGraphicalComponents(glasses)
     energyBar.setVertex(3, energyBarOffsetX, energyBarOffsetY)
     energyBar.setVertex(4, energyBarOffsetX, energyBarOffsetY)
     energyBar.setColor(0/255 , 0/255, 0/255)
+
+    local currentEU = glasses.addTextLabel()
+
+    local maxEU = glasses.addTextLabel()
+    result.energyBarText = energyBarText
+    result.energyBar = energyBar
+    result.energyBarBorder = energyBarBorder
+    result.energyBarEmpty = energyBarEmpty
+    result.currentEU = currentEU
+    result.maxEU = maxEU
+    return result
 end
 
 LSC_Util.addGraphicalComponents = addGraphicalComponents

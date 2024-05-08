@@ -12,5 +12,5 @@ for a,b in pairs(LSC_List) do
     print(a,b)
 end
 
-util.addGraphicalComponents(glasses)
+graphicalComponents = util.addGraphicalComponents(glasses)
 
