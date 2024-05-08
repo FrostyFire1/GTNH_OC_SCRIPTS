@@ -2,11 +2,10 @@ local component = require("component")
 local math = require("math")
 
 local LSC_Util = {}
+local GUI_SCALE = 3
 LSC_Util.height = 1080 / GUI_SCALE
 LSC_Util.width = 1920 / GUI_SCALE
 
-local GUI_SCALE = 3
-    
 local textScale = 1
 local miniTextScale = 0.8
 local energyBarOffsetX = 5
@@ -92,15 +91,15 @@ function updateEUStored(graphicalComponents)
 
     local curEU_Val = mainLSC.getEUStored()
     local curEU_Exponent = math.log(curEU_Val, 10) - math.log(curEU_Val, 10) % 3
-    local curEU_String = string.format("%.2f",curEU_Val / math.pow(10,curEU_Exponent)) .. "e" .. tostring(curEU_Exponent)
+    local curEU_String = string.format("%.2f",curEU_Val / math.pow(10,curEU_Exponent)) .. "e" .. string.format("%.f", curEU_Exponent)
     
     local maxEU_Val = mainLSC.getEUMaxStored()
     local maxEU_Exponent = math.log(maxEU_Val, 10) - math.log(maxEU_Val, 10) % 3
-    local maxEU_String = string.format("%.2f",maxEU_Val / math.pow(10,maxEU_Exponent)) .. "e" .. tostring(maxEU_Exponent)
+    local maxEU_String = string.format("%.2f",maxEU_Val / math.pow(10,maxEU_Exponent)) .. "e" .. string.format("%.f", maxEU_Exponent)
 
-    currentEU.setText(curEU_String)
+    currentEU.setText(curEU_String .. " /")
 
-    local textOffset = currentEU.getText():len() * GUI_SCALE*2 * (miniTextScale+1)
+    local textOffset = currentEU.getText():len() * GUI_SCALE * (miniTextScale+1)
     maxEU.setText(maxEU_String)
     maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+5*GUI_SCALE/3)
     
