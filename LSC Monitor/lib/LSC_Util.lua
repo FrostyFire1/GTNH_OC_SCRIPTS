@@ -168,7 +168,7 @@ function updateReadings(readings, lastReading, graphicalComponents)
         fiveSecText = fiveSecText .. formatEngineering(difference) .. " / "
 
         if difference >= 0 then fiveSecText = fiveSecText .. "+" end
-        fiveSecText = fiveSecText .. formatEngineering((difference / (20*5))) .. " EU/T"
+        fiveSecText = fiveSecText .. formatEngineering((difference / (20*5))) .. " EU/t"
 
         readingFiveSec.setText(fiveSecText)
     end
