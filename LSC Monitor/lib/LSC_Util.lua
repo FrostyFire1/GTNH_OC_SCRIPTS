@@ -39,13 +39,15 @@ LSC_Util.getLSC_List = getLSC_List
 
 
 function formatEngineering(inputNum)
-    if inputNum < 1000 then return string.format("%.2f", inputNum) end
+    if math.abs(inputNum) < 1000 then return string.format("%.2f", inputNum) end
 
-    local exponent = math.log(inputNum, 10) - math.log(inputNum, 10) % 3
+    local exponent = math.log(math.abs(inputNum), 10) - math.log(math.abs(inputNum), 10) % 3
     local returnString = string.format("%.2f",inputNum / math.pow(10,exponent)) .. "e" .. string.format("%.f", exponent)
     return returnString
     
 end
+LSC_Util.formatEngineering = formatEngineering
+
 function addGraphicalComponents(glasses)
     local result = {}
 
