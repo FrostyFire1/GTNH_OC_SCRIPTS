@@ -161,8 +161,8 @@ function updateReadings(readings, lastReading, graphicalComponents)
     for _,_ in pairs(readings) do count = count + 1 end
     local readingFiveMinStart = math.max(0, count - (60/5)*5)
 
-    if count > 0 then
-        local difference = lastReading - readings[count]
+    if count > 1 then
+        local difference = lastReading - readings[count-1]
         local fiveSecText = "5s: "
         if difference >= 0 then fiveSecText = fiveSecText .. "+" end
         fiveSecText = fiveSecText .. formatEngineering(difference) .. " / "
