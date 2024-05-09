@@ -14,7 +14,14 @@ local energyBarWidth = 150
 local energyBarHeight = 15
 local triangleRatio = 0.9
 local borderThickness = 5 / 2
+local eBarTextOffsetY = energyBarOffsetY+GUI_SCALE/2
 
+local timeInfoOffsetX = LSC_Util.width * 0.664
+local timeInfoOffsetY = LSC_Util.height * 0.903
+local timeInfoGap = 3*GUI_SCALE*miniTextScale
+
+local posColor = {21/255,168/255,24/255}
+local negColor = {168/255,24/255,21/255}
 
 function getLSC_List()
     local LSC_LIST = {}
@@ -62,14 +69,32 @@ function addGraphicalComponents(glasses)
     currentEU.setText("Test")
     currentEU.setScale(textScale)
     currentEU.setColor(247/255, 67/255, 7/255)
-    currentEU.setPosition(energyBarOffsetX ,energyBarOffsetY+4*GUI_SCALE/3)
+    currentEU.setPosition(energyBarOffsetX ,eBarTextOffsetY)
 
     local maxEU = glasses.addTextLabel()
     maxEU.setText("Test 2")
     maxEU.setScale(textScale)
     maxEU.setColor(247/255, 67/255, 7/255)
     local textOffset = currentEU.getText():len() * GUI_SCALE*2 * (miniTextScale+1)
-    maxEU.setPosition(energyBarOffsetX + textOffset ,energyBarOffsetY+GUI_SCALE/2)
+    maxEU.setPosition(energyBarOffsetX + textOffset ,eBarTextOffsetY)
+
+    local readingFiveSec = glasses.addTextLabel()
+    readingFiveSec.setText("5s: +0 EU / +0 EU/t")
+    readingFiveSec.setScale(miniTextScale)
+    readingFiveSec.setColor(table.unpack(posColor))
+    readingFiveSec.setPosition(timeInfoOffsetX, timeInfoOffsetY)
+
+    local readingFiveMin = glasses.addTextLabel()
+    readingFiveMin.setText("5min: +0 EU / +0 EU/t")
+    readingFiveMin.setScale(miniTextScale)
+    readingFiveMin.setColor(table.unpack(posColor))
+    readingFiveMin.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap)
+
+    local readingOneHour = glasses.addTextLabel()
+    readingOneHour.setText("1h: +0 EU / +0 EU/t")
+    readingOneHour.setScale(miniTextScale)
+    readingOneHour.setColor(table.unpack(posColor))
+    readingOneHour.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap*2)
 
     result.energyBarText = energyBarText
     result.energyBar = energyBar
@@ -77,6 +102,9 @@ function addGraphicalComponents(glasses)
     result.energyBarEmpty = energyBarEmpty
     result.currentEU = currentEU
     result.maxEU = maxEU
+    result.readingFiveSec = readingFiveSec
+    result.readingFiveMin = readingFiveMin
+    result.readingOneHour = readingOneHour
     return result
 end
 
@@ -101,7 +129,7 @@ function updateEUStored(graphicalComponents)
 
     local textOffset = currentEU.getText():len() * 3 * (miniTextScale+1)
     maxEU.setText(maxEU_String)
-    maxEU.setPosition(energyBarOffsetX + textOffset, energyBarOffsetY+GUI_SCALE/2)
+    maxEU.setPosition(energyBarOffsetX + textOffset, eBarTextOffsetY)
 
     local barFillPct = maxEU_Val / curEU_Val
     local maxBottomWidth = energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness
