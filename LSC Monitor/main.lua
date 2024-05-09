@@ -14,5 +14,7 @@ end
 
 graphicalComponents = util.addGraphicalComponents(glasses)
 
-util.updateEUStored(graphicalComponents)
-
+while true do
+    util.updateEUStored(graphicalComponents)
+    os.sleep(5)
+end
