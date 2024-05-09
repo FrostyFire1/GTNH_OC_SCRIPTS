@@ -20,8 +20,8 @@ local timeInfoOffsetX = LSC_Util.width * 0.664
 local timeInfoOffsetY = LSC_Util.height * 0.903
 local timeInfoGap = 3*GUI_SCALE*miniTextScale
 
-local posColor = {21/255,168/255,24/255}
-local negColor = {168/255,24/255,21/255}
+local posColor = {21/255,102/255,28/255}
+local negColor = {102/255,28/255,21/255}
 
 function getLSC_List()
     local LSC_LIST = {}
