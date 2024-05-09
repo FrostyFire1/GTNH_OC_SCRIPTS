@@ -165,6 +165,9 @@ function updateReadings(readings, lastReading, graphicalComponents)
 
     if count > 1 then
         local difference = lastReading - readings[count-1]
+        if difference >= 0 then readingFiveSec.setColor(table.unpack(posColor))
+        else readingFiveSec.setColor(table.unpack(negColor)) end
+
         local fiveSecText = "5s: "
         if difference >= 0 then fiveSecText = fiveSecText .. "+" end
         fiveSecText = fiveSecText .. formatEngineering(difference) .. " / "
