@@ -38,7 +38,14 @@ LSC_Util.getLSC_List = getLSC_List
 
 
 
+function formatEngineering(inputNum)
+    if inputNum < 1000 then return string.format("%.2f", inputNum) end
 
+    local exponent = math.log(inputNum, 10) - math.log(inputNum, 10) % 3
+    local returnString = string.format("%.2f",inputNum / math.pow(10,exponent)) .. "e" .. string.format("%.f", exponent)
+    return returnString
+    
+end
 function addGraphicalComponents(glasses)
     local result = {}
 
@@ -88,13 +95,13 @@ function addGraphicalComponents(glasses)
     readingFiveMin.setText("5min: +0 EU / +0 EU/t")
     readingFiveMin.setScale(miniTextScale)
     readingFiveMin.setColor(table.unpack(posColor))
-    readingFiveMin.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap)
+    readingFiveMin.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap*2)
 
     local readingOneHour = glasses.addTextLabel()
     readingOneHour.setText("1h: +0 EU / +0 EU/t")
     readingOneHour.setScale(miniTextScale)
     readingOneHour.setColor(table.unpack(posColor))
-    readingOneHour.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap*2)
+    readingOneHour.setPosition(timeInfoOffsetX, timeInfoOffsetY + timeInfoGap*4)
 
     result.energyBarText = energyBarText
     result.energyBar = energyBar
@@ -139,7 +146,38 @@ function updateEUStored(graphicalComponents)
     energyBar.setVertex(2, math.min(maxBottomWidth, maxTopWidth*barFillPct), energyBarOffsetY - borderThickness)
     energyBar.setVertex(3, maxTopWidth*barFillPct, energyBarOffsetY - energyBarHeight + borderThickness)
     
+    return curEU_Val
 end
 LSC_Util.updateEUStored = updateEUStored
+
+function updateReadings(readings, lastReading, graphicalComponents)
+    local readingFiveSec = graphicalComponents.readingFiveSec
+    local readingFiveMin = graphicalComponents.readingFiveMin
+    local readingOneHour = graphicalComponents.readingOneHour
+
+
+
+    local count = 0
+    for _,_ in pairs(readings) do count = count + 1 end
+    local readingFiveMinStart = math.max(0, count - (60/5)*5)
+
+    if count > 0 then
+        local difference = lastReading - readings[count]
+        local fiveSecText = "5s: "
+        if difference >= 0 then fiveSecText = fiveSecText .. "+" end
+        fiveSecText = fiveSecText .. formatEngineering(difference) .. " / "
+
+        if difference >= 0 then fiveSecText = fiveSecText .. "+" end
+        fiveSecText = fiveSecText .. formatEngineering((difference / (20*5))) --eu/t
+
+        readingFiveSec.setText(formatEngineering(difference));
+    end
+
+    for i = 1, count, 1 do
+        if i == count then end
+    end
+end
+
+LSC_Util.updateReadings = updateReadings
 return LSC_Util
 
