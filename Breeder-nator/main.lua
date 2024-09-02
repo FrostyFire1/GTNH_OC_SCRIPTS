@@ -37,3 +37,5 @@ elseif (storageSide == nil) then
     os.exit()
 end
 
+print(util.createBreedingChain("Clay", breeder, storageSide))
+
