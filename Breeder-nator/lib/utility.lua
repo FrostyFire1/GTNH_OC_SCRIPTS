@@ -2,7 +2,7 @@ local component = require("component")
 
 local utility = {}
 
-function utility.createBreedingChain(beeName, breeder, storageSide, transposer)
+function utility.createBreedingChain(beeName, breeder, storageSide)
     local startingParents = table.unpack(breeder.getBeeParents(beeName))
     if(next(startingparents) == nil) then
         return {}
@@ -11,7 +11,7 @@ function utility.createBreedingChain(beeName, breeder, storageSide, transposer)
     local queue = {startingParents}
     local current = {}
 
-    while next(queue) ~= nil then
+    while next(queue) ~= nil do
         for _,parentPair in pairs(queue) do
             local leftParents = table.unpack(breeder.getBeeParents(parentPair.allele1.name))
             local rightParents = table.unpack(breeder.getBeeParents(parentPair.allele2.name))
