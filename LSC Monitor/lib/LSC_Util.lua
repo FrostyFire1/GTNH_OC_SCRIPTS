@@ -140,7 +140,7 @@ function updateEUStored(graphicalComponents)
     maxEU.setText(maxEU_String)
     maxEU.setPosition(energyBarOffsetX + textOffset, eBarTextOffsetY)
 
-    local barFillPct = maxEU_Val / curEU_Val
+    local barFillPct = curEU_Val / maxEU_Val
     local maxBottomWidth = energyBarOffsetX + energyBarWidth*triangleRatio - borderThickness
     local maxTopWidth = energyBarOffsetX + energyBarWidth - math.sqrt(borderThickness*borderThickness*2)*2
 
