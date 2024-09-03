@@ -1,15 +1,15 @@
 local component = require("component")
-local config = require("lib.config")
+local config = require("config")
 local utility = {}
 
 function utility.createBreedingChain(beeName, breeder, storageSide)
-    local startingParents = table.unpack(breeder.getBeeParents(beeName))
+    local startingParents = utility.processBee(beeName, breeder)
     if(startingParents == nil) then
         print("Bee has no parents!")
         return {}
     end
-    local breedingChain = {startingParents}
-    local queue = {startingParents}
+    local breedingChain = {[beeName] = startingParents}
+    local queue = {[beeName] = startingParents}
     local current = {}
 
     while next(queue) ~= nil do
@@ -19,19 +19,23 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
             local rightParents = utility.processBee(parentPair.allele2.name, breeder)
 
             if leftParents ~= nil then
-                print(leftParents.allele1.name .. " " .. leftParents.allele2.name)
-                table.insert(current, leftParents)
+                print(parentPair.allele1.name .. ": " .. leftParents.allele1.name .. " + " .. leftParents.allele2.name)
+                current[parentPair.allele1.name] = leftParents
             end
             if rightParents ~= nil then
-                print(rightParents.allele1.name .. " " .. rightParents.allele2.name)
-                table.insert(current, rightParents)
+                print(parentPair.allele2.name .. ": " .. rightParents.allele1.name .. " + " .. rightParents.allele2.name)
+                current[parentPair.allele2.name] = rightParents
             end
-            os.sleep(0.5)
         end
         queue = {}
-        for _,newParents in pairs(current) do
-            table.insert(queue, newParents)
-            table.insert(breedingChain, newParents)
+        for child,newParents in pairs(current) do
+            --Skip the bee if it's already present in the breeding chain
+            if breedingChain[child] == nil and queue[child] == nil then
+            queue[child] = newParents
+            end
+            if breedingChain[child] == nil then
+            breedingChain[child] = newParents
+            end
         end
         current = {}
     end
