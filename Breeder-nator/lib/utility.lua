@@ -118,7 +118,7 @@ end
 
 --Converts the first princess found in storage to the given bee type
 --Assumes bee is scanned (Only scanned bees expose genes)
-function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
+function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide, scannerSide, outputSide)
     print("Converting princess to " .. beeName)
     local droneSlot = nil
     local stackSize = nil
@@ -173,7 +173,13 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
                 if item ~= nil then
                     local species,type = utility.getBee(item)
                     if type == "Drone" and item.size == targetGenes.active.fertility and species == beeName then
-                        princessConverted = true
+                        print("Scanning princess...")
+                        princessConverted = utility.checkPrincess(breederSide, scannerSide, outputSide) --This call will move the princess to outputSide
+                        if (not princessConverted) then
+                            print("Princess is not a perfect copy! Continuing.")
+                            transposer.transferItem(outputSide,breederSide, 1, 1, 1) --Move princess back to input
+                            transposer.transferItem(storageSide, breederSide, 1, droneSlot, 2) --Move drone from storage to breed slot
+                        end
                     end
                 end
             end
@@ -195,24 +201,26 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
         os.sleep(1)
     end
     print("Conversion complete!")
-    --Return breeding stack to storage
-    transposer.transferItem(breederSide, storageSide, 64, 2)
-    for i=1,9 do
+    for i=3,9 do --clean up the drones
         local item = transposer.getStackInSlot(breederSide, i)
         if item ~= nil then
-            local _,type = utility.getBee(item)
-            if type == "Princess" then
-                transposer.transferItem(breederSide, storageSide, item.size)
-            else
                 transposer.transferItem(breederSide, garbageSide, item.size)
-            end
         end
     end
+    transposer.transferItem(outputSide,storageSide, 1, 1)
     print(beeName .. " princess moved to storage.")
 end
 
 function utility.populateBee(beeName, storageSide, breederSide)
+    print("Populating " .. beeName .. " bee.")
     local princessSlot, droneSlot = utility.findPairString(beeName, beeName, storageSide)
+    if(princessSlot == nil or droneSlot == nil) then
+        print("Couldn't find princess or drone! Aborting.")
+        return
+    end
+    --Because the drones in storage are scanned you can only insert 1. the rest will be taken from output of the following cycles
+    transposer.transferItem(storageSide, breederSide, 1, princessSlot, 1)
+    transposer.transferItem(storageSide, breederSide, 1, droneSlot, 2)
 end
 
 function utility.findBeeWithType(targetName, targetType, storageSide)
@@ -325,6 +333,37 @@ function utility.getBee(bee)
     return table.unpack({species,type})
 end
 
+function utility.checkPrincess(breederSide, scannerSide, outputSide)
+    for i=3,9 do
+        local item = transposer.getStackInSlot(breederSide,i)
+        if item ~= nil then
+            local species,type = utility.getBee(item)
+            if type == "Princess" then
+                transposer.transferItem(breederSide,scannerSide, 1, i)
+                while transposer.getStackInSlot(outputSide, 1) == nil do
+                    os.sleep(1)
+                end
+                local princess = transposer.getStackInSlot(outputSide, 1)
+                return utility.areGenesEqual(princess.individual)
+            end
+        end
+    end
+    return false
+end
 
+function utility.areGenesEqual(geneTable)
+    for gene,value in pairs(geneTable.active) do
+        if type(value) == "table" then
+            for name,tValue in pairs(value) do
+                if geneTable.inactive[gene][name] ~= tValue then
+                    return false
+                end
+            end
+        elseif value ~= geneTable.inactive[gene] then
+            return false
+        end
+    end
+    return true
+end
 return utility
 
