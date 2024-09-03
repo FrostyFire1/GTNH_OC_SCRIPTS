@@ -13,28 +13,32 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
     local current = {}
 
     while next(queue) ~= nil do
-        for _,parentPair in pairs(queue) do
-            print("Processing: " .. parentPair.allele1.name .. " and " .. parentPair.allele2.name)
-            local leftParents = utility.processBee(parentPair.allele1.name, breeder)
-            local rightParents = utility.processBee(parentPair.allele2.name, breeder)
+        for child,parentPair in pairs(queue) do
+            local leftName = parentPair.allele1.name
+            local rightName = parentPair.allele2.name
+            print("Processing parents of " .. child .. ": " .. leftName .. " and " .. rightName)
+
+            --Process parents only if they're not already in the breeding chain
+            local leftParents = utility.processBee(leftName, breeder, child)
+            local rightParents = utility.processBee(rightName, breeder, child)
 
             if leftParents ~= nil then
-                print(parentPair.allele1.name .. ": " .. leftParents.allele1.name .. " + " .. leftParents.allele2.name)
-                current[parentPair.allele1.name] = leftParents
+                print(leftName .. ": " .. leftParents.allele1.name .. " + " .. leftParents.allele2.name)
+                current[leftName] = leftParents
             end
             if rightParents ~= nil then
-                print(parentPair.allele2.name .. ": " .. rightParents.allele1.name .. " + " .. rightParents.allele2.name)
-                current[parentPair.allele2.name] = rightParents
+                print(rightName .. ": " .. rightParents.allele1.name .. " + " .. rightParents.allele2.name)
+                current[rightName] = rightParents
             end
         end
         queue = {}
-        for child,newParents in pairs(current) do
+        for child,parents in pairs(current) do
             --Skip the bee if it's already present in the breeding chain
             if breedingChain[child] == nil and queue[child] == nil then
-            queue[child] = newParents
+            queue[child] = parents
             end
             if breedingChain[child] == nil then
-            breedingChain[child] = newParents
+            breedingChain[child] = parents
             end
         end
         current = {}
@@ -42,7 +46,7 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
     return breedingChain
 end
 
-function utility.processBee(beeName, breeder)
+function utility.processBee(beeName, breeder, child)
     local parentPairs = breeder.getBeeParents(beeName)
     if #parentPairs == 0 then
         return nil
@@ -51,7 +55,7 @@ function utility.processBee(beeName, breeder)
     else
         local preference = config.preference[beeName]
         if preference == nil then
-            return utility.resolveConflict(parentPairs)
+            return utility.resolveConflict(beeName, parentPairs, child)
         end
         for _,pair in pairs(parentPairs) do
             if (pair.allele1.name == preference[1] and pair.allele2.name == preference[2]) then
@@ -62,8 +66,20 @@ function utility.processBee(beeName, breeder)
     return nil
 end
 
-function utility.resolveConflict(parentPairs)
-    print("CONFLICT RESOLUTION NOT YET IMPLEMENTED. CLOSING.")
-    os.exit()
+function utility.resolveConflict(beeName, parentPairs, child)
+    local choice = nil
+
+    print("Detected conflict! Please choose one of the following parents for the " .. beeName .. " bee (Breeds into " .. child .. "bee): ")
+    for i,pair in pairs(parentPairs) do
+        print(i .. ": " .. pair.allele1.name .. " + " .. pair.allele2.name)
+    end
+
+    while(choice == nil or choice < 1 or choice > #parentPairs) do
+    print("Please type the number of the correct pair")
+    choice = io.read("*n")
+    end
+
+    print("Selected: " .. parentPairs[choice].allele1.name .. " + " .. parentPairs[choice].allele2.name)
+    return parentPairs[choice]
 end
 return utility
