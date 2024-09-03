@@ -121,6 +121,7 @@ end
 function utility.convertPrincess(beeName, storageSide, breederSide)
     print("Converting princess to " .. beeName)
     local droneSlot = nil
+    local targetGenes = nil
     local princessSlot = nil
     local princessName = nil
     local size = transposer.getInventorySize(storageSide)
@@ -138,6 +139,7 @@ function utility.convertPrincess(beeName, storageSide, breederSide)
                 local species,type = getBee(bee)
                 if species == beeName and type == "Drone" and bee.size >= 16 and droneSlot == nil then
                     droneSlot = i
+                    targetGenes = bee.individual
                 elseif type == "Princess" and princessSlot = nil then
                     princessSlot = i
                     princessName = species
@@ -155,7 +157,17 @@ function utility.convertPrincess(beeName, storageSide, breederSide)
     while(not princessConverted) do
         --Cycle finished if slot 1 is empty
         if transposer.getStackInSlot(breederSide, 1) == nil then
+            for i=(3+offset),(9+offset) do
+                local bee = transposer.getStackInSlot(breederSide,i)
 
+                if bee ~= nil then
+                    local species,type = getBee(bee)
+                    if type == "Princess" then
+                        transposer.transferItem(breederSide, breederSide, 1, i, 1)
+                        
+                    end
+                end
+            end
         end
         os.sleep(1)
     end
@@ -167,8 +179,11 @@ function getBee(bee)
     for word in string.gmatch(bee.label,"%S+") do
         table.insert(words,word)
     end
-    local species = words[1]
-    local type = words[2]
+    local species = ""
+    for i=1,(#words-1) do
+        species = species .. words[i]
+    end
+    local type = words[#words]
     return table.unpack({species,type})
 end
 
