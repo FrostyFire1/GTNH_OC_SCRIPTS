@@ -1,4 +1,4 @@
-config = {}
+local config = {}
 config.preference = {
     "Common" = {"Forest","Meadows"},
     "Oily" = {"Ocean","Primeval"},
@@ -27,6 +27,8 @@ config.preference = {
     "Rusty" = {"Meadows","Resilient"},
     "Vengeful" = {"Demonic","Vindictive"},
     "Eldritch" = {"Mystical","Cultivated"},
-    
+
 
 }
+
+return config

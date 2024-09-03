@@ -1,5 +1,5 @@
 local component = require("component")
-
+local config = require("lib.config")
 local utility = {}
 
 function utility.createBreedingChain(beeName, breeder, storageSide)
@@ -15,8 +15,8 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
     while next(queue) ~= nil do
         for _,parentPair in pairs(queue) do
             print("Processing: " .. parentPair.allele1.name .. " and " .. parentPair.allele2.name)
-            local leftParents = table.unpack(breeder.getBeeParents(parentPair.allele1.name))
-            local rightParents = table.unpack(breeder.getBeeParents(parentPair.allele2.name))
+            local leftParents = utility.processBee(parentPair.allele1.name, breeder)
+            local rightParents = utility.processBee(parentPair.allele2.name, breeder)
 
             if leftParents ~= nil then
                 print(leftParents.allele1.name .. " " .. leftParents.allele2.name)
@@ -38,4 +38,28 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
     return breedingChain
 end
 
+function utility.processBee(beeName, breeder)
+    local parentPairs = breeder.getBeeParents(beeName)
+    if #parentPairs == 0 then
+        return nil
+    elseif #parentPairs == 1 then
+        return table.unpack(parentPairs)
+    else
+        local preference = config.preference[beeName]
+        if preference == nil then
+            return utility.resolveConflict(parentPairs)
+        end
+        for _,pair in pairs(parentPairs) do
+            if (pair.allele1.name == preference[1] and pair.allele2.name == preference[2]) then
+                return pair 
+            end
+        end
+    end
+    return nil
+end
+
+function utility.resolveConflict(parentPairs)
+    print("CONFLICT RESOLUTION NOT YET IMPLEMENTED. CLOSING.")
+    os.exit()
+end
 return utility
