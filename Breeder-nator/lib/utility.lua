@@ -97,7 +97,7 @@ function utility.listBeesInStorage(storageSide)
     for i=1,size do
         local bee = transposer.getStackInSlot(storageSide, i)
         if bee ~= nil then
-            local species,type = getBee(bee)
+            local species,type = utility.getBee(bee)
 
 
             if bees[species] == nil then
@@ -211,8 +211,8 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
     print(beeName .. " princess moved to storage.")
 end
 
-function utility.populateBee(beeName)
-
+function utility.populateBee(beeName, storageSide, breederSide)
+    local princessSlot, droneSlot = utility.findPairString(beeName, beeName, storageSide)
 end
 
 function utility.findBeeWithType(targetName, targetType, storageSide)
@@ -230,7 +230,7 @@ function utility.findBeeWithType(targetName, targetType, storageSide)
 end
 
 --Takes the table from getBeeParents() 
-function utility.findPair(pair)
+function utility.findPair(pair, storageSide)
     local size = transposer.getInventorySize(storageSide)
     local princess1 = nil
     local princess2 = nil
@@ -267,6 +267,45 @@ function utility.findPair(pair)
     end
     return table.unpack({-1,-1})
 end
+
+function utility.findPairString(bee1, bee2, storageSide)
+    local size = transposer.getInventorySize(storageSide)
+    local princess1 = nil
+    local princess2 = nil
+    local drone1 = nil
+    local drone2 = nil
+
+    for i=1,size do
+        local item = transposer.getStackInSlot(storageSide,i)
+        if item ~= nil then
+            local species, type = utility.getBee(item)
+            if type == "Drone" then
+                if species == bee1 then
+                    drone1 = i
+                end
+                if species == bee2 then
+                    drone2 = i
+                end
+            end
+            if type == "Princess" then
+                if species == bee1 then
+                    princess1 = i
+                end
+                if species == bee2 then
+                    princess2 = i
+                end
+            end
+        end
+    end
+    if princess1 and drone2 then
+        return table.unpack({princess1, drone2})
+    end
+    if princess2 and drone1 then
+        return table.unpack({princess2, drone1})
+    end
+    return table.unpack({-1,-1})
+end
+
 function utility.getBee(bee)
     local name = ""
     if bee.label ~= nil then
