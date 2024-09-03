@@ -4,6 +4,7 @@ local utility = {}
 local transposer = component.transposer
 
 function utility.createBreedingChain(beeName, breeder, storageSide)
+    local existingBees = utility.listBeesInStorage(storageSide)
     local startingParents = utility.processBee(beeName, breeder)
     if(startingParents == nil) then
         print("Bee has no parents!")
@@ -84,12 +85,12 @@ function utility.resolveConflict(beeName, parentPairs, child)
     return parentPairs[choice]
 end
 
-function utility.listBeesInChest(chestSide)
-    local size = transposer.getInventorySize(chestSide)
+function utility.listBeesInStorage(storageSide)
+    local size = transposer.getInventorySize(storageSide)
     local bees = {}
 
     for i=1,size do
-        bee = transposer.getStackInSlot(chestSide, i)
+        bee = transposer.getStackInSlot(storageSide, i)
         if bee ~= nil then
             local words = {}
             for word in string.gmatch(bee.label,"%S+") do
