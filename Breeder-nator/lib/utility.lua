@@ -158,8 +158,8 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
         return
     end
     --Insert bees into the apiary
-    --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
     print("Beginning conversion therapy using " .. beeName .. " drones and " .. princessName .. " princess")
+    --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
     --Move only 1 drone at a time to leave the apiary empty after the cycling is complete (you can't extract from input slots)
     transposer.transferItem(storageSide,breederSide, 1, droneSlot, 2) --Slot 2 for apiary is the drone slot
     transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
@@ -211,6 +211,62 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide)
     print(beeName .. " princess moved to storage.")
 end
 
+function utility.populateBee(beeName)
+
+end
+
+function utility.findBeeWithType(targetName, targetType, storageSide)
+    local size = transposer.getInventorySize(storageSide)
+    for i=1,size do
+        local item = transposer.getStackInSlot(storageSide,i)
+        if item ~= nil then
+            local species, type = utility.getBee(item)
+            if type == targetType and species == targetName then
+                return i
+            end
+        end
+    end
+    return -1
+end
+
+--Takes the table from getBeeParents() 
+function utility.findPair(pair)
+    local size = transposer.getInventorySize(storageSide)
+    local princess1 = nil
+    local princess2 = nil
+    local drone1 = nil
+    local drone2 = nil
+
+    for i=1,size do
+        local item = transposer.getStackInSlot(storageSide,i)
+        if item ~= nil then
+            local species, type = utility.getBee(item)
+            if type == "Drone" then
+                if species == pair.allele1.name then
+                    drone1 = i
+                end
+                if species == pair.allele2.name then
+                    drone2 = i
+                end
+            end
+            if type == "Princess" then
+                if species == pair.allele1.name then
+                    princess1 = i
+                end
+                if species == pair.allele2.name then
+                    princess2 = i
+                end
+            end
+        end
+    end
+    if princess1 and drone2 then
+        return table.unpack({princess1, drone2})
+    end
+    if princess2 and drone1 then
+        return table.unpack({princess2, drone1})
+    end
+    return table.unpack({-1,-1})
+end
 function utility.getBee(bee)
     local name = ""
     if bee.label ~= nil then
