@@ -1,6 +1,7 @@
 local component = require("component")
 local config = require("config")
 local utility = {}
+local transposer = component.transposer
 
 function utility.createBreedingChain(beeName, breeder, storageSide)
     local startingParents = utility.processBee(beeName, breeder)
@@ -33,7 +34,7 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
         end
         queue = {}
         for child,parents in pairs(current) do
-            --Skip the bee if it's already present in the breeding chain
+            --Skip the bee if it's already present in the breeding chain or the queue
             if breedingChain[child] == nil and queue[child] == nil then
             queue[child] = parents
             end
@@ -81,5 +82,31 @@ function utility.resolveConflict(beeName, parentPairs, child)
 
     print("Selected: " .. parentPairs[choice].allele1.name .. " + " .. parentPairs[choice].allele2.name)
     return parentPairs[choice]
+end
+
+function utility.listBeesInChest(chestSide)
+    local size = transposer.getInventorySize(chestSide)
+    local bees = {}
+
+    for i=1,size do
+        bee = transposer.getStackInSlot(chestSide, i)
+        if bee ~= nil then
+            local words = {}
+            for word in string.gmatch(bee.label,"%S+") do
+                table.insert(words,word)
+            end
+            local species = words[1]
+            local type = words[2]
+
+            if bees[species] == nil then
+                bees[species] = {[type] = bee.size}
+            elseif bees[species][type] == nil then
+                bees[species][type] = bee.size
+            else
+                bees[species][type] = bees[species][type] + bee.size
+            end
+        end
+    end
+    return bees
 end
 return utility
