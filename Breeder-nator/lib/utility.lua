@@ -4,10 +4,16 @@ local utility = {}
 local transposer = component.transposer
 
 function utility.createBreedingChain(beeName, breeder, storageSide)
+    print("Checking storage for existing bees...")
     local existingBees = utility.listBeesInStorage(storageSide)
+    print("Done!")
     local startingParents = utility.processBee(beeName, breeder)
     if(startingParents == nil) then
         print("Bee has no parents!")
+        return {}
+    end
+    if(existingBees[beeName]) then
+        print("You already have the " .. beeName .. " bee!")
         return {}
     end
     local breedingChain = {[beeName] = startingParents}
@@ -35,11 +41,11 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
         end
         queue = {}
         for child,parents in pairs(current) do
-            --Skip the bee if it's already present in the breeding chain or the queue
-            if breedingChain[child] == nil and queue[child] == nil then
+            --Skip the bee if it's already present in the breeding chain, the queue or in storage
+            if breedingChain[child] == nil and queue[child] == nil and existingBees[child] == nil then
             queue[child] = parents
             end
-            if breedingChain[child] == nil then
+            if breedingChain[child] == nil and existingBees[child] == nil then
             breedingChain[child] = parents
             end
         end
@@ -71,7 +77,7 @@ end
 function utility.resolveConflict(beeName, parentPairs, child)
     local choice = nil
 
-    print("Detected conflict! Please choose one of the following parents for the " .. beeName .. " bee (Breeds into " .. child .. "bee): ")
+    print("Detected conflict! Please choose one of the following parents for the " .. beeName .. " bee (Breeds into " .. child .. " bee): ")
     for i,pair in pairs(parentPairs) do
         print(i .. ": " .. pair.allele1.name .. " + " .. pair.allele2.name)
     end
