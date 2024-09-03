@@ -140,7 +140,7 @@ function utility.convertPrincess(beeName, storageSide, breederSide)
                 if species == beeName and type == "Drone" and bee.size >= 16 and droneSlot == nil then
                     droneSlot = i
                     targetGenes = bee.individual
-                elseif type == "Princess" and princessSlot = nil then
+                elseif type == "Princess" and princessSlot == nil then
                     princessSlot = i
                     princessName = species
                 end
@@ -174,14 +174,14 @@ function utility.convertPrincess(beeName, storageSide, breederSide)
 
 end
 
-function getBee(bee)
+function utility.getBee(bee)
     local words = {}
     for word in string.gmatch(bee.label,"%S+") do
         table.insert(words,word)
     end
     local species = ""
     for i=1,(#words-1) do
-        species = species .. words[i]
+        species = species .. " " .. words[i]
     end
     local type = words[#words]
     return table.unpack({species,type})
