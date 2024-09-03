@@ -26,7 +26,6 @@ function utility.createBreedingChain(beeName, breeder, storageSide)
             local rightName = parentPair.allele2.name
             print("Processing parents of " .. child .. ": " .. leftName .. " and " .. rightName)
 
-            --Process parents only if they're not already in the breeding chain
             local leftParents = utility.processBee(leftName, breeder, child)
             local rightParents = utility.processBee(rightName, breeder, child)
 
@@ -96,14 +95,10 @@ function utility.listBeesInStorage(storageSide)
     local bees = {}
 
     for i=1,size do
-        bee = transposer.getStackInSlot(storageSide, i)
+        local bee = transposer.getStackInSlot(storageSide, i)
         if bee ~= nil then
-            local words = {}
-            for word in string.gmatch(bee.label,"%S+") do
-                table.insert(words,word)
-            end
-            local species = words[1]
-            local type = words[2]
+            local species,type = getBee(bee)
+
 
             if bees[species] == nil then
                 bees[species] = {[type] = bee.size}
@@ -116,4 +111,67 @@ function utility.listBeesInStorage(storageSide)
     end
     return bees
 end
+
+function utility.breed(beeName, parentPair, storageSide)
+
+end
+
+--Converts the first princess found in storage to the given bee type
+--Assumes bee is not scanned (so the new purebreds can stack together)
+function utility.convertPrincess(beeName, storageSide, breederSide)
+    print("Converting princess to " .. beeName)
+    local droneSlot = nil
+    local princessSlot = nil
+    local princessName = nil
+    local size = transposer.getInventorySize(storageSide)
+    --Alveary has 3 less slots (because no frames) so offset needs to be determined
+    local isApiary = transposer.getInventorySize(breederSide) == 12
+    local offset = 0
+    if isApiary then 
+        offset = 3
+    end
+
+    for i=1,size do
+        if droneSlot == nil and princessSlot == nil then
+            local bee = transposer.getStackInSlot(storageSide,i)
+            if bee ~= nil then
+                local species,type = getBee(bee)
+                if species == beeName and type == "Drone" and bee.size >= 16 and droneSlot == nil then
+                    droneSlot = i
+                elseif type == "Princess" and princessSlot = nil then
+                    princessSlot = i
+                    princessName = species
+                end
+            end
+        end
+    end
+    --Insert bees into the apiary
+    --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
+    print("Beginning conversion therapy using " .. beeName .. " drones and " .. princessName .. " princess")
+    transposer.transferItem(storageSide,breederSide, 16, droneSlot, 2) --Slot 2 for apiary is the drone slot
+    transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
+
+    local princessConverted = false
+    while(not princessConverted) do
+        --Cycle finished if slot 1 is empty
+        if transposer.getStackInSlot(breederSide, 1) == nil then
+
+        end
+        os.sleep(1)
+    end
+
+end
+
+function getBee(bee)
+    local words = {}
+    for word in string.gmatch(bee.label,"%S+") do
+        table.insert(words,word)
+    end
+    local species = words[1]
+    local type = words[2]
+    return table.unpack({species,type})
+end
+
+
 return utility
+
