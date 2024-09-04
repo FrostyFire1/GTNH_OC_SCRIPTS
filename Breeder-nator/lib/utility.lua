@@ -211,16 +211,65 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide,
     print(beeName .. " princess moved to storage.")
 end
 
-function utility.populateBee(beeName, storageSide, breederSide)
+function utility.populateBee(beeName, storageSide, breederSide, scannerSide, outputSide)
+    local droneOutput = nil
     print("Populating " .. beeName .. " bee.")
     local princessSlot, droneSlot = utility.findPairString(beeName, beeName, storageSide)
-    if(princessSlot == nil or droneSlot == nil) then
+    if(princessSlot == -1 or droneSlot == -1) then
         print("Couldn't find princess or drone! Aborting.")
         return
     end
+    print(beeName .. " bees found!")
     --Because the drones in storage are scanned you can only insert 1. the rest will be taken from output of the following cycles
     transposer.transferItem(storageSide, breederSide, 1, princessSlot, 1)
     transposer.transferItem(storageSide, breederSide, 1, droneSlot, 2)
+    local item = nil
+    while(item == nil or item.size < 32) do
+        while(transposer.getStackInSlot(breederSide,1) ~= nil) do --Wait until cycle is finished
+            os.sleep(1)
+        end
+        if droneOutput == nil then
+            for i=3,9 do
+                local candidate = transposer.getStackInSlot(breederSide,i)
+                if candidate ~= nil then
+                    local _,type = utility.getBee(candidate)
+                    if type == "Drone" then
+                        print("Drones located in slot: " .. i)
+                        droneOutput = i
+                    end
+                end
+            end
+        else
+            item = transposer.getStackInSlot(breederSide, droneOutput)
+            print("Populating progress: " .. item.size .. "/32")
+            if (item.size < 32) then
+                transposer.transferItem(breederSide,breederSide, 1, droneOutput, 2) --Move a single drone back to the breeding slot
+                for i=3,9 do
+                    local candidate = transposer.getStackInSlot(breederSide,i)
+                    if candidate ~= nil then
+                        local _,type = utility.getBee(candidate)
+                        if type == "Princess" then
+                            transposer.transferItem(breederSide,breederSide,1, i, 1) --Move princess back to breeding slot
+                        end
+                    end
+                end
+            end
+        end
+    end
+    print("Populating complete! Sending " .. beeName .. " bees to scanner.")
+    for i=3,9 do
+        transposer.transferItem(breederSide,scannerSide,64,i)
+    end
+    local remainingScans = 2 --1 drone stack + 1 princess stack
+    while remainingScans > 0 do
+        for i=1,2 do
+            if transposer.transferItem(outputSide,storageSide, 64, i) > 0 then
+                remainingScans = remainingScans - 1
+            end
+        end
+        os.sleep(1)
+    end
+    print("Scanned! " .. beeName .. " bees sent to storage.")
 end
 
 function utility.findBeeWithType(targetName, targetType, storageSide)
