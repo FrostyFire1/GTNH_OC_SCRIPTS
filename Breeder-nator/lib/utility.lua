@@ -112,10 +112,6 @@ function utility.listBeesInStorage(storageSide)
     return bees
 end
 
-function utility.breed(beeName, parentPair, storageSide)
-
-end
-
 --Converts the first princess found in storage to the given bee type
 --Assumes bee is scanned (Only scanned bees expose genes)
 function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide, scannerSide, outputSide)
@@ -204,7 +200,7 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide,
     for i=3,9 do --clean up the drones
         local item = transposer.getStackInSlot(breederSide, i)
         if item ~= nil then
-                transposer.transferItem(breederSide, garbageSide, item.size)
+            transposer.transferItem(breederSide, garbageSide, item.size)
         end
     end
     transposer.transferItem(outputSide,storageSide, 1, 1)
@@ -258,7 +254,15 @@ function utility.populateBee(beeName, storageSide, breederSide, scannerSide, out
     end
     print("Populating complete! Sending " .. beeName .. " bees to scanner.")
     for i=3,9 do
-        transposer.transferItem(breederSide,scannerSide,64,i)
+        local item = transposer.getStackInSlot(breederSide,i)
+        if item ~= nil then
+            local _,type = utility.getBee(item)
+            if type ~= "Princess" and type ~= "Drone" then
+                transposer.transferItem(breederSide,garbageSide,64,i)
+            else
+                transposer.transferItem(breederSide,scannerSide,64,i)
+            end
+        end
     end
     local remainingScans = 2 --1 drone stack + 1 princess stack
     while remainingScans > 0 do
@@ -271,6 +275,124 @@ function utility.populateBee(beeName, storageSide, breederSide, scannerSide, out
     end
     print("Scanned! " .. beeName .. " bees sent to storage.")
 end
+
+
+function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide, outputSide, garbageSide)
+    print("Breeding " .. beeName .. " bee.")
+    local princessSlot, droneSlot = utility.findPair(breedData, storageSide)
+    if princessSlot == -1 or droneSlot == -1 then
+        print("Couldn't find the parents of " .. beeName .. " bee! Aborting.")
+        return
+    end
+    local chance = breedData.chance
+    if(transposer.getInventorySize(breederSide) == 12) then --Apiary exclusive.
+        for i=10,12 do
+            local frame = transposer.getStackInSlot(breederSide,i)
+            if frame ~= nil and frame.name == "MagicBees:item.frenziedFrame"then
+                chance = math.min(100, chance*10)
+            end
+        end
+    end
+    if chance ~= breedData.chance then
+        print("Mutation altering frames detected!")
+    end
+    
+    print("Base chance: " .. breedData.chance .. "%")
+    print("Actual chance: " .. chance .. "%. MIGHT PRODUCE OTHER MUTATIONS!")
+    local requirements = table.unpack(breedData.specialConditions)
+    if requirements ~= nil then
+        print("This bee has the following special requirements: " .. requirements)
+        print("Press enter when you've made sure the conditions are met.")
+        io.read()
+    end
+
+    transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1)
+    transposer.transferItem(storageSide,breederSide, 1, droneSlot, 2)
+    local isPure = false
+    local isGeneticallyPerfect = false --In this case genetic perfection refers to the bee having the same active and inactive genes
+    local messageSent = false --About mutation frames
+    while(not isPure) do
+        while(transposer.getStackInSlot(breederSide,1) ~= nil) do
+            os.sleep(1)
+        end
+        print("Scanning bees...")
+        local scanCount = 0
+        for i=3,9 do
+            local item = transposer.getStackInSlot(breederSide,i)
+            if item ~= nil then
+                local _,type = utility.getBee(item)
+                if type ~= "Princess" and type ~= "Drone" then
+                    transposer.transferItem(breederSide, garbageSide, 64, i)
+                else
+                    transposer.transferItem(breederSide, scannerSide, 64, i)
+                    scanCount = scanCount + 1
+                end
+            end
+        end
+        while(transposer.getStackInSlot(outputSide, scanCount) == nil) do
+            os.sleep(1)
+        end
+
+        print("Assessing...")
+        local princess = nil
+        local princessPureness = 0
+        local princessSlot = nil
+        local bestDrone = nil
+        local bestDronePureness = -1
+        local bestDroneSlot = nil
+        for i=1,scanCount do
+            local item = transposer.getStackInSlot(outputSide, i) --Previous loop ensures the slots aren't empty
+            local _,type = utility.getBee(item)
+            if type == "Princess" then
+                princessSlot = i
+                princess = item
+                if item.individual.active.species.name == beeName then
+                    princessPureness = princessPureness + 1
+                end
+                if item.individual.inactive.species.name == beeName then
+                    princessPureness = princessPureness + 1
+                end
+            else
+                local dronePureness = 0
+                if item.individual.active.species.name == beeName then
+                    dronePureness = dronePureness + 1
+                end
+                if item.individual.inactive.species.name == beeName then
+                    dronePureness = dronePureness + 1
+                end
+                if dronePureness > bestDronePureness then
+                    bestDronePureness = dronePureness
+                    bestDroneSlot = i
+                    bestDrone = item
+                end
+            end
+        end
+        if (princessPureness + bestDronePureness) == 4 then
+            print("Target bee is pure!")
+            isPure = true
+        elseif (princessPureness + bestDronePureness) > 0 then
+            if (not messageSent) then
+                messageSent = true
+                print("Target species present!")
+                print("IT IS RECOMMENDED THAT YOU TAKE OUT ANY MUTATION ALTERING FRAMES TO REDUCE THE RISK OF UNWANTED MUTATIONS.")
+                os.sleep(5)
+            end
+            local princessSpecies = princess.individual.active.species.name .. "/" .. princess.individual.inactive.species.name
+            local droneSpecies = bestDrone.individual.active.species.name .. "/" .. bestDrone.individual.inactive.species.name
+            print("Breeding " .. princessSpecies .. " princess with " .. droneSpecies .. " drone.")
+            transposer.transferItem(outputSide, breederSide, 1, princessSlot, 1) --Send princess to breeding slot
+            transposer.transferItem(outputSide, breederSide, 1, bestDroneSlot, 2) --Send drone to breeding slot
+            for i=1,scanCount do --Move the other drones to the garbage container
+                transposer.transferItem(outputSide, garbageSide, 64, i)
+            end
+        else
+            print("TARGET SPECIES LOST! ABORTING.")
+            return
+        end
+    end
+end
+
+
 
 function utility.findBeeWithType(targetName, targetType, storageSide)
     local size = transposer.getInventorySize(storageSide)
