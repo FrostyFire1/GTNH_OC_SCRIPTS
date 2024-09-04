@@ -315,12 +315,12 @@ function utility.findPair(pair, storageSide)
                 end
             end
         end
-    end
-    if princess1 and drone2 then
-        return table.unpack({princess1, drone2})
-    end
-    if princess2 and drone1 then
-        return table.unpack({princess2, drone1})
+        if princess1 and drone2 then
+            return table.unpack({princess1, drone2})
+        end
+        if princess2 and drone1 then
+            return table.unpack({princess2, drone1})
+        end
     end
     return table.unpack({-1,-1})
 end
@@ -353,12 +353,12 @@ function utility.findPairString(bee1, bee2, storageSide)
                 end
             end
         end
-    end
-    if princess1 and drone2 then
-        return table.unpack({princess1, drone2})
-    end
-    if princess2 and drone1 then
-        return table.unpack({princess2, drone1})
+        if princess1 and drone2 then
+            return table.unpack({princess1, drone2})
+        end
+        if princess2 and drone1 then
+            return table.unpack({princess2, drone1})
+        end
     end
     return table.unpack({-1,-1})
 end
