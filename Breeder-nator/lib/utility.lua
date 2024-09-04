@@ -112,29 +112,32 @@ function utility.listBeesInStorage(storageSide)
     return bees
 end
 
---Converts the first princess found in storage to the given bee type
+--Converts a princess to the given bee type
 --Assumes bee is scanned (Only scanned bees expose genes)
 function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide, scannerSide, outputSide)
     print("Converting princess to " .. beeName)
     local droneSlot = nil
-    local stackSize = nil
     local targetGenes = nil
+    local princess = transposer.getStackInSlot(breederSide, 1)
     local princessSlot = nil
     local princessName = nil
-
+    if princess ~= nil then
+        local species,_ = utility.getBee(princess)
+        princessName = species
+    end
     local size = transposer.getInventorySize(storageSide)
     --Since frame slots are slots 10,11,12 for the apiary there is no need to make any offsets
 
     for i=1,size do
-        if droneSlot == nil or princessSlot == nil then
+        if droneSlot == nil or princess == nil then
             local bee = transposer.getStackInSlot(storageSide,i)
             if bee ~= nil then
                 local species,type = utility.getBee(bee)
                 if species == beeName and type == "Drone" and bee.size >= 16 and droneSlot == nil then
                     droneSlot = i
-                    stackSize = bee.size
                     targetGenes = bee.individual
-                elseif type == "Princess" and princessSlot == nil then
+                elseif type == "Princess" and princess == nil then
+                    princess = bee
                     princessSlot = i
                     princessName = species
                 end
@@ -149,7 +152,7 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide,
         print("Drone not scanned! Aborting.")
         return
     end
-    if princessSlot == nil then
+    if princess == nil then
         print("Can't find princess! Aborting.")
         return
     end
@@ -158,7 +161,9 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide,
     --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
     --Move only 1 drone at a time to leave the apiary empty after the cycling is complete (you can't extract from input slots)
     transposer.transferItem(storageSide,breederSide, 1, droneSlot, 2) --Slot 2 for apiary is the drone slot
-    transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
+    if princessSlot ~= nil then
+        transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
+    end
 
     local princessConverted = false
     while(not princessConverted) do
@@ -277,14 +282,17 @@ function utility.populateBee(beeName, storageSide, breederSide, scannerSide, out
 end
 
 
-function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide, outputSide, garbageSide)
+function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide, scannerSide, outputSide)
     print("Breeding " .. beeName .. " bee.")
-    local princessSlot, droneSlot = utility.findPair(breedData, storageSide)
-    if princessSlot == -1 or droneSlot == -1 then
+    local basePrincessSlot, baseDroneSlot = utility.findPair(breedData, storageSide)
+    if basePrincessSlot == -1 or baseDroneSlot == -1 then
         print("Couldn't find the parents of " .. beeName .. " bee! Aborting.")
         return
     end
+    local basePrincess = transposer.getStackInSlot(storageSide, basePrincessSlot) --In case princess needs to be converted
+    local basePrincessSpecies,_ = utility.getBee(basePrincess)
     local chance = breedData.chance
+
     if(transposer.getInventorySize(breederSide) == 12) then --Apiary exclusive.
         for i=10,12 do
             local frame = transposer.getStackInSlot(breederSide,i)
@@ -306,11 +314,19 @@ function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide
         io.read()
     end
 
-    transposer.transferItem(storageSide,breederSide, 1, princessSlot, 1)
-    transposer.transferItem(storageSide,breederSide, 1, droneSlot, 2)
+    transposer.transferItem(storageSide,breederSide, 1, basePrincessSlot, 1)
+    transposer.transferItem(storageSide,breederSide, 1, baseDroneSlot, 2)
     local isPure = false
     local isGeneticallyPerfect = false --In this case genetic perfection refers to the bee having the same active and inactive genes
     local messageSent = false --About mutation frames
+
+    local princess = nil
+    local princessPureness = 0
+    local princessSlot = nil
+    local bestDrone = nil
+    local bestDronePureness = -1
+    local bestDroneSlot = nil
+
     while(not isPure) do
         while(transposer.getStackInSlot(breederSide,1) ~= nil) do
             os.sleep(1)
@@ -334,12 +350,13 @@ function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide
         end
 
         print("Assessing...")
-        local princess = nil
-        local princessPureness = 0
-        local princessSlot = nil
-        local bestDrone = nil
-        local bestDronePureness = -1
-        local bestDroneSlot = nil
+        princess = nil
+        princessPureness = 0
+        princessSlot = nil
+        bestDrone = nil
+        bestDronePureness = -1
+        bestDroneSlot = nil
+
         for i=1,scanCount do
             local item = transposer.getStackInSlot(outputSide, i) --Previous loop ensures the slots aren't empty
             local _,type = utility.getBee(item)
@@ -367,6 +384,7 @@ function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide
                 end
             end
         end
+
         if (princessPureness + bestDronePureness) == 4 then
             print("Target bee is pure!")
             isPure = true
@@ -386,8 +404,21 @@ function utility.breed(beeName, breedData, storageSide, breederSide, scannerSide
                 transposer.transferItem(outputSide, garbageSide, 64, i)
             end
         else
-            print("TARGET SPECIES LOST! ABORTING.")
-            return
+            print("TARGET SPECIES LOST!")
+            transposer.transferItem(outputSide,breederSide, 1, princessSlot) -- Move to breeder for conversion
+            for i=1,scanCount do --Get rid of the useless bees
+                transposer.transferItem(outputSide, garbageSide, 64, i)
+            end
+            utility.convertPrincess(basePrincessSpecies, storageSide, breederSide, garbageSide, scannerSide, outputSide)
+
+            local otherDroneSlot = utility.findBeeWithType(basePrincessSpecies, "Drone", storageSide) --other drone species is the same as the base princess species
+            local otherDrone = transposer.getStackInSlot(storageSide, otherDroneSlot)
+            if otherDrone.size < 32 then
+                utility.populateBee(basePrincessSpecies, storageSide, breederSide, scannerSide, outputSide)
+            end
+
+            messageSent = false
+            return utility.breed(beeName, breedData, storageSide, breederSide, garbageSide, scannerSide, outputSide)
         end
     end
 end
