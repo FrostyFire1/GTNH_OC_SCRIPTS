@@ -30,5 +30,36 @@ config.preference = {
 
 
 }
+config.geneWeights = {
+    ["species"] = 5,
+    ["lifespan"] = 1,
+    ["speed"] = 1,
+    ["flowering"] = 1,
+    ["flowerProvider"] = 1,
+    ["fertility"] = 7,
+    ["territory"] = 1,
+    ["effect"] = 1,
+
+    ["temperatureTolerance"] = 4,
+    ["humidityTolerance"] = 4,
+    ["nocturnal"] = 2,
+    ["tolerantFlyer"] = 2,
+    ["caveDwelling"] = 2,
+}
+config.activeBonus = 1.2
+
+config.weightSum = 0
+for _,value in pairs(config.geneWeights) do
+    config.weightSum = config.weightSum + value
+end
+config.targetSum = config.weightSum + config.weightSum * config.activeBonus
+
+config.devConfig = {
+    ["storage"] = 4,
+    ["breeder"] = 5,
+    ["scanner"] = 2,
+    ["garbage"] = 1,
+    ["output"] = 3,
+}
 
 return config
