@@ -157,7 +157,7 @@ function utility.convertPrincess(beeName, storageSide, breederSide, garbageSide,
         return
     end
     --Insert bees into the apiary
-    print("Beginning conversion therapy using " .. beeName .. " drones and " .. princessName .. " princess")
+    print("Converting " .. princessName .. " princess to " .. beeName)
     --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
     --Move only 1 drone at a time to leave the apiary empty after the cycling is complete (you can't extract from input slots)
     transposer.transferItem(storageSide,breederSide, 1, droneSlot, 2) --Slot 2 for apiary is the drone slot
@@ -293,7 +293,8 @@ function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide
     local basePrincessSpecies,_ = utility.getBee(basePrincess)
     local chance = breedData.chance
 
-    if(transposer.getInventorySize(breederSide) == 12) then --Apiary exclusive.
+    local breederSize = transpoer.getInventorySize(breederSide)
+    if(breederSize == 12) then --Apiary exclusive.
         for i=10,12 do
             local frame = transposer.getStackInSlot(breederSide,i)
             if frame ~= nil and frame.name == "MagicBees:item.frenziedFrame"then
@@ -306,7 +307,11 @@ function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide
     end
     
     print("Base chance: " .. breedData.chance .. "%")
-    print("Actual chance: " .. chance .. "%. MIGHT PRODUCE OTHER MUTATIONS!")
+    if breederSize == 12 then
+        print("Actual chance: " .. chance .. "%. MIGHT PRODUCE OTHER MUTATIONS!")
+    else
+        print("Actual chance unknown (using alveary). MIGHT PRODUCE OTHER MUTATIONS!")
+    end
     local requirements = table.unpack(breedData.specialConditions)
     if requirements ~= nil then
         print("This bee has the following special requirements: " .. requirements)
