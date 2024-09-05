@@ -293,7 +293,7 @@ function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide
     local basePrincessSpecies,_ = utility.getBee(basePrincess)
     local chance = breedData.chance
 
-    local breederSize = transpoer.getInventorySize(breederSide)
+    local breederSize = transposer.getInventorySize(breederSide)
     if(breederSize == 12) then --Apiary exclusive.
         for i=10,12 do
             local frame = transposer.getStackInSlot(breederSide,i)
@@ -331,13 +331,14 @@ function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide
     local bestDrone = nil
     local bestDronePureness = -1
     local bestDroneSlot = nil
+    local scanCount = 0
 
     while(not isPure) do
         while(transposer.getStackInSlot(breederSide,1) ~= nil) do
             os.sleep(1)
         end
+        scanCount = 0
         print("Scanning bees...")
-        local scanCount = 0
         for i=3,9 do
             local item = transposer.getStackInSlot(breederSide,i)
             if item ~= nil then
@@ -421,14 +422,63 @@ function utility.breed(beeName, breedData, storageSide, breederSide, garbageSide
             if otherDrone.size < 32 then
                 utility.populateBee(basePrincessSpecies, storageSide, breederSide, scannerSide, outputSide)
             end
-
             messageSent = false
             return utility.breed(beeName, breedData, storageSide, breederSide, garbageSide, scannerSide, outputSide)
         end
     end
+    for i=1,scanCount do
+        if i ~= bestDroneSlot and i ~= princessSlot then
+            transposer.transferItem(outputSide,garbageSide, 64, i) --Move irrelevant drones to garbage
+        end
+    end
+    utility.ensureGeneticEquivalence(princessSlot, bestDroneSlot, storageSide, breederSide, garbageSide, scannerSide, outputSide) --Makes sure all genes are equal. will move genetically equivalent bee to storage
+    print("Breeding finished. " .. beeName .. " and its drone moved to storage.")
 end
 
+function utility.ensureGeneticEquivalence(princessSlot, droneSlot, storageSide, breederSide, garbageSide, scannnerSide, outputSide)
+    local princess = transposer.getStackInSlot(outputSide,princessSlot)
+    local drone = transposer.getStackInSlot(outputSide,droneSlot)
+    local targetGenes = princess.individual.active
+    local isEquivalent = utility.isGeneticallyEquivalent(princess, drone)
+    if isEquivalent then
+        print("Target bee is genetically consistent!")
+        transposer.transferItem(outputSide, storageSide, 1, princessSlot)
+        transposer.transferItem(outputSide, storageSide, 64, droneSlot)
+        return
+    else
+        print("TARGET BEE SHAT ITSELF. NOT IMPLEMENTED.")
+        return
+    end
+end
 
+function utility.isGeneticallyEquivalent(princess, drone)
+    for gene, value in pairs(princess.individual.active) do
+        if type(value) == "table" then
+            for tName, tValue in pairs(value) do
+                if princess.individual.inactive[gene][tName] ~= tValue then
+                    return false
+                end
+                if drone.individual.active[gene][tName] ~= tValue then
+                    return false
+                end
+                if drone.individual.inactive[gene][tName] ~= tValue then
+                    return false
+                end
+            end
+        else
+            if princess.individual.inactive[gene] ~= value then
+                return false
+            end
+            if drone.individual.active[gene] ~= value then
+                return false
+            end
+            if drone.individual.inactive[gene] ~= value then
+                return false
+            end
+        end
+    end
+    return true
+end
 
 function utility.findBeeWithType(targetName, targetType, storageSide)
     local size = transposer.getInventorySize(storageSide)
