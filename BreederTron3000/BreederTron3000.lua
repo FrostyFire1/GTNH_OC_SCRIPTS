@@ -29,13 +29,13 @@ local transposer = component.transposer
 -- end
 
 
--- if (next(component.list("for_alveary_0")) ~= nil and breeder == nil) then
---     print("Alveary found!")
---     breeder = component.for_alveary_0
--- elseif (next(component.list("tile_for_apiculture_0_name")) ~= nil and breeder == nil) then
---     print("Apiary found!")
---     breeder = component.tile_for_apiculture_0_name
--- end
+if (next(component.list("for_alveary_0")) ~= nil and breeder == nil) then
+    print("Alveary found!")
+    breeder = component.for_alveary_0
+elseif (next(component.list("tile_for_apiculture_0_name")) ~= nil and breeder == nil) then
+    print("Apiary found!")
+    breeder = component.tile_for_apiculture_0_name
+end
 
 -- if (breederSide == nil or breeder == nil) then
 --     print("Could not find apiary/alveary! Closing.")
