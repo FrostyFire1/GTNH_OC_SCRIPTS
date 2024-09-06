@@ -397,6 +397,9 @@ function utility.breed(beeName, breedData, sideConfig)
             isGeneticallyPerfect = utility.ensureGeneticEquivalence(princessSlot, bestDroneSlot, sideConfig) --Makes sure all genes are equal. will move genetically equivalent bee to storage
             if not isGeneticallyPerfect then
                 print("Target bee is not genetically consistent! continuing")
+                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1) --Send princess to breeding slot
+                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2) --Send drone to breeding slot
+                dumpOutput(sideConfig, scanCount)
             end
         elseif (princessPureness + bestDronePureness) > 0 then
             if (not messageSent) then
