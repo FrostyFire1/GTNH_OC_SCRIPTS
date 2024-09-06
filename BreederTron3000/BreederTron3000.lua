@@ -46,7 +46,10 @@ end
 -- end
 
 local breedingChain, beeCount = util.createBreedingChain(targetBee, breeder, config.devConfig) 
-
+if beeCount == nil then
+    print("Exiting...")
+    os.exit()
+end
 for beeName,breedData in pairs(breedingChain) do
     for a,b in pairs(breedData) do
         print(a,b)
