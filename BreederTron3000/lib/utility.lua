@@ -212,7 +212,7 @@ function utility.convertPrincess(beeName, sideConfig)
     print(beeName .. " princess moved to storage.")
 end
 
-function utility.populateBee(beeName, sideConfig)
+function utility.populateBee(beeName, sideConfig, targetCount)
     local droneOutput = nil
     print("Populating " .. beeName .. " bee.")
     local princessSlot, droneSlot = utility.findPairString(beeName, beeName, sideConfig)
@@ -225,7 +225,7 @@ function utility.populateBee(beeName, sideConfig)
     transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, princessSlot, 1)
     transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2)
     local item = nil
-    while(item == nil or item.size < 32) do
+    while(item == nil or item.size < targetCount) do
         while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do --Wait until cycle is finished
             os.sleep(1)
         end
@@ -242,7 +242,7 @@ function utility.populateBee(beeName, sideConfig)
             end
         else
             item = transposer.getStackInSlot(sideConfig.breeder, droneOutput)
-            print("Populating progress: " .. item.size .. "/32")
+            print("Populating progress: " .. item.size .. "/" .. targetCount)
             if (item.size < 32) then
                 transposer.transferItem(sideConfig.breeder,sideConfig.breeder, 1, droneOutput, 2) --Move a single drone back to the breeding slot
                 for i=3,9 do
@@ -424,7 +424,7 @@ function utility.breed(beeName, breedData, sideConfig)
             local otherDroneSlot = utility.findBeeWithType(basePrincessSpecies, "Drone", sideConfig) --other drone species is the same as the base princess species
             local otherDrone = transposer.getStackInSlot(sideConfig.storage, otherDroneSlot)
             if otherDrone.size < 32 then
-                utility.populateBee(basePrincessSpecies, sideConfig)
+                utility.populateBee(basePrincessSpecies, sideConfig, 8)
             end
             messageSent = false
             return utility.breed(beeName, breedData, sideConfig)
@@ -565,14 +565,10 @@ function utility.imprintFromTemplate(beeName, sideConfig)
                 transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
                 dumpOutput(sideConfig, scanCount)
             else
+                print("Couldn't find reserve drone! Substituting base drone")
                 transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+                transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2)
                 dumpOutput(sideConfig, scanCount)
-                utility.convertPrincess(beeName, sideConfig)
-                baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
-                if baseDrone.size < 32 then
-                    utility.populateBee(beeName, sideConfig)
-                end
-                return utility.imprintFromTemplate(beeName, sideConfig)
             end
         elseif (princessPureness + bestDronePureness) == 1 then
             print("BEE AT RISK OF LOSING ORIGINAL SPECIES!")
