@@ -50,7 +50,7 @@ function utility.createBreedingChain(beeName, breeder, sideConfig)
         end
         current = {}
     end
-    return breedingChain
+    return table.unpack({breedingChain,existingBees})
 end
 
 function utility.processBee(beeName, breeder, child)
@@ -333,7 +333,7 @@ function utility.breed(beeName, breedData, sideConfig)
     local bestDroneSlot = nil
     local scanCount = 0
 
-    while(not isPure) do
+    while(not isPure) or (not isGeneticallyPerfect) do
         while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
             os.sleep(1)
         end
@@ -394,6 +394,10 @@ function utility.breed(beeName, breedData, sideConfig)
         if (princessPureness + bestDronePureness) == 4 then
             print("Target bee is pure!")
             isPure = true
+            isGeneticallyPerfect = utility.ensureGeneticEquivalence(princessSlot, bestDroneSlot, sideConfig) --Makes sure all genes are equal. will move genetically equivalent bee to storage
+            if not isGeneticallyPerfect then
+                print("Target bee is not genetically consistent! continuing")
+            end
         elseif (princessPureness + bestDronePureness) > 0 then
             if (not messageSent) then
                 messageSent = true
@@ -431,7 +435,6 @@ function utility.breed(beeName, breedData, sideConfig)
             transposer.transferItem(sideConfig.output,sideConfig.garbage, 64, i) --Move irrelevant drones to garbage
         end
     end
-    utility.ensureGeneticEquivalence(princessSlot, bestDroneSlot, sideConfig) --Makes sure all genes are equal. will move genetically equivalent bee to storage
     print("Breeding finished. " .. beeName .. " and its drone moved to storage.")
 end
 
@@ -444,11 +447,9 @@ function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
         print("Target bee is genetically consistent!")
         transposer.transferItem(sideConfig.output, sideConfig.storage, 1, princessSlot)
         transposer.transferItem(sideConfig.output, sideConfig.storage, 64, droneSlot)
-        return
-    else
-        print("TARGET BEE SHAT ITSELF. NOT IMPLEMENTED.")
-        return
+        return true
     end
+    return false
 end
 
 function utility.imprintFromTemplate(beeName, sideConfig)
@@ -541,10 +542,10 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         if (princessPureness + bestDronePureness) == 4 then
             print("PRINCESS AND DRONE ARE PURELY ORIGINAL SPECIES!")
             if utility.hasTargetGenes(princess, bestDrone, templateDrone) then
-                print("Target gene pool possible. Continuing.")
+                print("Target gene pool reachable. Continuing.")
                 continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
             else
-                print("Target gene pool impossible. substituting drone for template drone.")
+                print("Target gene pool unreachable. substituting drone for template drone.")
                 transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
                 transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
                 for i=1,scanCount do
@@ -595,7 +596,7 @@ function getBestReserve(beeName, sideConfig, targetDrone)
                 return table.unpack({bestReserveScore, bestReserveSlot})
             end
         else
-            if bee.individual ~= nil then
+            if bee.individual.active ~= nil then
                 local score = -1
                 if bee.individual.active.species.name == beeName then
                     score = utility.getGeneticScore(bee, targetDrone, bee.individual.active.species)
