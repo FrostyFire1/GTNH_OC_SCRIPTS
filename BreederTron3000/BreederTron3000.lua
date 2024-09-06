@@ -84,6 +84,7 @@ while breedingChain[targetBee] ~= nil do
                 util.breed(beeName, breedData, config.devConfig)
                 util.populateBee(beeName, config.devConfig)
                 util.imprintFromTemplate(beeName, config.devConfig)
+                util.populateBee(beeName, config.devConfig) 
                 breedingChain[beeName] = nil
                 bredBee = true
                 print("Updating bee list...")
