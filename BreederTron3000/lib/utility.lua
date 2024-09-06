@@ -269,15 +269,12 @@ function utility.populateBee(beeName, sideConfig)
             end
         end
     end
-    local remainingScans = 2 --1 drone stack + 1 princess stack
-    while remainingScans > 0 do
-        for i=1,2 do
-            if transposer.transferItem(sideConfig.output,sideConfig.storage, 64, i) > 0 then
-                remainingScans = remainingScans - 1
-            end
-        end
+    while transposer.getStackInSlot(sideConfig.output, 2) == nil do
         os.sleep(1)
     end
+    transposer.transferItem(sideConfig.output,sideConfig.storage,64,1)
+    transposer.transferItem(sideConfig.output,sideConfig.storage,64,2)
+
     print("Scanned! " .. beeName .. " bees sent to storage.")
 end
 
