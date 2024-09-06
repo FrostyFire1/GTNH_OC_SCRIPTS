@@ -52,7 +52,7 @@ config.weightSum = 0
 for _,value in pairs(config.geneWeights) do
     config.weightSum = config.weightSum + value
 end
-config.targetSum = config.weightSum + config.weightSum * config.activeBonus
+config.targetSum = config.weightSum + config.weightSum * config.activeBonus - (config.geneWeights.species * (config.activeBonus - 1))
 
 config.devConfig = {
     ["storage"] = 4,

@@ -466,7 +466,7 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
         return
     end
-    if utility.isGeneticallyEquivalent(basePrincess, drone, drone, true) then
+    if utility.isGeneticallyEquivalent(basePrincess, templateDrone, templateDrone, true) then
         print("This bee already has template genes! Aborting.")
         return
     end
@@ -507,12 +507,14 @@ function utility.imprintFromTemplate(beeName, sideConfig)
             local bee = transposer.getStackInSlot(sideConfig.output, i) --scanCount guarantees there are bees in these slots
             local _,type = utility.getItemName(bee)
             if type == "Princess" then
+                princess = bee
                 princessScore = utility.getGeneticScore(bee, templateDrone, basePrincess)
                 princessPureness = utility.getBeePureness(beeName, bee)
                 princessSlot = i
             else
                 local droneScore = utility.getGeneticScore(bee, templateDrone, basePrincess)
                 if droneScore > bestDroneScore then
+                    bestDrone = bee
                     bestDroneScore = droneScore
                     bestDronePureness = utility.getBeePureness(beeName, bee)
                     bestDroneSlot = i
@@ -521,27 +523,61 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         end
         local geneticSum = princessScore + bestDroneScore
         print("Genetic score: " .. geneticSum .. "/" .. config.targetSum*2)
-        if (princessPureness + bestDronePureness) == 4 then
-            print("PRINCESS IS PURELY ORIGINAL SPECIES! NOT YET IMPLEMENTED. FINISHING.")
+        if (geneticSum == config.targetSum*2) then
+            print("Genetic imprint succeeded!")
             return
+        end
+        if (princessPureness + bestDronePureness) == 4 then
+            print("PRINCESS AND DRONE ARE PURELY ORIGINAL SPECIES!")
+            if utility.hasTargetGenes(princess, bestDrone, templateDrone) then
+                print("Target gene pool possible. Continuing.")
+                continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
+            else
+                print("Target gene pool impossible. substituting drone for template drone.")
+                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+                transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
+                for i=1,scanCount do
+                    transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+                end
+            end
         elseif (princessPureness + bestDronePureness) == 0 then
             print("ORIGINAL SPECIES LOST! NOT YET IMPLEMENTED. FINISHING.")
             return
-        elseif (princessPureness + bestDronePureness) < 2 then
+        elseif (princessPureness + bestDronePureness) == 1 then
             print("BEE AT RISK OF LOSING ORIGINAL SPECIES! NOT YET IMPLEMENTED. CONTINUING")
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2)
-            for i=1,scanCount do
-                transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+            continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
+        else
+            continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
+        end
+    end
+end
+
+function continueImprinting(sideConfig, princessSlot, droneSlot, scanCount)
+    transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+    transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, droneSlot, 2)
+    for i=1,scanCount do
+        transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+    end
+end
+
+function utility.hasTargetGenes(princess, drone, target)
+    for gene, value in pairs(target.individual.active) do
+        if gene == "species" then
+        elseif type(value) == "table" then
+            for tName, tValue in pairs(value) do
+                if princess.individual.active[gene][tName] ~= tValue and drone.individual.active[gene][tName] ~= tValue and 
+                    princess.individual.inactive[gene][tName] ~= tValue and drone.individual.inactive[gene][tName] ~= tValue then
+                    return false
+                end
             end
         else
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2)
-            for i=1,scanCount do
-                transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+            if princess.individual.active[gene] ~= value and princess.individual.inactive[gene] ~= value and
+                drone.individual.active[gene] ~= value and drone.individual.inactive[gene] ~= value then
+                return false
             end
         end
     end
+    return true
 end
 function utility.getBeePureness(beeName, bee)
     local pureness = 0
@@ -634,7 +670,7 @@ function utility.isGeneticallyEquivalent(princess, drone, target, omitSpecies)
             if princess.individual.active[gene] ~= value then
                 return false
             end
-            if princess.individual.inactive[gene] ~= tValue then
+            if princess.individual.inactive[gene] ~= value then
                 return false
             end
             if drone.individual.active[gene] ~= value then
