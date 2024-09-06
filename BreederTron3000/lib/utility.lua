@@ -435,7 +435,7 @@ function utility.breed(beeName, breedData, sideConfig)
             transposer.transferItem(sideConfig.output,sideConfig.garbage, 64, i) --Move irrelevant drones to garbage
         end
     end
-    print("Breeding finished. " .. beeName .. " and its drone moved to storage.")
+    print("Breeding finished. " .. beeName .. " princess and its drones moved to storage.")
 end
 
 function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
