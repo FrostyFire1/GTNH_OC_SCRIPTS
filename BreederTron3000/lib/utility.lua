@@ -243,7 +243,7 @@ function utility.populateBee(beeName, sideConfig, targetCount)
         else
             item = transposer.getStackInSlot(sideConfig.breeder, droneOutput)
             print("Populating progress: " .. item.size .. "/" .. targetCount)
-            if (item.size < 32) then
+            if (item.size < targetCount) then
                 transposer.transferItem(sideConfig.breeder,sideConfig.breeder, 1, droneOutput, 2) --Move a single drone back to the breeding slot
                 for i=3,9 do
                     local candidate = transposer.getStackInSlot(sideConfig.breeder,i)
