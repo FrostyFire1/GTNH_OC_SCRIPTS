@@ -455,14 +455,14 @@ function utility.imprintFromTemplate(beeName, sideConfig)
     print("Imprinting template genes onto " .. beeName .. " bee.")
     local size = transposer.getInventorySize(sideConfig.storage)
     local templateDrone = transposer.getStackInSlot(sideConfig.storage, size)
-    local basePrincessSlot, droneSlot = utility.findPairString(beeName, beeName, sideConfig)
+    local basePrincessSlot, baseDroneSlot = utility.findPairString(beeName, beeName, sideConfig)
     local basePrincess = transposer.getStackInSlot(sideConfig.storage, basePrincessSlot)
-    local drone = transposer.getStackInSlot(sideConfig.storage, droneSlot)
+    local baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
     if templateDrone == nil then
         print("You don't have a template drone (It goes in the last slot of your storage container)! Aborting.")
         return
     end
-    if basePrincessSlot == nil or droneSlot == nil then
+    if basePrincessSlot == nil or baseDroneSlot == nil then
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
         return
     end
@@ -525,6 +525,12 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         print("Genetic score: " .. geneticSum .. "/" .. config.targetSum*2)
         if (geneticSum == config.targetSum*2) then
             print("Genetic imprint succeeded!")
+            print("Dumping original drones...")
+            utility.dumpDrones(beeName, sideConfig)
+            transposer.transferItem(sideConfig.output, sideConfig.storage, 1, princessSlot)
+            transposer.transferItem(sideConfig.output, sideConfig.storage, 64, bestDroneSlot)
+            print("Imprinted bee moved to storage.")
+            dumpOutput(sideConfig, scanCount)
             return
         end
         if (princessPureness + bestDronePureness) == 4 then
@@ -541,10 +547,21 @@ function utility.imprintFromTemplate(beeName, sideConfig)
                 end
             end
         elseif (princessPureness + bestDronePureness) == 0 then
-            print("ORIGINAL SPECIES LOST! NOT YET IMPLEMENTED. FINISHING.")
-            return
+            print("ORIGINAL SPECIES LOST!")
+            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+            dumpOutput(sideConfig, scanCount)
+
+            utility.convertPrincess(beeName, sideConfig)
+            baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
+            if baseDrone.size < 32 then
+                utility.populateBee(beeName, sideConfig)
+            end
+
+            return utility.imprintFromTemplate(beeName, sideConfig)
         elseif (princessPureness + bestDronePureness) == 1 then
-            print("BEE AT RISK OF LOSING ORIGINAL SPECIES! NOT YET IMPLEMENTED. CONTINUING")
+            print("BEE AT RISK OF LOSING ORIGINAL SPECIES!")
+            print("Substituting drone for original drone")
+            transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2)
             continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
         else
             continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
@@ -552,14 +569,29 @@ function utility.imprintFromTemplate(beeName, sideConfig)
     end
 end
 
+function utility.dumpDrones(beeName, sideConfig)
+    local storageSize = transposer.getInventorySize(sideConfig.storage)
+    for i=1,storageSize do
+        local bee = transposer.getStackInSlot(sideConfig.storage, i)
+        if bee ~= nil then
+            local species = utility.getItemName(bee)
+            if species == beeName then
+                transposer.transferItem(sideConfig.storage, sideConfig.garbage, 64, i)
+            end
+        end
+    end
+end
 function continueImprinting(sideConfig, princessSlot, droneSlot, scanCount)
     transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
     transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, droneSlot, 2)
+    dumpOutput(sideConfig, scanCount)
+end
+
+function dumpOutput(sideConfig, scanCount)
     for i=1,scanCount do
         transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
     end
 end
-
 function utility.hasTargetGenes(princess, drone, target)
     for gene, value in pairs(target.individual.active) do
         if gene == "species" then
