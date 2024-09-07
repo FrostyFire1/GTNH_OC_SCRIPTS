@@ -906,6 +906,7 @@ function utility.getOrCreateConfig()
         return sideConfig
     end
     local directions = {"down","up","north","south","west","east"}
+    local remainingDirections = {"down","up","north","south","west","east"}
     local configOrder = {"storage","breeder","scanner","output","garbage"}
     local newConfig = {}
 
@@ -915,7 +916,9 @@ function utility.getOrCreateConfig()
     for _,container in pairs(configOrder) do
         print(string.format("Which side is the: %s? Select one of the following:", container))
         for i,direction in pairs(directions) do
-            print(string.format("%d. %s", i, direction))
+            if indexInTable(remainingDirections, direction) ~= 0 then
+                print(string.format("%d. %s", i, direction))
+            end
         end
         local answeredCorrectly = false
         while not answeredCorrectly do
@@ -924,14 +927,14 @@ function utility.getOrCreateConfig()
                 answer = tonumber(answer)
                 if answer >= 1 and answer <= #directions then --Check if answer within bounds
                     newConfig[container] = answer - 1
-                    table.remove(directions, answer)
+                    table.remove(remainingDirections, indexInTable(remainingDirections, directions[answer]))
                     answeredCorrectly = true
                 end
             else
-                local index = isInTable(directions, string.lower(answer))
+                local index = indexInTable(directions, string.lower(answer))
                 if index ~= 0 then
-                    newConfig[container] = index
-                    table.remove(directions, index)
+                    newConfig[container] = index - 1
+                    table.remove(remainingDirections, indexInTable(remainingDirections, answer))
                     answeredCorrectly = true
                 end
             end
@@ -949,10 +952,11 @@ function utility.getOrCreateConfig()
     file:write("}\n")
     file:write("return sideConfig")
     file:close()
+    print("Done! Setup Complete!")
     return newConfig
 end
 
-function isInTable(tbl, target)
+function indexInTable(tbl, target)
     for i,value in pairs(tbl) do
         if value == target then
             return i
