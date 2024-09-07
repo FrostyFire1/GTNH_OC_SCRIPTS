@@ -907,7 +907,7 @@ function utility.getOrCreateConfig()
     end
     local directions = {"down","up","north","south","west","east"}
     local remainingDirections = {"down","up","north","south","west","east"}
-    local configOrder = {"storage","breeder","scanner","output","garbage"}
+    local configOrder = {"storage","scanner","output","garbage"}
     local newConfig = {}
 
     print("It looks like this might be your first time running this program. Let's set up your containers!")

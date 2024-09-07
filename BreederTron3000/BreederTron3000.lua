@@ -24,7 +24,12 @@ else
     print("Can't find breeder block! Terminating.")
     os.exit()
 end
-
+for i=0,5 do
+    local size = transposer.getInventorySize(i)
+    if size == 9 or size == 12 then
+        sideConfig.breeder = i
+    end
+end
 
 local breedingChain, beeCount = util.createBreedingChain(targetBee, breeder, sideConfig) 
 if beeCount == nil then
