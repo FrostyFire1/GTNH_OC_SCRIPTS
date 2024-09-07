@@ -1,5 +1,6 @@
 local component = require("component")
 local config = require("config")
+local filesystem = require("filesystem")
 local utility = {}
 local transposer = component.transposer
 
@@ -897,5 +898,63 @@ function utility.areGenesEqual(geneTable)
     end
     return true
 end
+
+
+function utility.getOrCreateConfig(printMessage)
+    if filesystem.exists("/home/sideConfig.lua") then
+        local sideConfig = require("sideConfig")
+        return sideConfig
+    end
+    local directions = {"down","up","north","south","west","east"}
+    local configOrder = {"storage","breeder","scanner","output","garbage"}
+    local newConfig = {}
+    if printMessage then
+        print("It looks like this might be your first time running this program. Let's set up your containers!")
+        print("All directions are relative to the transposer.")
+    end
+    for _,container in pairs(configOrder) do
+        print(string.format("Which side is the: %s? Select one of the following:", container))
+        for i,direction in pairs(directions) do
+            print(string.format("%d. %s", i, direction))
+        end
+        local answeredCorrectly = false
+        while not answeredCorrectly do
+            local answer = io.read()
+            if tonumber(answer) ~= nil then
+                newConfig[container] = answer-1
+                table.remove(directions, answer-1)
+                answeredCorrectly = true
+            else
+                local index = isInTable(directions, string.lower(answer))
+                if index ~= 0 then
+                    newConfig[container] = index
+                    table.remove(directions, index)
+                    answeredCorrectly = true
+                else
+                    print("I can't process this answer. Try again.")
+                end
+            end
+        end
+    end
+    print("Creating sideConfig.lua...")
+    local file = filesystem.open("/home/sideConfig.lua", "w")
+    file:write("local sideConfig = {\n")
+    for container,side in pairs(newConfig) do
+        file:write(string.format("[\"%s\"] = %d, \n", container, side))
+    end
+    file:write("}\n")
+    file:write("return sideConfig")
+    file:close()
+end
+
+function isInTable(tbl, target)
+    for i,value in pairs(tbl) do
+        if value == target then
+            return i
+        end
+    end
+    return 0
+end
+
 return utility
 
