@@ -900,7 +900,7 @@ function utility.areGenesEqual(geneTable)
 end
 
 
-function utility.getOrCreateConfig(printMessage)
+function utility.getOrCreateConfig()
     if filesystem.exists("/home/sideConfig.lua") then
         local sideConfig = require("sideConfig")
         return sideConfig
@@ -908,10 +908,10 @@ function utility.getOrCreateConfig(printMessage)
     local directions = {"down","up","north","south","west","east"}
     local configOrder = {"storage","breeder","scanner","output","garbage"}
     local newConfig = {}
-    if printMessage then
-        print("It looks like this might be your first time running this program. Let's set up your containers!")
-        print("All directions are relative to the transposer.")
-    end
+
+    print("It looks like this might be your first time running this program. Let's set up your containers!")
+    print("All directions are relative to the transposer.")
+
     for _,container in pairs(configOrder) do
         print(string.format("Which side is the: %s? Select one of the following:", container))
         for i,direction in pairs(directions) do

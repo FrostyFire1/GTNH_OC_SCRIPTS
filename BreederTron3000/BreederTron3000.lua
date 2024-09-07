@@ -12,7 +12,7 @@ end
 local breeder = nil
 -- The program assumes only one adapter and one transposer is present in the network
 local transposer = component.transposer
-local sideConfig = util.getOrCreateConfig(true)
+local sideConfig = util.getOrCreateConfig()
 
 if (next(component.list("for_alveary_0")) ~= nil) then
     print("Alveary found!")
