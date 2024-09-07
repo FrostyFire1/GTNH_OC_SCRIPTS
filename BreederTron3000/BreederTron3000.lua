@@ -26,7 +26,7 @@ else
 end
 
 
-local breedingChain, beeCount = util.createBreedingChain(targetBee, breeder, config.devConfig) 
+local breedingChain, beeCount = util.createBreedingChain(targetBee, breeder, sideConfig) 
 if beeCount == nil then
     print("Exiting...")
     os.exit()
@@ -40,7 +40,7 @@ for a,b in pairs(beeCount) do
     print(a,b)
 end
 
-local storageSize = transposer.getInventorySize(config.devConfig.storage)
+local storageSize = transposer.getInventorySize(sideConfig.storage)
 while breedingChain[targetBee] ~= nil do
     local bredBee = false
     for beeName,breedData in pairs(breedingChain) do
@@ -52,29 +52,29 @@ while breedingChain[targetBee] ~= nil do
             elseif beeCount[parent1].Drone ~= nil and beeCount[parent2].Drone ~= nil then
                 if beeCount[parent1].Princess then
                     if beeCount[parent1].Drone < 32 then
-                        util.populateBee(parent1, config.devConfig, 8)
+                        util.populateBee(parent1, sideConfig, 8)
                     end
                 elseif beeCount[parent2].Princess then
                     if beeCount[parent2].Drone < 32 then
-                        util.populateBee(parent2, config.devConfig, 8)
+                        util.populateBee(parent2, sideConfig, 8)
                     end
                 else
-                    util.convertPrincess(parent1, config.devConfig)
+                    util.convertPrincess(parent1, sideConfig)
                     if beeCount[parent1].Drone < 32 then
-                        util.populateBee(parent1, config.devConfig, 8)
+                        util.populateBee(parent1, sideConfig, 8)
                     end
                 end
-                util.breed(beeName, breedData, config.devConfig)
+                util.breed(beeName, breedData, sideConfig)
                 
-                if transposer.getStackInSlot(config.devConfig.storage, storageSize) ~= nil then
-                    util.populateBee(beeName, config.devConfig, 8)
-                    util.imprintFromTemplate(beeName, config.devConfig)
+                if transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil then
+                    util.populateBee(beeName, sideConfig, 8)
+                    util.imprintFromTemplate(beeName, sideConfig)
                 end
-                util.populateBee(beeName, config.devConfig, 32)
+                util.populateBee(beeName, sideConfig, 32)
                 breedingChain[beeName] = nil
                 bredBee = true
                 print("Updating bee list...")
-                beeCount = util.listBeesInStorage(config.devConfig)
+                beeCount = util.listBeesInStorage(sideConfig)
             end
         end
     end

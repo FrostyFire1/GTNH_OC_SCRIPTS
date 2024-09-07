@@ -921,18 +921,22 @@ function utility.getOrCreateConfig(printMessage)
         while not answeredCorrectly do
             local answer = io.read()
             if tonumber(answer) ~= nil then
-                newConfig[container] = answer-1
-                table.remove(directions, answer-1)
-                answeredCorrectly = true
+                answer = tonumber(answer)
+                if answer >= 1 and answer <= #directions then --Check if answer within bounds
+                    newConfig[container] = answer - 1
+                    table.remove(directions, answer)
+                    answeredCorrectly = true
+                end
             else
                 local index = isInTable(directions, string.lower(answer))
                 if index ~= 0 then
                     newConfig[container] = index
                     table.remove(directions, index)
                     answeredCorrectly = true
-                else
-                    print("I can't process this answer. Try again.")
                 end
+            end
+            if not answeredCorrectly then
+                print("I can't process this answer! Try again.")
             end
         end
     end
@@ -945,6 +949,7 @@ function utility.getOrCreateConfig(printMessage)
     file:write("}\n")
     file:write("return sideConfig")
     file:close()
+    return newConfig
 end
 
 function isInTable(tbl, target)
