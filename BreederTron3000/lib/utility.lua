@@ -322,8 +322,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 print("Telling the robot to place: " .. foundationBlock)
                 modem.broadcast(config.port, "place " .. foundationBlock)
                 local _, _, _, _, _, actionTaken = event.pull(10,"modem_message")
-                print(actionTaken)
-                if actionTaken == true then
+                if actionTaken then
                     print("Robot successfuly placed: " .. foundationBlock)
                 else
                     print("Robot could not place " .. foundationBlock .. ". Please do it yourself.")
