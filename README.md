@@ -2,6 +2,12 @@
 ## BreederTron3000 installation guide:  
 in your OpenComputers PC run the following command:  
 ```wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/setup.lua && setup```  
+When you first run BreederTron3000 you will be asked to provide the spots for all of the required containers:
+1. Storage (that's where your bees go)
+2. Scanner (Where you send your bees to be scanned)
+3. Output (Of the scanner)
+4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee.
+   
 To run BreederTron3000 you must provide the target bee as an argument.  
 Example: `BreederTron3000 Clay` will breed up to the Clay bee.  
 ## BreederTron3000 Robot Mode
