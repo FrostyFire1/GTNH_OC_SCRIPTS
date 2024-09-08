@@ -27,7 +27,8 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 To run BreederTron3000 you must provide the target bee as an argument.  
 Example: `BreederTron3000 Clay` will breed up to the Clay bee.  
 ## BreederTron3000 Robot Mode
-If you are too lazy to place the required foundation blocks by yourself you can make an OC robot do it for you!  
+THIS MODE REQUIRES A WIRELESS NETWORK CARD (T2) IN THE OC COMPUTER
+If you are too lazy to place the required foundation blocks by yourself you can make an OC robot do it for you! 
 Simply:
 1. In an OC computer install openos on the hard disk and run `wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/robotSetup.lua && robotSetup`
 2. create an OC Robot (MUST have a keyboard, a screen, a wireless network card (T2 recommended), the hard disk from step 1, an inventory upgrade and an inventory controller upgrade). 
