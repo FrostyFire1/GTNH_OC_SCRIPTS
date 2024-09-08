@@ -13,6 +13,7 @@ Requirements:
 
 Recommendations:
 - Maddening Frame of Frenzy (Requires T3 blood magic altar)
+- Arborist Frame (Or any other frame that completely stops mutations)
 - Witchery brews of shifting seasons (For climate changes)
 - World Accelerators
 ## BreederTron3000 installation guide:  
