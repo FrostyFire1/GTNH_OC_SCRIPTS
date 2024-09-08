@@ -7,7 +7,7 @@ robotUtil.port = 3000
 robotUtil.computerPort = 3001
 function robotUtil.check(_)
     print("Reporting status")
-    modem.broadcast(robotUtil.computerPort, "faslkjfklaskfj")
+    modem.broadcast(robotUtil.computerPort, true)
 end
 
 function robotUtil.place(block)
