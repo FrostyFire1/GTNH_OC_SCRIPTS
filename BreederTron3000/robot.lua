@@ -24,7 +24,6 @@ while true do
         local command, arg = message:match("(%w+) ?([a-zA-Z0-9 ]*)")
         if robotUtil[command] ~= nil then
             print(string.format("Executing command %s with argument: %s",command, arg))
-            os.sleep(0.5)
             robotUtil[command](arg)
         end
     end

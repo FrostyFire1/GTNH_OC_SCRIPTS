@@ -321,7 +321,9 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             if robotMode and foundationBlock ~= nil then
                 print("Telling the robot to place: " .. foundationBlock)
                 modem.broadcast(config.robotPort, "place " .. foundationBlock)
+                os.sleep(0.5)
                 local _, _, _, _, _, actionTaken = event.pull("modem_message")
+                print(actionTaken)
                 if actionTaken  == true then
                     print("Robot successfuly placed: " .. foundationBlock)
                 else

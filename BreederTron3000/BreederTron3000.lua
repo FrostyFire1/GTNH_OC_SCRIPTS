@@ -31,8 +31,8 @@ if modem == nil or (not modem.isWireless()) then
     print("WARNING: No network card or card isn't wireless!")
 else
     print("Wireless network card detected!")
-    modem.open(config.robotPort)
-    print("Opened port " .. config.robotPort)
+    modem.open(config.port)
+    print("Opened port " .. config.port)
     print("Searching for a robot...")
     modem.broadcast(config.robotPort, "check")
     local _, _, _, _, _, message = event.pull(5,"modem_message")

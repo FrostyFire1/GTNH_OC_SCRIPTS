@@ -7,7 +7,7 @@ robotUtil.port = 3000
 robotUtil.computerPort = 3001
 function robotUtil.check(_)
     print("Reporting status")
-    modem.broadcast(robotUtil.computerPort, true)
+    modem.broadcast(robotUtil.computerPort, "faslkjfklaskfj")
 end
 
 function robotUtil.place(block)
@@ -16,7 +16,7 @@ function robotUtil.place(block)
     for i=1, robot.inventorySize() do
         item =  invControl.getStackInInternalSlot(i)
         if item ~= nil then
-            if item.label == block then
+            if item.label == block and (not placed) then
                 print("Located " .. block)
                 robot.select(i)
                 robot.swing(3) --3 is front of the robot
