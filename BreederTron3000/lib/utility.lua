@@ -45,10 +45,10 @@ function utility.createBreedingChain(beeName, breeder, sideConfig)
         for child,parents in pairs(current) do
             --Skip the bee if it's already present in the breeding chain, the queue or in storage
             if breedingChain[child] == nil and queue[child] == nil and existingBees[child] == nil then
-            queue[child] = parents
+                queue[child] = parents
             end
             if breedingChain[child] == nil and existingBees[child] == nil then
-            breedingChain[child] = parents
+                breedingChain[child] = parents
             end
         end
         current = {}
@@ -373,6 +373,14 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 end
             end
         end
+        if scanCount == 0 then
+            print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
+            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
+                os.sleep(1)
+            end
+            print("Continuing...")
+            goto continue
+        end
         while(transposer.getStackInSlot(sideConfig.output, scanCount) == nil) do
             os.sleep(1)
         end
@@ -384,7 +392,6 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         bestDrone = nil
         bestDronePureness = -1
         bestDroneSlot = nil
-
         for i=1,scanCount do
             local item = transposer.getStackInSlot(sideConfig.output, i) --Previous loop ensures the slots aren't empty
             local _,type = utility.getItemName(item)
@@ -454,6 +461,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             messageSent = false
             return utility.breed(beeName, breedData, sideConfig)
         end
+        ::continue::
     end
     for i=1,scanCount do
         if i ~= bestDroneSlot and i ~= princessSlot then
@@ -527,6 +535,14 @@ function utility.imprintFromTemplate(beeName, sideConfig)
             os.sleep(1)
         end
         scanCount = utility.dumpBreeder(sideConfig, true)
+        if scanCount == 0 then
+            print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
+            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
+                os.sleep(1)
+            end
+            print("Continuing...")
+            goto continue
+        end
         print("Scanning...")
         while transposer.getStackInSlot(sideConfig.output, scanCount) == nil do --Wait for scan finish
             os.sleep(1)
@@ -601,6 +617,7 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         else
             continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
         end
+        ::continue::
     end
 end
 
