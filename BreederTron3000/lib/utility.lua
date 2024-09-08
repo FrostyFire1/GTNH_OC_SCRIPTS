@@ -313,6 +313,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         print("Actual chance unknown (using alveary). MIGHT PRODUCE OTHER MUTATIONS!")
     end
     local requirements = breedData.specialConditions
+    local botPlaced false
     if next(requirements) ~= nil then
         print("This bee has the following special requirements: ")
         for _, req in pairs(requirements) do
@@ -325,13 +326,18 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 local _, _, _, _, _, actionTaken = event.pull("modem_message")
                 if actionTaken  == true then
                     print("Robot successfuly placed: " .. foundationBlock)
+                    botPlaced = true
                 else
                     print("Robot could not place " .. foundationBlock .. ". Please do it yourself.")
                 end
             end
         end
-        print("Press enter when you've made sure the conditions are met.")
-        io.read()
+        if #requirements == 1 and botPlaced then
+            print("The robot dealt with all of the requirements! Proceeding.")
+        else
+            print("Press enter when you've made sure the conditions are met.")
+            io.read()
+        end
         
     end
 
