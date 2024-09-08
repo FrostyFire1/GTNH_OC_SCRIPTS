@@ -3,6 +3,7 @@ local component = require("component")
 local config = require("lib.config")
 local shell = require("shell")
 local targetBee,_ = shell.parse(...)
+local event = require("event")
 
 local targetBee = targetBee[1]
 if targetBee == nil then

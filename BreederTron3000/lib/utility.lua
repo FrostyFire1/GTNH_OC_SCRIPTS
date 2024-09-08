@@ -1,6 +1,7 @@
 local component = require("component")
 local config = require("config")
 local filesystem = require("filesystem")
+local event = require("event")
 local utility = {}
 local transposer = component.transposer
 local modem = component.modem
