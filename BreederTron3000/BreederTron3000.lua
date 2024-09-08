@@ -67,13 +67,9 @@ if princessCount == 0 then
     os.exit()
 end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
+print("The breeding list:")
 for beeName,breedData in pairs(breedingChain) do
-    for a,b in pairs(breedData) do
-        print(a,b)
-    end
-end
-for a,b in pairs(beeCount) do
-    print(a,b)
+    print(beeName)
 end
 
 
