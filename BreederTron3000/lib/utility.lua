@@ -310,9 +310,12 @@ function utility.breed(beeName, breedData, sideConfig)
     else
         print("Actual chance unknown (using alveary). MIGHT PRODUCE OTHER MUTATIONS!")
     end
-    local requirements = table.unpack(breedData.specialConditions)
-    if requirements ~= nil then
-        print("This bee has the following special requirements: " .. requirements)
+    local requirements = breedData.specialConditions
+    if next(requirements) ~= nil then
+        print("This bee has the following special requirements: ")
+        for _, req in pairs(requirements) do
+            print(req)
+        end
         print("Press enter when you've made sure the conditions are met.")
         io.read()
     end
