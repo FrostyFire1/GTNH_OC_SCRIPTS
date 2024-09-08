@@ -29,8 +29,8 @@ Example: `BreederTron3000 Clay` will breed up to the Clay bee.
 ## BreederTron3000 Robot Mode
 If you are too lazy to place the required foundation blocks by yourself you can make an OC robot do it for you!  
 Simply:
-1. create an OC Robot (MUST have a keyboard, a screen, a wireless network card (T2 recommended), an inventory upgrade and an inventory controller upgrade).
-2. Run `wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/robotSetup.lua && robotSetup`
+1. In an OC computer install openos on the hard disk and run `wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/robotSetup.lua && robotSetup`
+2. create an OC Robot (MUST have a keyboard, a screen, a wireless network card (T2 recommended), the hard disk from step 1, an inventory upgrade and an inventory controller upgrade). 
 3. Place the robot so it faces the foundation spot for your apiary/alveary
 4. Give it all of the required foundation blocks and a tool to break already placed ones (pickaxe recommended)
 5. Run the command `robot`
