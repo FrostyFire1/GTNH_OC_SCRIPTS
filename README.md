@@ -16,5 +16,6 @@ Simply:
 1. create an OC Robot (MUST have a keyboard, a screen, a wireless network card (T2 recommended), an inventory upgrade and an inventory controller upgrade).
 2. Run `wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/robotSetup.lua && robotSetup`
 3. Place the robot so it faces the foundation spot for your apiary/alveary
-4. Run the command `robot`
+4. Give it all of the required foundation blocks and a tool to break already placed ones (pickaxe recommended)
+5. Run the command `robot`
 Remember to put a charger next to your robot!
