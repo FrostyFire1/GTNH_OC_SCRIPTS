@@ -20,17 +20,12 @@ print("Opened port " .. robotUtil.port)
 while true do
     print("Awaiting message...")
     local _, _, _, _, _, message = event.pull("modem_message")
-    print(message)
     if message ~= nil then
-        local command, arg = message:match("(%w+) ([a-zA-Z0-9 ]+)")
-        print(command, arg)
-        print(robotUtil[command] == nil)
+        local command, arg = message:match("(%w+) ?([a-zA-Z0-9 ]*)")
         if robotUtil[command] ~= nil then
             print(string.format("Executing command %s with argument: %s",command, arg))
             os.sleep(0.5)
             robotUtil[command](arg)
-        else
-            modem.broadcast(robotUtil.port, string.format("Command %s not recognised!", command))
         end
     end
 end

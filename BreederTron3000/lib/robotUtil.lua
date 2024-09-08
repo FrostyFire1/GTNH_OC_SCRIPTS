@@ -22,14 +22,14 @@ function robotUtil.place(block)
                 robot.swing(3) --3 is front of the robot
                 if not robot.place(3) then
                     print("Front obstructed or this isn't a block!")
+                    modem.broadcast(robotUtil.port, false)
                 else
                     print("Placed " .. block)
-                    placed = true
+                    modem.broadcast(robotUtil.port, true)
                 end
             end
         end
     end
-    modem.broadcast(robotUtil.port, placed)
 end
 
 
