@@ -328,7 +328,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 else
                     print("Robot could not place " .. foundationBlock .. ". Please do it yourself.")
                 end
-            else
+            end
         end
         print("Press enter when you've made sure the conditions are met.")
         io.read()
