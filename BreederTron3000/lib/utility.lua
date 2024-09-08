@@ -320,9 +320,9 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             local foundationBlock = req:match("Requires ([a-zA-Z ]+) as a foundation")
             if robotMode and foundationBlock ~= nil then
                 print("Telling the robot to place: " .. foundationBlock)
-                modem.broadcast(config.port, "place " .. foundationBlock)
-                local _, _, _, _, _, actionTaken = event.pull(10,"modem_message")
-                if actionTaken then
+                modem.broadcast(config.robotPort, "place " .. foundationBlock)
+                local _, _, _, _, _, actionTaken = event.pull("modem_message")
+                if actionTaken  == true then
                     print("Robot successfuly placed: " .. foundationBlock)
                 else
                     print("Robot could not place " .. foundationBlock .. ". Please do it yourself.")

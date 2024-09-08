@@ -4,10 +4,10 @@ local invControl = component.inventory_controller
 local modem = component.modem
 local robotUtil = {}
 robotUtil.port = 3000
-
+robotUtil.computerPort = 3001
 function robotUtil.check(_)
     print("Reporting status")
-    modem.broadcast(robotUtil.port, true)
+    modem.broadcast(robotUtil.computerPort, true)
 end
 
 function robotUtil.place(block)
@@ -22,14 +22,16 @@ function robotUtil.place(block)
                 robot.swing(3) --3 is front of the robot
                 if not robot.place(3) then
                     print("Front obstructed or this isn't a block!")
-                    modem.broadcast(robotUtil.port, false)
                 else
                     print("Placed " .. block)
-                    modem.broadcast(robotUtil.port, true)
+                    placed = true
                 end
             end
         end
     end
+    print("placed: ")
+    print(placed)
+    modem.broadcast(robotUtil.computerPort, placed)
 end
 
 
