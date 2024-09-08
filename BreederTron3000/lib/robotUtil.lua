@@ -29,6 +29,7 @@ function robotUtil.place(block)
             end
         end
     end
+    modem.broadcast(robotUtil.port, false)
 end
 
 
