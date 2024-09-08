@@ -12,6 +12,8 @@ end
 local breeder = nil
 -- The program assumes only one adapter and one transposer is present in the network
 local transposer = component.transposer
+local modem = component.modem
+local robotMode = false
 local sideConfig = util.getOrCreateConfig()
 
 if (next(component.list("for_alveary_0")) ~= nil) then
@@ -24,6 +26,23 @@ else
     print("Can't find breeder block! Terminating.")
     os.exit()
 end
+if modem == nil or (not modem.isWireless()) then
+    print("WARNING: No network card or card isn't wireless!")
+else
+    print("Wireless network card detected!")
+    modem.open(config.port)
+    print("Opened port " .. config.port)
+    print("Searching for a robot...")
+    modem.broadcast(config.port, "check")
+    local _, _, _, _, _, message = event.pull(5,"modem_message")
+    if message then
+        print("Found a robot! Enabling robot mode...")
+        robotMode = true
+    else
+        print("Can't locate any robots! Robot mode will stay disabled.")
+    end
+end
+
 for i=0,5 do
     local size = transposer.getInventorySize(i)
     if size == 9 or size == 12 then
@@ -56,6 +75,8 @@ for a,b in pairs(beeCount) do
     print(a,b)
 end
 
+
+
 local storageSize = transposer.getInventorySize(sideConfig.storage)
 while breedingChain[targetBee] ~= nil do
     local bredBee = false
@@ -80,7 +101,7 @@ while breedingChain[targetBee] ~= nil do
                         util.populateBee(parent1, sideConfig, 8)
                     end
                 end
-                util.breed(beeName, breedData, sideConfig)
+                util.breed(beeName, breedData, sideConfig, robotMode)
                 
                 if transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil then
                     util.populateBee(beeName, sideConfig, 8)

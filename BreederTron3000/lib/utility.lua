@@ -3,6 +3,7 @@ local config = require("config")
 local filesystem = require("filesystem")
 local utility = {}
 local transposer = component.transposer
+local modem = component.modem
 
 function utility.createBreedingChain(beeName, breeder, sideConfig)
     print("Checking storage for existing bees...")
@@ -280,7 +281,7 @@ function utility.populateBee(beeName, sideConfig, targetCount)
 end
 
 
-function utility.breed(beeName, breedData, sideConfig)
+function utility.breed(beeName, breedData, sideConfig, robotMode)
     print("Breeding " .. beeName .. " bee.")
     local basePrincessSlot, baseDroneSlot = utility.findPair(breedData, sideConfig)
     if basePrincessSlot == -1 or baseDroneSlot == -1 then
@@ -312,12 +313,26 @@ function utility.breed(beeName, breedData, sideConfig)
     end
     local requirements = breedData.specialConditions
     if next(requirements) ~= nil then
+        local robotActed = false
         print("This bee has the following special requirements: ")
         for _, req in pairs(requirements) do
             print(req)
+            local foundationBlock = req:match("Requires ([a-zA-Z ]+) as a foundation")
+            if robotMode and foundationBlock ~= nil then
+                print("Telling the robot to place: " .. foundationBlock)
+                modem.broadcast(config.port, "place " .. foundationBlock)
+                local _, _, _, _, _, actionTaken = event.pull(10,"modem_message")
+                if actionTaken then
+                    robotActed = true
+                    print("Robot successfuly placed: " .. foundationBlock)
+                else
+                    print("Robot could not place " .. foundationBlock .. ". Please do it yourself.")
+                end
+            else
         end
         print("Press enter when you've made sure the conditions are met.")
         io.read()
+        
     end
 
     transposer.transferItem(sideConfig.storage,sideConfig.breeder, 1, basePrincessSlot, 1)

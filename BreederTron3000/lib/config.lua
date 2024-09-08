@@ -62,4 +62,5 @@ config.devConfig = {
     ["output"] = 3,
 }
 
+config.port = 3000
 return config
