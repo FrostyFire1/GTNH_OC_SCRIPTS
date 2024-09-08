@@ -1,4 +1,20 @@
 # Collection of scripts of random usefulness.  
+## BreederTron3000
+The breeder of all breeders. Breeds from whatever you have in your bee chest up to the specified bee.  
+Requirements:
+1. OC Computer
+2. Adapter connected to an apiary/alveary
+3. Transposer
+4. Four (4) chests adjacent to the transposer
+5. Forestry Analyzer or GT singleblock scanner (tier doesn't matter)
+
+![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
+![2024-09-08_11 04 52](https://github.com/user-attachments/assets/e8c580b6-09be-4ed8-b700-650e24e43b88)
+
+Recommendations:
+- Maddening Frame of Frenzy (Requires T3 blood magic altar)
+- Witchery brews of shifting seasons (For climate changes)
+- World Accelerators
 ## BreederTron3000 installation guide:  
 in your OpenComputers PC run the following command:  
 ```wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/setup.lua && setup```  
