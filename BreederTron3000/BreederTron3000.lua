@@ -36,6 +36,17 @@ if beeCount == nil then
     print("Exiting...")
     os.exit()
 end
+local princessCount = 0
+for _,data in pairs(beeCount) do
+    if data["Princess"] ~= nil then
+        princessCount = princessCount + data["Princess"]
+    end
+end
+if princessCount == 0 then
+    print("There are 0 princesses in storage! Terminating.")
+    os.exit()
+end
+print(string.format("Located %d princesses in the storage chest.", princessCount))
 for beeName,breedData in pairs(breedingChain) do
     for a,b in pairs(breedData) do
         print(a,b)
