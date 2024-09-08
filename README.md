@@ -1,6 +1,6 @@
 # Collection of scripts of random usefulness.  
 ## BreederTron3000
-The breeder of all breeders. Breeds from whatever you have in your bee chest up to the specified bee.  
+The breeder of all breeders. Breeds from whatever you have in your bee chest up to the specified bee. Gene imprinting included but optional.
 Requirements:
 1. OC Computer
 2. Adapter connected to an apiary/alveary
@@ -15,6 +15,7 @@ Recommendations:
 - Maddening Frame of Frenzy (Requires T3 blood magic altar)
 - Arborist Frame (Or any other frame that completely stops mutations)
 - Witchery brews of shifting seasons (For climate changes)
+- Template drone in the last slot of the storage chest (The program will imprint their genes onto other bees as it goes)
 - World Accelerators
 ## BreederTron3000 installation guide:  
 in your OpenComputers PC run the following command:  
