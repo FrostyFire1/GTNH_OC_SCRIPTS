@@ -13,7 +13,10 @@ end
 local breeder = nil
 -- The program assumes only one adapter and one transposer is present in the network
 local transposer = component.transposer
-local modem = component.modem
+local modem = nil
+if next(component.list("modem")) ~= nil then
+    modem = component.modem
+end
 local robotMode = false
 local sideConfig = util.getOrCreateConfig()
 

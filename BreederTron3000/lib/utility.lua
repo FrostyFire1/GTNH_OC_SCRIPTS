@@ -4,7 +4,10 @@ local filesystem = require("filesystem")
 local event = require("event")
 local utility = {}
 local transposer = component.transposer
-local modem = component.modem
+local modem = nil
+if next(component.list("modem")) ~= nil then
+    modem = component.modem
+end
 
 function utility.createBreedingChain(beeName, breeder, sideConfig)
     print("Checking storage for existing bees...")
