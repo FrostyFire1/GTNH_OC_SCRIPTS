@@ -5,7 +5,7 @@ Requirements:
 1. OC Computer
 2. Adapter connected to an apiary/alveary
 3. Transposer
-4. Four (4) chests adjacent to the transposer
+4. Four (4) chests and an apiary/alveaery adjacent to the transposer
 5. Forestry Analyzer or GT singleblock scanner (tier doesn't matter)
 
 ![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
