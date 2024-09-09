@@ -313,7 +313,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         print("Actual chance unknown (using alveary). MIGHT PRODUCE OTHER MUTATIONS!")
     end
     local requirements = breedData.specialConditions
-    local botPlaced false
+    local botPlaced = false
     if next(requirements) ~= nil then
         print("This bee has the following special requirements: ")
         for _, req in pairs(requirements) do
