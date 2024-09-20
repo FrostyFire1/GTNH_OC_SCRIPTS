@@ -459,7 +459,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             local otherDroneSlot = utility.findBeeWithType(basePrincessSpecies, "Drone", sideConfig) --other drone species is the same as the base princess species
             local otherDrone = transposer.getStackInSlot(sideConfig.storage, otherDroneSlot)
             if otherDrone.size < 32 then
-                utility.populateBee(basePrincessSpecies, sideConfig, 8)
+                utility.populateBee(basePrincessSpecies, sideConfig, 16)
             end
             messageSent = false
             return utility.breed(beeName, breedData, sideConfig)
