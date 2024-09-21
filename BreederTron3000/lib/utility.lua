@@ -242,6 +242,10 @@ function utility.populateBee(beeName, sideConfig, targetCount)
                     local _,type = utility.getItemName(candidate)
                     if type == "Drone" then
                         print("Drones located in slot: " .. i)
+                        if droneOutput ~= nil then
+                            print("HEY! YOU'RE NOT SUPPOSED TO MAKE MORE THAN 2 DRONE STACKS WHEN POPULATING! TERMINATING PROGRAM.")
+                            os.exit()
+                        end
                         droneOutput = i
                     end
                 end
