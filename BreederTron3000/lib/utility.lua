@@ -362,20 +362,8 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
             os.sleep(1)
         end
-        scanCount = 0
         print("Scanning bees...")
-        for i=3,9 do
-            local item = transposer.getStackInSlot(sideConfig.breeder,i)
-            if item ~= nil then
-                local _,type = utility.getItemName(item)
-                if type ~= "Princess" and type ~= "Drone" then
-                    transposer.transferItem(sideConfig.breeder, sideConfig.garbage, 64, i)
-                else
-                    transposer.transferItem(sideConfig.breeder, sideConfig.scanner, 64, i)
-                    scanCount = scanCount + 1
-                end
-            end
-        end
+        scanCount = utility.dumpBreeder(sideConfig, true)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
             while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
