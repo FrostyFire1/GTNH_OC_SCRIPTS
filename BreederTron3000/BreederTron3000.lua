@@ -147,6 +147,7 @@ elseif programMode:lower() == "imprint" then
         print("PROGRAM IS IN IMPRINT MODE BUT NO TEMPLATE DRONES ARE PRESENT! TERMINATING!")
         os.exit()
     end
+    local templateSpecies,_ = utility.getItemName(templateDrone)
     for name,count in pairs(beeCount) do
         if count.Princess ~= nil and count.Drone ~= nil then
             if count.Drone < 8 then
@@ -158,6 +159,9 @@ elseif programMode:lower() == "imprint" then
         end
     end
     for name,count in pairs(beeCount) do
+        if name == templateSpecies then
+            goto continue
+        end
         if(count.Drone < 16) then
             print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
         end
@@ -165,4 +169,6 @@ elseif programMode:lower() == "imprint" then
         util.populateBee(name, sideConfig, 8)
         util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
         util.populateBee(name, sideConfig, 32)
+        ::continue::
     end
+end
