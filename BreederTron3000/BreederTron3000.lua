@@ -164,4 +164,29 @@ elseif programMode:lower() == "imprint" then
         util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
         util.populateBee(name, sideConfig, 32)
     end
+elseif programMode:lower() == "update" then
+    local size = transposer.getInventorySize(sideConfig.storage)
+    local templateDrone = transposer.getStackInSlot(sideConfig.storage, size)
+    local updateDrone = transposer.getStackInSlot(sideConfig.storage, size-1)
+    if templateDrone == nil then
+        print("PROGRAM IS IN UPDATE MODE BUT NO TEMPLATE DRONES ARE PRESENT! TERMINATING!")
+        os.exit()
+    end
+    if updateDrone == nil then
+        print("PROGRAM IS IN UPDATE MODE BUT NO UPDATE DRONES ARE PRESENT! TERMINATING!")
+        os.exit()
+    end
+    local species,_ = util.getItemName(updateDrone)
+    local baseGenes = templateDrone.individual.active
+    print("Which one of these new genes would you like to put on your template bee?")
+    for name, value in pairs(updateDrone.individual.active) do
+        if type(value) == "table" then
+            print(name)
+            for _,tValue in pairs(value) do
+                print("----------",tValue)
+            end
+        else
+            print(name, value)
+        end
+    end
 end
