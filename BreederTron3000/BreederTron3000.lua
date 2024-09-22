@@ -7,8 +7,15 @@ local event = require("event")
 
 local programMode = args[1]
 local targetBee = args[2]
-if targetBee == nil && programMode:lower() == "breed" then
-    print("Target bee not provided! Terminating.")
+if programMode == nil then
+    print("PROGRAM MODE NOT PROVIDED! TERMINATING!")
+    print("Usage: BreederTron3000 ProgramMode TargetBee")
+    print("TargetBee only needed in ProgramMode \"breed\"")
+    os.exit()
+if targetBee == nil and programMode:lower() == "breed" then
+    print("TARGET BEE NOT PROVIDED! TERMINATING!")
+    print("Usage: BreederTron3000 ProgramMode TargetBee")
+    print("TargetBee only needed in ProgramMode \"breed\"")
     os.exit()
 end
 local breeder = nil
