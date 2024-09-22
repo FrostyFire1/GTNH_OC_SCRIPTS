@@ -13,7 +13,7 @@ function utility.createBreedingChain(beeName, breeder, sideConfig)
     print("Checking storage for existing bees...")
     local existingBees = utility.listBeesInStorage(sideConfig)
     print("Done!")
-    local startingParents = utility.processBee(beeName, breeder)
+    local startingParents = utility.processBee(beeName, breeder, "TARGET BEE!")
     if(startingParents == nil) then
         print("Bee has no parents!")
         return {}
