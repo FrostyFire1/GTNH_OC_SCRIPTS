@@ -577,7 +577,7 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
 
         if (princessPureness + bestDronePureness) == 4 then
             print("PRINCESS AND DRONE ARE PURELY ORIGINAL SPECIES!")
-            if utility.hasTargetGenes(princess, bestDrone, templateDrone) then
+            if utility.hasTargetGenes(princess, bestDrone, templateGenes) then
                 print("Target gene pool reachable. Continuing.")
                 continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
             else
