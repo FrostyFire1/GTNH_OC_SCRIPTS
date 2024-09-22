@@ -9,10 +9,7 @@ if next(component.list("modem")) ~= nil then
     modem = component.modem
 end
 
-function utility.createBreedingChain(beeName, breeder, sideConfig)
-    print("Checking storage for existing bees...")
-    local existingBees = utility.listBeesInStorage(sideConfig)
-    print("Done!")
+function utility.createBreedingChain(beeName, breeder, sideConfig, existingBees)
     local startingParents = utility.processBee(beeName, breeder, "TARGET BEE!")
     if(startingParents == nil) then
         print("Bee has no parents!")
@@ -470,7 +467,7 @@ function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
     local princess = transposer.getStackInSlot(sideConfig.output,princessSlot)
     local drone = transposer.getStackInSlot(sideConfig.output,droneSlot)
     local targetGenes = princess.individual.active
-    local isEquivalent = utility.isGeneticallyEquivalent(princess, drone, princess, false)
+    local isEquivalent = utility.isGeneticallyEquivalent(princess, drone, princess.individual.active, false)
     if isEquivalent then
         print("Target bee is genetically consistent!")
         transposer.transferItem(sideConfig.output, sideConfig.storage, 1, princessSlot)
@@ -480,7 +477,7 @@ function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
     return false
 end
 
-function utility.imprintFromTemplate(beeName, sideConfig)
+function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
     print("Imprinting template genes onto " .. beeName .. " bee.")
     local size = transposer.getInventorySize(sideConfig.storage)
     local templateDrone = transposer.getStackInSlot(sideConfig.storage, size)
@@ -489,15 +486,18 @@ function utility.imprintFromTemplate(beeName, sideConfig)
     local baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
     if templateDrone == nil then
         print("You don't have a template drone (It goes in the last slot of your storage container)! Aborting.")
-        return
+        return false
+    end
+    if templateGenes == nil then
+        templateGenes = templateDrone.individual.active
     end
     if basePrincessSlot == nil or baseDroneSlot == nil then
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
-        return
+        return false
     end
-    if utility.isGeneticallyEquivalent(basePrincess, templateDrone, templateDrone, true) then
+    if utility.isGeneticallyEquivalent(basePrincess, templateDrone, templateGenes, true) then
         print("This bee already has template genes! Aborting.")
-        return
+        return false
     end
 
 
@@ -548,11 +548,11 @@ function utility.imprintFromTemplate(beeName, sideConfig)
             local _,type = utility.getItemName(bee)
             if type == "Princess" then
                 princess = bee
-                princessScore = utility.getGeneticScore(bee, templateDrone, basePrincess.individual.active.species)
+                princessScore = utility.getGeneticScore(bee, templateGenes, basePrincess.individual.active.species)
                 princessPureness = utility.getBeePureness(beeName, bee)
                 princessSlot = i
             else
-                local droneScore = utility.getGeneticScore(bee, templateDrone, basePrincess.individual.active.species)
+                local droneScore = utility.getGeneticScore(bee, templateGenes, basePrincess.individual.active.species)
                 if droneScore > bestDroneScore then
                     bestDrone = bee
                     bestDroneScore = droneScore
@@ -572,7 +572,7 @@ function utility.imprintFromTemplate(beeName, sideConfig)
             transposer.transferItem(sideConfig.output, sideConfig.storage, 64, bestDroneSlot)
             print("Imprinted bee moved to storage.")
             dumpOutput(sideConfig, scanCount)
-            return
+            return true
         end
 
         if (princessPureness + bestDronePureness) == 4 then
@@ -593,7 +593,7 @@ function utility.imprintFromTemplate(beeName, sideConfig)
             print("ORIGINAL SPECIES LOST!")
             print("Looking for reserve drone...")
             bestReserveDrone = nil
-            bestReserveScore, bestReserveSlot = getBestReserve(beeName, sideConfig, templateDrone)
+            bestReserveScore, bestReserveSlot = getBestReserve(beeName, sideConfig, templateGenes)
             bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
             if bestReserveDrone ~= nil then
                 print("Found reserve drone with genetic score " .. bestReserveScore .. "/" .. config.targetSum)
@@ -614,9 +614,10 @@ function utility.imprintFromTemplate(beeName, sideConfig)
         end
         ::continue::
     end
+    return false
 end
 
-function getBestReserve(beeName, sideConfig, targetDrone)
+function getBestReserve(beeName, sideConfig, targetGenes)
     local reserveSize = transposer.getInventorySize(sideConfig.garbage)
     local bestReserveScore = -1
     local bestReserveSlot = nil
@@ -632,9 +633,9 @@ function getBestReserve(beeName, sideConfig, targetDrone)
             if bee.individual.active ~= nil then
                 local score = -1
                 if bee.individual.active.species.name == beeName then
-                    score = utility.getGeneticScore(bee, targetDrone, bee.individual.active.species)
+                    score = utility.getGeneticScore(bee, targetGenes, bee.individual.active.species)
                 elseif bee.individual.inactive.species.name == beeName then
-                    score = utility.getGeneticScore(bee, targetDrone, bee.individual.inactive.species)
+                    score = utility.getGeneticScore(bee, targetGenes, bee.individual.inactive.species)
                 end
                 if score > bestReserveScore then
                     bestReserveScore = score
@@ -668,8 +669,8 @@ function dumpOutput(sideConfig, scanCount)
         transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
     end
 end
-function utility.hasTargetGenes(princess, drone, target)
-    for gene, value in pairs(target.individual.active) do
+function utility.hasTargetGenes(princess, drone, targetGenes)
+    for gene, value in pairs(targetGenes) do
         if gene == "species" then
         elseif type(value) == "table" then
             for tName, tValue in pairs(value) do
@@ -697,9 +698,9 @@ function utility.getBeePureness(beeName, bee)
     end
     return pureness
 end
-function utility.getGeneticScore(bee, target, speciesTarget)
+function utility.getGeneticScore(bee, targetGenes, speciesTarget)
     local geneticScore = 0
-    for gene, value in pairs(target.individual.active) do
+    for gene, value in pairs(targetGenes) do
         local weight = config.geneWeights[gene]
         local bonusExp = 1
         if gene == "species" then
@@ -756,8 +757,8 @@ function utility.dumpBreeder(sideConfig, scanDrones)
     end
     return dumpedBees
 end
-function utility.isGeneticallyEquivalent(princess, drone, target, omitSpecies)
-    for gene, value in pairs(target.individual.active) do
+function utility.isGeneticallyEquivalent(princess, drone, targetGenes, omitSpecies)
+    for gene, value in pairs(targetGenes) do
         if gene == "species" and omitSpecies then
         elseif type(value) == "table" then
             for tName, tValue in pairs(value) do
