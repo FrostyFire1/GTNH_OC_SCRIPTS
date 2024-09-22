@@ -146,23 +146,25 @@ elseif programMode:lower() == "imprint" then
         os.exit()
     end
     for name,count in pairs(beeCount) do
-        if count.Princess ~= nil and count.Drones ~= nil then
+        for a,b in pairs(count) do
+            print(name, a, b)
+        end
+        if count.Princess ~= nil and count.Drone ~= nil then
             if count.Drone < 8 then
                 util.populateBee(name, sideConfig, 8)
             end
-            if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)) then
-                util.populateBee(name, sideConfig, 32)
-                beeCount[name] = nil
-            end
+            util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
+            util.populateBee(name, sideConfig, 32)
+            beeCount[name] = nil
         end
     end
     for name,count in pairs(beeCount) do
+        if(count.Drone < 16) then
+            print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
+        end
         util.convertPrincess(name, sideConfig)
-        if count.Drone < 8 then
-            util.populateBee(name, sideConfig, 8)
-        end
-        if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)) then
-            util.populateBee(name, sideConfig, 32)
-        end
+        util.populateBee(name, sideConfig, 8)
+        util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
+        util.populateBee(name, sideConfig, 32)
     end
 end
