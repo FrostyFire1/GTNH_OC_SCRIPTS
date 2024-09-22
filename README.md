@@ -30,7 +30,8 @@ To run BreederTron3000 you must provide the mode and the target bee (if running 
 **Available modes: `breed` and `imprint`**   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
-Imprint mode simply imprints template genes onto every bee in the storage chest. To run the program in imprint mode run `BreederTron3000 imprint`
+Imprint mode simply imprints template genes onto every bee in the storage chest. To run the program in imprint mode run:  
+`BreederTron3000 imprint`
 
 ## BreederTron3000 Robot Mode
 THIS MODE REQUIRES A WIRELESS NETWORK CARD (T2) IN THE OC COMPUTER  
