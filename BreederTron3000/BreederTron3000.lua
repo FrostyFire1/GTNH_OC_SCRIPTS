@@ -42,22 +42,7 @@ else
     print("Can't find breeder block! Terminating.")
     os.exit()
 end
-if modem == nil or (not modem.isWireless()) then
-    print("WARNING: No network card or card isn't wireless!")
-else
-    print("Wireless network card detected!")
-    modem.open(config.port)
-    print("Opened port " .. config.port)
-    print("Searching for a robot...")
-    modem.broadcast(config.robotPort, "check")
-    local _, _, _, _, _, message = event.pull(5,"modem_message")
-    if message then
-        print("Found a robot! Enabling robot mode...")
-        robotMode = true
-    else
-        print("Can't locate any robots! Robot mode will stay disabled.")
-    end
-end
+
 
 for i=0,5 do
     local size = transposer.getInventorySize(i)
@@ -88,6 +73,23 @@ end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
 if programMode == "breed" then
+
+    if modem == nil or (not modem.isWireless()) then
+        print("WARNING: No network card or card isn't wireless!")
+    else
+        print("Wireless network card detected!")
+        modem.open(config.port)
+        print("Opened port " .. config.port)
+        print("Searching for a robot...")
+        modem.broadcast(config.robotPort, "check")
+        local _, _, _, _, _, message = event.pull(5,"modem_message")
+        if message then
+            print("Found a robot! Enabling robot mode...")
+            robotMode = true
+        else
+            print("Can't locate any robots! Robot mode will stay disabled.")
+        end
+    end
 
     local breedingChain = util.createBreedingChain(targetBee, breeder, sideConfig, beeCount) 
     print("The breeding list:")
@@ -177,8 +179,8 @@ elseif programMode:lower() == "update" then
         os.exit()
     end
     local species,_ = util.getItemName(updateDrone)
-    local baseGenes = templateDrone.individual.active
-    print("Which one of these new genes would you like to put on your template bee?")
+    local newGenes = templateDrone.individual.active
+    print("Which of these new genes would you like to put on your template bee?")
     for name, value in pairs(updateDrone.individual.active) do
         if type(value) == "table" then
             print(name)
@@ -189,4 +191,18 @@ elseif programMode:lower() == "update" then
             print(name, value)
         end
     end
+    local ans = io.read()
+    while updateDrone.individual.active[ans] ~= nil do
+        newGenes[ans] = updateDrone.individual.active[ans]
+        print(string.format("Added %s gene to the target gene pool."))
+        print("Keep typing gene names to continue or type anything else to stop.")
+        ans = io.read()
+    end
+    if beeCount[species].Princess == nil then
+        util.convertPrincess(species, sideConfig)
+        if beeCount[species].Drone < 32 then
+            util.populateBee(species, sideConfig, 16)
+        end
+    end
+    util.imprintFromTemplate(species, sideConfig, newGenes)
 end
