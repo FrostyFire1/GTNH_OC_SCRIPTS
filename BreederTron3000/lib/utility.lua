@@ -1012,16 +1012,19 @@ function safeTransfer(input, output, amonut, inSlot, outSlot)
             print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
             os.sleep(5)
         end
+        return
     elseif inSlot ~= nil then
         while (transposer.transferItem(input, output, amount) == 0 and transposer.getStackInSlot(input, inSlot) ~= nil) do
             print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
             os.sleep(5)
         end
+        return
     elseif amount ~= nil then
         while (transposer.transferItem(input, output) == 0 and transposer.getStackInSlot(input, inSlot) ~= nil) do
             print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
             os.sleep(5)
         end
+        return
     end
 end
 return utility
