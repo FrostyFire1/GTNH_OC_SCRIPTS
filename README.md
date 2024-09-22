@@ -26,8 +26,12 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 3. Output (Of the scanner)
 4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee.
    
-To run BreederTron3000 you must provide the target bee as an argument.  
-Example: `BreederTron3000 Clay` will breed up to the Clay bee.  
+To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument.  
+**Available modes: `breed` and `imprint`**   
+Breed mode breeds bees up to the given bee. Example:  
+`BreederTron3000 breed Clay` will breed up to the Clay bee.  
+Imprint mode simply imprints template genes onto every bee in the storage chest. To run the program in imprint mode run `BreederTron3000 imprint`
+
 ## BreederTron3000 Robot Mode
 THIS MODE REQUIRES A WIRELESS NETWORK CARD (T2) IN THE OC COMPUTER  
 If you are too lazy to place the required foundation blocks by yourself you can make an OC robot do it for you! 
