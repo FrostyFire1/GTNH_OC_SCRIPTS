@@ -166,3 +166,4 @@ elseif programMode:lower() == "imprint" then
         util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
         util.populateBee(name, sideConfig, 32)
     end
+end
