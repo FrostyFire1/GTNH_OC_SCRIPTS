@@ -146,9 +146,6 @@ elseif programMode:lower() == "imprint" then
         os.exit()
     end
     for name,count in pairs(beeCount) do
-        for a,b in pairs(count) do
-            print(name, a, b)
-        end
         if count.Princess ~= nil and count.Drone ~= nil then
             if count.Drone < 8 then
                 util.populateBee(name, sideConfig, 8)
