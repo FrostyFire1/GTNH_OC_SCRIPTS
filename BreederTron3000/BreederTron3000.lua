@@ -152,26 +152,17 @@ elseif programMode:lower() == "imprint" then
             end
             if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)) then
                 util.populateBee(name, sideConfig, 32)
+                beeCount[name] = nil
             end
         end
     end
     for name,count in pairs(beeCount) do
-        local modifiedBees = false
-        if count.Princess == nil then
-            util.convertPrincess(name, sideConfig)
-            modifiedBees = true
-        end
+        util.convertPrincess(name, sideConfig)
         if count.Drone < 8 then
             util.populateBee(name, sideConfig, 8)
-            modifiedBees = true
         end
         if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)) then
             util.populateBee(name, sideConfig, 32)
-            modifiedBees = true
-        end
-        if modifiedBees then
-            print("Updating bee list...")
-            beeCount = util.listBeesInStorage(sideConfig)
         end
     end
 end
