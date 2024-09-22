@@ -163,9 +163,9 @@ function utility.convertPrincess(beeName, sideConfig)
     print("Converting " .. princessName .. " princess to " .. beeName)
     --First number is the amount of items transferred, the second is the slot number of the container items are transferred to
     --Move only 1 drone at a time to leave the apiary empty after the cycling is complete (you can't extract from input slots)
-    transposer.transferItem(sideConfig.storage,sideConfig.breeder, 1, droneSlot, 2) --Slot 2 for apiary is the drone slot
+    safeTransfer(sideConfig.storage,sideConfig.breeder, 1, droneSlot, 2) --Slot 2 for apiary is the drone slot
     if princessSlot ~= nil then
-        transposer.transferItem(sideConfig.storage,sideConfig.breeder, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
+        safeTransfer(sideConfig.storage,sideConfig.breeder, 1, princessSlot, 1) --Slot 1 for apiary is the princess slot
     end
 
     local princessConverted = false
@@ -181,8 +181,8 @@ function utility.convertPrincess(beeName, sideConfig)
                         princessConverted = utility.checkPrincess(sideConfig) --This call will move the princess to sideConfig.output
                         if (not princessConverted) then
                             print("Princess is not a perfect copy! Continuing.")
-                            transposer.transferItem(sideConfig.output,sideConfig.breeder, 1, 1, 1) --Move princess back to input
-                            transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2) --Move drone from storage to breed slot
+                            safeTransfer(sideConfig.output,sideConfig.breeder, 1, 1, 1) --Move princess back to input
+                            safeTransfer(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2) --Move drone from storage to breed slot
                         end
                     end
                 end
@@ -193,10 +193,10 @@ function utility.convertPrincess(beeName, sideConfig)
                     if item ~= nil then
                         local species,type = utility.getItemName(item)
                         if type == "Princess" then
-                            transposer.transferItem(sideConfig.breeder, sideConfig.breeder, 1, i, 1) --Move princess back to input slot
-                            transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2) --Move drone from storage to breed slot
+                            safeTransfer(sideConfig.breeder, sideConfig.breeder, 1, i, 1) --Move princess back to input slot
+                            safeTransfer(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2) --Move drone from storage to breed slot
                         else
-                            transposer.transferItem(sideConfig.breeder, sideConfig.garbage, item.size, i)
+                            safeTransfer(sideConfig.breeder, sideConfig.garbage, item.size, i)
                         end
                     end
                 end
@@ -208,10 +208,10 @@ function utility.convertPrincess(beeName, sideConfig)
     for i=3,9 do --clean up the drones
         local item = transposer.getStackInSlot(sideConfig.breeder, i)
         if item ~= nil then
-            transposer.transferItem(sideConfig.breeder, sideConfig.garbage, item.size)
+            safeTransfer(sideConfig.breeder, sideConfig.garbage, item.size)
         end
     end
-    transposer.transferItem(sideConfig.output,sideConfig.storage, 1, 1)
+    safeTransfer(sideConfig.output,sideConfig.storage, 1, 1)
     print(beeName .. " princess moved to storage.")
 end
 
@@ -225,8 +225,8 @@ function utility.populateBee(beeName, sideConfig, targetCount)
     end
     print(beeName .. " bees found!")
     --Because the drones in storage are scanned you can only insert 1. the rest will be taken from output of the following cycles
-    transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, princessSlot, 1)
-    transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2)
+    safeTransfer(sideConfig.storage, sideConfig.breeder, 1, princessSlot, 1)
+    safeTransfer(sideConfig.storage, sideConfig.breeder, 1, droneSlot, 2)
     local item = nil
     while(item == nil or item.size < targetCount) do
         while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do --Wait until cycle is finished
@@ -251,13 +251,13 @@ function utility.populateBee(beeName, sideConfig, targetCount)
             item = transposer.getStackInSlot(sideConfig.breeder, droneOutput)
             print("Populating progress: " .. item.size .. "/" .. targetCount)
             if (item.size < targetCount) then
-                transposer.transferItem(sideConfig.breeder,sideConfig.breeder, 1, droneOutput, 2) --Move a single drone back to the breeding slot
+                safeTransfer(sideConfig.breeder,sideConfig.breeder, 1, droneOutput, 2) --Move a single drone back to the breeding slot
                 for i=3,9 do
                     local candidate = transposer.getStackInSlot(sideConfig.breeder,i)
                     if candidate ~= nil then
                         local _,type = utility.getItemName(candidate)
                         if type == "Princess" then
-                            transposer.transferItem(sideConfig.breeder,sideConfig.breeder,1, i, 1) --Move princess back to breeding slot
+                            safeTransfer(sideConfig.breeder,sideConfig.breeder,1, i, 1) --Move princess back to breeding slot
                         end
                     end
                 end
@@ -270,17 +270,17 @@ function utility.populateBee(beeName, sideConfig, targetCount)
         if item ~= nil then
             local _,type = utility.getItemName(item)
             if type ~= "Princess" and type ~= "Drone" then
-                transposer.transferItem(sideConfig.breeder,sideConfig.garbage,64,i)
+                safeTransfer(sideConfig.breeder,sideConfig.garbage,64,i)
             else
-                transposer.transferItem(sideConfig.breeder,sideConfig.scanner,64,i)
+                safeTransfer(sideConfig.breeder,sideConfig.scanner,64,i)
             end
         end
     end
     while transposer.getStackInSlot(sideConfig.output, 2) == nil do
         os.sleep(1)
     end
-    transposer.transferItem(sideConfig.output,sideConfig.storage,64,1)
-    transposer.transferItem(sideConfig.output,sideConfig.storage,64,2)
+    safeTransfer(sideConfig.output,sideConfig.storage,64,1)
+    safeTransfer(sideConfig.output,sideConfig.storage,64,2)
 
     print("Scanned! " .. beeName .. " bees sent to storage.")
 end
@@ -345,8 +345,8 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         
     end
 
-    transposer.transferItem(sideConfig.storage,sideConfig.breeder, 1, basePrincessSlot, 1)
-    transposer.transferItem(sideConfig.storage,sideConfig.breeder, 1, baseDroneSlot, 2)
+    safeTransfer(sideConfig.storage,sideConfig.breeder, 1, basePrincessSlot, 1)
+    safeTransfer(sideConfig.storage,sideConfig.breeder, 1, baseDroneSlot, 2)
     local isPure = false
     local isGeneticallyPerfect = false --In this case genetic perfection refers to the bee having the same active and inactive genes
     local messageSent = false --About mutation frames
@@ -418,8 +418,8 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             isGeneticallyPerfect = utility.ensureGeneticEquivalence(princessSlot, bestDroneSlot, sideConfig) --Makes sure all genes are equal. will move genetically equivalent bee to storage
             if not isGeneticallyPerfect then
                 print("Target bee is not genetically consistent! continuing")
-                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1) --Send princess to breeding slot
-                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2) --Send drone to breeding slot
+                safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1) --Send princess to breeding slot
+                safeTransfer(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2) --Send drone to breeding slot
                 dumpOutput(sideConfig, scanCount)
             end
         elseif (princessPureness + bestDronePureness) > 0 then
@@ -432,16 +432,16 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             local princessSpecies = princess.individual.active.species.name .. "/" .. princess.individual.inactive.species.name
             local droneSpecies = bestDrone.individual.active.species.name .. "/" .. bestDrone.individual.inactive.species.name
             print("Breeding " .. princessSpecies .. " princess with " .. droneSpecies .. " drone.")
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1) --Send princess to breeding slot
-            transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2) --Send drone to breeding slot
+            safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1) --Send princess to breeding slot
+            safeTransfer(sideConfig.output, sideConfig.breeder, 1, bestDroneSlot, 2) --Send drone to breeding slot
             for i=1,scanCount do --Move the other drones to the garbage container
-                transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+                safeTransfer(sideConfig.output, sideConfig.garbage, 64, i)
             end
         else
             print("TARGET SPECIES LOST!")
-            transposer.transferItem(sideConfig.output,sideConfig.breeder, 1, princessSlot) -- Move to breeder for conversion
+            safeTransfer(sideConfig.output,sideConfig.breeder, 1, princessSlot) -- Move to breeder for conversion
             for i=1,scanCount do --Get rid of the useless bees
-                transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+                safeTransfer(sideConfig.output, sideConfig.garbage, 64, i)
             end
             utility.convertPrincess(basePrincessSpecies, sideConfig)
 
@@ -457,7 +457,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
     end
     for i=1,scanCount do
         if i ~= bestDroneSlot and i ~= princessSlot then
-            transposer.transferItem(sideConfig.output,sideConfig.garbage, 64, i) --Move irrelevant drones to garbage
+            safeTransfer(sideConfig.output,sideConfig.garbage, 64, i) --Move irrelevant drones to garbage
         end
     end
     print("Breeding finished. " .. beeName .. " princess and its drones moved to storage.")
@@ -470,8 +470,8 @@ function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
     local isEquivalent = utility.isGeneticallyEquivalent(princess, drone, princess.individual.active, false)
     if isEquivalent then
         print("Target bee is genetically consistent!")
-        transposer.transferItem(sideConfig.output, sideConfig.storage, 1, princessSlot)
-        transposer.transferItem(sideConfig.output, sideConfig.storage, 64, droneSlot)
+        safeTransfer(sideConfig.output, sideConfig.storage, 1, princessSlot)
+        safeTransfer(sideConfig.output, sideConfig.storage, 64, droneSlot)
         return true
     end
     return false
@@ -501,8 +501,8 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
     end
 
 
-    transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, basePrincessSlot, 1)
-    transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
+    safeTransfer(sideConfig.storage, sideConfig.breeder, 1, basePrincessSlot, 1)
+    safeTransfer(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
 
     
     local isImprinted = false
@@ -568,8 +568,8 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
             print("Genetic imprint succeeded!")
             print("Dumping original drones...")
             utility.dumpDrones(beeName, sideConfig)
-            transposer.transferItem(sideConfig.output, sideConfig.storage, 1, princessSlot)
-            transposer.transferItem(sideConfig.output, sideConfig.storage, 64, bestDroneSlot)
+            safeTransfer(sideConfig.output, sideConfig.storage, 1, princessSlot)
+            safeTransfer(sideConfig.output, sideConfig.storage, 64, bestDroneSlot)
             print("Imprinted bee moved to storage.")
             dumpOutput(sideConfig, scanCount)
             return true
@@ -582,10 +582,10 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
                 continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
             else
                 print("Target gene pool unreachable. substituting drone for template drone.")
-                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-                transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
+                safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+                safeTransfer(sideConfig.storage, sideConfig.breeder, 1, size, 2) -- Last slot in storage is reserved for template bees.
                 for i=1,scanCount do
-                    transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+                    safeTransfer(sideConfig.output, sideConfig.garbage, 64, i)
                 end
             end
 
@@ -597,13 +597,13 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
             bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
             if bestReserveDrone ~= nil then
                 print("Found reserve drone with genetic score " .. bestReserveScore .. "/" .. config.targetSum)
-                transposer.transferItem(sideConfig.garbage, sideConfig.breeder, 1, bestReserveSlot, 2)
-                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+                safeTransfer(sideConfig.garbage, sideConfig.breeder, 1, bestReserveSlot, 2)
+                safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
                 dumpOutput(sideConfig, scanCount)
             else
                 print("Couldn't find reserve drone! Substituting base drone")
-                transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-                transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2)
+                safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+                safeTransfer(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2)
                 dumpOutput(sideConfig, scanCount)
             end
         elseif (princessPureness + bestDronePureness) == 1 then
@@ -653,20 +653,20 @@ function utility.dumpDrones(beeName, sideConfig)
         if bee ~= nil then
             local species = utility.getItemName(bee)
             if species == beeName then
-                transposer.transferItem(sideConfig.storage, sideConfig.garbage, 64, i)
+                safeTransfer(sideConfig.storage, sideConfig.garbage, 64, i)
             end
         end
     end
 end
 function continueImprinting(sideConfig, princessSlot, droneSlot, scanCount)
-    transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-    transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, droneSlot, 2)
+    safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
+    safeTransfer(sideConfig.output, sideConfig.breeder, 1, droneSlot, 2)
     dumpOutput(sideConfig, scanCount)
 end
 
 function dumpOutput(sideConfig, scanCount)
     for i=1,scanCount do
-        transposer.transferItem(sideConfig.output, sideConfig.garbage, 64, i)
+        safeTransfer(sideConfig.output, sideConfig.garbage, 64, i)
     end
 end
 function utility.hasTargetGenes(princess, drone, targetGenes)
@@ -744,13 +744,13 @@ function utility.dumpBreeder(sideConfig, scanDrones)
         if item ~= nil then
             local name,type = utility.getItemName(item)
             if type == "Comb" then
-                transposer.transferItem(sideConfig.breeder, sideConfig.garbage, 64, i)
+                safeTransfer(sideConfig.breeder, sideConfig.garbage, 64, i)
             else
                 if scanDrones or type == "Princess" then
                     dumpedBees = dumpedBees + 1
-                    transposer.transferItem(sideConfig.breeder, sideConfig.scanner, 64, i)
+                    safeTransfer(sideConfig.breeder, sideConfig.scanner, 64, i)
                 else
-                    transposer.transferItem(sideConfig.breeder, sideConfig.garbage, 64, i)
+                    safeTransfer(sideConfig.breeder, sideConfig.garbage, 64, i)
                 end
             end
         end
@@ -909,7 +909,7 @@ function utility.checkPrincess(sideConfig)
         if item ~= nil then
             local species,type = utility.getItemName(item)
             if type == "Princess" then
-                transposer.transferItem(sideConfig.breeder,sideConfig.scanner, 1, i)
+                safeTransfer(sideConfig.breeder,sideConfig.scanner, 1, i)
                 while transposer.getStackInSlot(sideConfig.output, 1) == nil do
                     os.sleep(1)
                 end
@@ -1006,5 +1006,23 @@ function indexInTable(tbl, target)
     return 0
 end
 
+function safeTransfer(input, output, amonut, inSlot, outSlot)
+    if outSlot ~= nil then
+        while (transposer.transferItem(input, output, amount, inSlot) == 0 and transposer.getStackInSlot(input, inSlot) ~= nil) do
+            print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
+            os.sleep(5)
+        end
+    elseif inSlot ~= nil then
+        while (transposer.transferItem(input, output, amount) == 0 and transposer.getStackInSlot(input, inSlot) ~= nil) do
+            print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
+            os.sleep(5)
+        end
+    elseif amount ~= nil then
+        while (transposer.transferItem(input, output) == 0 and transposer.getStackInSlot(input, inSlot) ~= nil) do
+            print("ITEM TRANSFER FAILED! CHECK YOUR CONTAINERS!")
+            os.sleep(5)
+        end
+    end
+end
 return utility
 
