@@ -2,11 +2,12 @@ local util = require("lib.utility")
 local component = require("component")
 local config = require("lib.config")
 local shell = require("shell")
-local targetBee,_ = shell.parse(...)
+local args,_ = shell.parse(...)
 local event = require("event")
 
-local targetBee = targetBee[1]
-if targetBee == nil then
+local programMode = args[1]
+local targetBee = args[2]
+if targetBee == nil && programMode:lower() == "breed" then
     print("Target bee not provided! Terminating.")
     os.exit()
 end
@@ -54,11 +55,15 @@ for i=0,5 do
     end
 end
 
-local breedingChain, beeCount = util.createBreedingChain(targetBee, breeder, sideConfig) 
+print("Checking storage for existing bees...")
+local beeCount = util.listBeesInStorage(sideConfig)
+print("Done!")
 if beeCount == nil then
-    print("Exiting...")
+    print("THERE ARE NO BEES! TERMINATING PROGRAM!")
     os.exit()
 end
+
+
 local princessCount = 0
 for _,data in pairs(beeCount) do
     if data["Princess"] ~= nil then
@@ -70,53 +75,74 @@ if princessCount == 0 then
     os.exit()
 end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
-print("The breeding list:")
-for beeName,breedData in pairs(breedingChain) do
-    print(beeName)
-end
 
+if programMode == "breed" then
 
-
-local storageSize = transposer.getInventorySize(sideConfig.storage)
-while breedingChain[targetBee] ~= nil do
-    local bredBee = false
+    local breedingChain = util.createBreedingChain(targetBee, breeder, sideConfig, beeCount) 
+    print("The breeding list:")
     for beeName,breedData in pairs(breedingChain) do
-        if breedData ~= nil then
-            local parent1 = breedData.allele1.name
-            local parent2 = breedData.allele2.name
-            if beeCount[parent1] == nil or beeCount[parent2] == nil then
-                print("Cannot breed " .. beeName .. ". Skipping.")
-            elseif beeCount[parent1].Drone ~= nil and beeCount[parent2].Drone ~= nil then
-                if beeCount[parent1].Princess then
-                    if beeCount[parent1].Drone < 32 then
-                        util.populateBee(parent1, sideConfig, 8)
+        print(beeName)
+    end
+
+    local storageSize = transposer.getInventorySize(sideConfig.storage)
+    while breedingChain[targetBee] ~= nil do
+        local bredBee = false
+        for beeName,breedData in pairs(breedingChain) do
+            if breedData ~= nil then
+                local parent1 = breedData.allele1.name
+                local parent2 = breedData.allele2.name
+                if beeCount[parent1] == nil or beeCount[parent2] == nil then
+                    print("Cannot breed " .. beeName .. ". Skipping.")
+                elseif beeCount[parent1].Drone ~= nil and beeCount[parent2].Drone ~= nil then
+                    if beeCount[parent1].Princess then
+                        if beeCount[parent1].Drone < 32 then
+                            util.populateBee(parent1, sideConfig, 8)
+                        end
+                    elseif beeCount[parent2].Princess then
+                        if beeCount[parent2].Drone < 32 then
+                            util.populateBee(parent2, sideConfig, 8)
+                        end
+                    else
+                        util.convertPrincess(parent1, sideConfig)
+                        if beeCount[parent1].Drone < 32 then
+                            util.populateBee(parent1, sideConfig, 8)
+                        end
                     end
-                elseif beeCount[parent2].Princess then
-                    if beeCount[parent2].Drone < 32 then
-                        util.populateBee(parent2, sideConfig, 8)
+                    util.breed(beeName, breedData, sideConfig, robotMode)
+                    
+                    if transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil then
+                        util.populateBee(beeName, sideConfig, 8)
+                        util.imprintFromTemplate(beeName, sideConfig)
                     end
-                else
-                    util.convertPrincess(parent1, sideConfig)
-                    if beeCount[parent1].Drone < 32 then
-                        util.populateBee(parent1, sideConfig, 8)
-                    end
+                    util.populateBee(beeName, sideConfig, 32)
+                    breedingChain[beeName] = nil
+                    bredBee = true
+                    print("Updating bee list...")
+                    beeCount = util.listBeesInStorage(sideConfig)
                 end
-                util.breed(beeName, breedData, sideConfig, robotMode)
-                
-                if transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil then
-                    util.populateBee(beeName, sideConfig, 8)
-                    util.imprintFromTemplate(beeName, sideConfig)
-                end
-                util.populateBee(beeName, sideConfig, 32)
-                breedingChain[beeName] = nil
-                bredBee = true
-                print("Updating bee list...")
-                beeCount = util.listBeesInStorage(sideConfig)
             end
         end
+        if not bredBee then
+            print("Cannot breed any required bee with bees in storage! Aborting.")
+            os.exit()
+        end
     end
-    if not bredBee then
-        print("Cannot breed any required bee with bees in storage! Aborting.")
+elseif programMode:lower() == "imprint" then
+    local size = transposer.getInventorySize(sideConfig.storage)
+    local templateDrone = transposer.getStackInSlot(sideConfig.storage, size)
+    if templateDrone == nil then
+        print("PROGRAM IS IN IMPRINT MODE BUT NO TEMPLATE DRONES ARE PRESENT! TERMINATING!")
         os.exit()
+    end
+    for name,count in pairs(beeCount) do
+        print(string.format("Imprinting genes onto the %s bee...", name))
+        if count.Princess == 0 then
+            util.convertPrincess(name, sideConfig)
+        end
+        if count.Drone < 8 then
+            util.populateBee(name, sideConfig, 8)
+        end
+        util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
+        util.populateBee(name, sideConfig, 32)
     end
 end

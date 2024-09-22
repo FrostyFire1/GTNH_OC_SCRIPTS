@@ -9,10 +9,7 @@ if next(component.list("modem")) ~= nil then
     modem = component.modem
 end
 
-function utility.createBreedingChain(beeName, breeder, sideConfig)
-    print("Checking storage for existing bees...")
-    local existingBees = utility.listBeesInStorage(sideConfig)
-    print("Done!")
+function utility.createBreedingChain(beeName, breeder, sideConfig, existingBees)
     local startingParents = utility.processBee(beeName, breeder, "TARGET BEE!")
     if(startingParents == nil) then
         print("Bee has no parents!")
@@ -490,6 +487,9 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
     if templateDrone == nil then
         print("You don't have a template drone (It goes in the last slot of your storage container)! Aborting.")
         return
+    end
+    if templateGenes == nil then
+        templateGenes = templateDrone.individual.active
     end
     if basePrincessSlot == nil or baseDroneSlot == nil then
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
