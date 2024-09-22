@@ -7,15 +7,19 @@ local event = require("event")
 
 local programMode = args[1]
 local targetBee = args[2]
+function printUsage()
+    print("Usage: BreederTron3000 ProgramMode TargetBee")
+    print("TargetBee only needed in ProgramMode \"breed\"")
+    print("Available Modes: breed, imprint")
+end
 if programMode == nil then
     print("PROGRAM MODE NOT PROVIDED! TERMINATING!")
-    print("Usage: BreederTron3000 ProgramMode TargetBee")
-    print("TargetBee only needed in ProgramMode \"breed\"")
+    printUsage()
     os.exit()
+end
 if targetBee == nil and programMode:lower() == "breed" then
     print("TARGET BEE NOT PROVIDED! TERMINATING!")
-    print("Usage: BreederTron3000 ProgramMode TargetBee")
-    print("TargetBee only needed in ProgramMode \"breed\"")
+    printUsage()
     os.exit()
 end
 local breeder = nil
@@ -142,7 +146,6 @@ elseif programMode:lower() == "imprint" then
         os.exit()
     end
     for name,count in pairs(beeCount) do
-        print(string.format("Imprinting genes onto the %s bee...", name))
         if count.Princess == 0 then
             util.convertPrincess(name, sideConfig)
         end

@@ -486,18 +486,18 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
     local baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
     if templateDrone == nil then
         print("You don't have a template drone (It goes in the last slot of your storage container)! Aborting.")
-        return
+        return false
     end
     if templateGenes == nil then
         templateGenes = templateDrone.individual.active
     end
     if basePrincessSlot == nil or baseDroneSlot == nil then
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
-        return
+        return false
     end
     if utility.isGeneticallyEquivalent(basePrincess, templateDrone, templateGenes, true) then
         print("This bee already has template genes! Aborting.")
-        return
+        return false
     end
 
 
@@ -572,7 +572,7 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
             transposer.transferItem(sideConfig.output, sideConfig.storage, 64, bestDroneSlot)
             print("Imprinted bee moved to storage.")
             dumpOutput(sideConfig, scanCount)
-            return
+            return true
         end
 
         if (princessPureness + bestDronePureness) == 4 then
@@ -614,6 +614,7 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
         end
         ::continue::
     end
+    return false
 end
 
 function getBestReserve(beeName, sideConfig, targetGenes)
