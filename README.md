@@ -7,7 +7,7 @@ Requirements:
 3. Transposer
 4. Four (4) chests and an apiary/alveaery adjacent to the transposer
 5. Forestry Analyzer or GT singleblock scanner (tier doesn't matter)
-
+6. Bees! At least 16 drones of a species because otherwise the program won't recognise them (but 32 wouldn't hurt :D)  
 ![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
 ![2024-09-08_11 04 52](https://github.com/user-attachments/assets/e8c580b6-09be-4ed8-b700-650e24e43b88)
 
@@ -24,7 +24,7 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 1. Storage (that's where your bees go)
 2. Scanner (Where you send your bees to be scanned)
 3. Output (Of the scanner)
-4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee.
+4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee. PREVENT IT FROM FILLING UP BECAUSE THE PROGRAM WILL CRASH)
    
 To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument.  
 **Available modes: `breed` and `imprint`**   
