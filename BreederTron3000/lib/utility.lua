@@ -951,11 +951,7 @@ function utility.getOrCreateConfig()
     print("All directions are relative to the transposer.")
 
     for _,container in pairs(configOrder) do
-        if container == "scanner" then
-            print(string.format("Which side is the: scanner output? Select one of the following:", container))
-        else
-            print(string.format("Which side is the: %s? Select one of the following:", container))
-        end
+        print(string.format("Which side is the: %s? Select one of the following:", container))
         for i,direction in pairs(directions) do
             if indexInTable(remainingDirections, direction) ~= 0 then
                 print(string.format("%d. %s", i, direction))
