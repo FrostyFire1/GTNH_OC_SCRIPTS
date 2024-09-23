@@ -148,7 +148,7 @@ function utility.convertPrincess(beeName, sideConfig)
         end
     end
     if droneSlot == nil then
-        print("Can't find drone! Aborting.")
+        print("Can't find drone or you don't have the required amount of drones (16)! Aborting.")
         return
     end
     if targetGenes == nil then
@@ -480,21 +480,25 @@ end
 function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
     print("Imprinting template genes onto " .. beeName .. " bee.")
     local size = transposer.getInventorySize(sideConfig.storage)
+
     local templateDrone = transposer.getStackInSlot(sideConfig.storage, size)
-    local basePrincessSlot, baseDroneSlot = utility.findPairString(beeName, beeName, sideConfig)
-    local basePrincess = transposer.getStackInSlot(sideConfig.storage, basePrincessSlot)
-    local baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
     if templateDrone == nil then
         print("You don't have a template drone (It goes in the last slot of your storage container)! Aborting.")
         return false
     end
-    if templateGenes == nil then
-        templateGenes = templateDrone.individual.active
-    end
+
+    local basePrincessSlot, baseDroneSlot = utility.findPairString(beeName, beeName, sideConfig)
     if basePrincessSlot == nil or baseDroneSlot == nil then
         print("This species doesn't have both drones and a princess in your storage container! Aborting.")
         return false
     end
+
+    local basePrincess = transposer.getStackInSlot(sideConfig.storage, basePrincessSlot)
+    local baseDrone = transposer.getStackInSlot(sideConfig.storage, baseDroneSlot)
+    if templateGenes == nil then
+        templateGenes = templateDrone.individual.active
+    end
+
     if utility.isGeneticallyEquivalent(basePrincess, templateDrone, templateGenes, true) then
         print("This bee already has template genes! Aborting.")
         return false
