@@ -109,16 +109,16 @@ if programMode == "breed" then
                 elseif beeCount[parent1].Drone ~= nil and beeCount[parent2].Drone ~= nil then
                     if beeCount[parent1].Princess then
                         if beeCount[parent1].Drone < 32 then
-                            util.populateBee(parent1, sideConfig, 8)
+                            util.populateBee(parent1, sideConfig, 16)
                         end
                     elseif beeCount[parent2].Princess then
                         if beeCount[parent2].Drone < 32 then
-                            util.populateBee(parent2, sideConfig, 8)
+                            util.populateBee(parent2, sideConfig, 16)
                         end
                     else
                         util.convertPrincess(parent1, sideConfig)
                         if beeCount[parent1].Drone < 32 then
-                            util.populateBee(parent1, sideConfig, 8)
+                            util.populateBee(parent1, sideConfig, 16)
                         end
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
