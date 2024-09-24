@@ -223,6 +223,12 @@ function utility.populateBee(beeName, sideConfig, targetCount)
         print("Couldn't find princess or drone! Aborting.")
         return
     end
+    local princess = transposer.getStackInSlot(sideConfig.storage, princessSlot)
+    local genes = princess.individual.active
+    if genes.fertility == 1 then
+        print("This bee has 1 fertility! I can't populate this! Aborting.")
+        return
+    end
     print(beeName .. " bees found!")
     --Because the drones in storage are scanned you can only insert 1. the rest will be taken from output of the following cycles
     transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, princessSlot, 1)
@@ -607,7 +613,10 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
             else
                 print("Couldn't find reserve drone! Substituting base drone")
                 transposer.transferItem(sideConfig.output, sideConfig.breeder, 1, princessSlot, 1)
-                transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2)
+                if (transposer.transferItem(sideConfig.storage, sideConfig.breeder, 1, baseDroneSlot, 2) == 0) then
+                    print("OUT OF BASE DRONES! TERMINATING.")
+                    os.exit()
+                end
                 dumpOutput(sideConfig, scanCount)
             end
         elseif (princessPureness + bestDronePureness) == 1 then
