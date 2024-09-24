@@ -151,7 +151,7 @@ function utility.convertPrincess(beeName, sideConfig)
         print("Can't find drone or you don't have the required amount of drones (16)! Aborting.")
         return
     end
-    if targetGenes == nil then
+    if targetGenes == nil or targetGenes.active == nil then
         print("Drone not scanned! Aborting.")
         return
     end
