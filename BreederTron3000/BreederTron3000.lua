@@ -147,7 +147,7 @@ elseif programMode:lower() == "imprint" then
         print("PROGRAM IS IN IMPRINT MODE BUT NO TEMPLATE DRONES ARE PRESENT! TERMINATING!")
         os.exit()
     end
-    local templateSpecies,_ = utility.getItemName(templateDrone)
+    local templateSpecies,_ = uti.getItemName(templateDrone)
     for name,count in pairs(beeCount) do
         if count.Princess ~= nil and count.Drone ~= nil then
             if count.Drone < 8 then
