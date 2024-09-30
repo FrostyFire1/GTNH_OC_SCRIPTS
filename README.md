@@ -5,7 +5,8 @@ Requirements:
 1. OC Computer
 2. Adapter connected to an apiary/alveary
 3. Transposer
-4. Four (4) chests and an apiary/alveaery adjacent to the transposer
+4. Four (4) chests and an apiary/alveary adjacent to the transposer  
+ ### WARNING: Alveary adapter cannot be on the edge of the alveary. If the program doesn't detect it: break and replace the alveary
 5. Forestry Analyzer or GT singleblock scanner (tier doesn't matter)
 6. Scanned bees! At least 16 drones of a species because otherwise the program won't recognise them (but 32 wouldn't hurt :D) and **Princesses** (Queens don't count)   
 ![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
