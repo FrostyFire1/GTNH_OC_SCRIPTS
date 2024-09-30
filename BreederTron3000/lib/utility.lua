@@ -643,6 +643,9 @@ function getBestReserve(beeName, sideConfig, targetGenes)
                 return table.unpack({bestReserveScore, bestReserveSlot})
             end
         else
+            if bee.individual == nil or bee.individual.active == nil then
+                goto continue
+            end
             if bee.individual.active ~= nil then
                 local score = -1
                 if bee.individual.active.species.name == beeName then
@@ -656,6 +659,7 @@ function getBestReserve(beeName, sideConfig, targetGenes)
                 end
             end
         end
+        ::continue::
     end
     return table.unpack({bestReserveScore, bestReserveSlot})
 end
