@@ -374,7 +374,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
             while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
-                os.sleep(1)
+                os.sleep(0.05)
             end
             print("Continuing...")
             goto continue
