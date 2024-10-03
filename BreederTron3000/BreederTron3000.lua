@@ -193,6 +193,8 @@ elseif programMode:lower() == "imprint" then
             if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
                 util.populateBee(name, sideConfig, 32)
             end
+        else
+            print(string.format("%s bee already has template genes. skipping.", name))
         end
         ::continue::
     end
