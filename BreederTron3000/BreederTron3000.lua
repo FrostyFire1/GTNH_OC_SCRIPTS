@@ -72,6 +72,14 @@ if princessCount == 0 then
 end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
+print("Populating underpopulated bee pairs...")
+for _,name in pairs(beeCount) do
+    if name["Princess"] ~= nil and name["Drone"] ~= nil then
+        if name["Drone"] < 16 then
+            util.populateBee(name, sideConfig, 16)
+        end
+    end
+end
 
 if programMode == "breed" then
     local storageSize = transposer.getInventorySize(sideConfig.storage)
