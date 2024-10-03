@@ -661,7 +661,7 @@ function getBestReserve(beeName, sideConfig, targetGenes)
         end
         ::continue::
     end
-    if transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot) == nil then
+    if bestReserveSlot ~= nil and transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot) == nil then
         print("BEST RESERVE DRONE DISAPPEARED! TRYING AGAIN...")
         return getBestReserve(beeName, sideConfig, targetGenes)
     end
