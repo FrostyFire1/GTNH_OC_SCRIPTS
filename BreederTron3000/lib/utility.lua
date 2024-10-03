@@ -661,6 +661,10 @@ function getBestReserve(beeName, sideConfig, targetGenes)
         end
         ::continue::
     end
+    if transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot) == nil then
+        print("BEST RESERVE DRONE DISAPPEARED! TRYING AGAIN...")
+        return getBestReserve(beeName, sideConfig, targetGenes)
+    end
     return table.unpack({bestReserveScore, bestReserveSlot})
 end
 function utility.dumpDrones(beeName, sideConfig)
