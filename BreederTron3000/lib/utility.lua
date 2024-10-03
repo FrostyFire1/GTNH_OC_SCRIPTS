@@ -376,7 +376,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
     local scanCount = 0
 
     while(not isPure) or (not isGeneticallyPerfect) do
-        while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
+        while(transposer.getStackInSlot(sideConfig.breeder,3) == nil) do
             os.sleep(1)
         end
         print("Scanning bees...")
