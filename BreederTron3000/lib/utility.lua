@@ -85,8 +85,8 @@ function utility.resolveConflict(beeName, parentPairs, child)
     end
 
     while(choice == nil or choice < 1 or choice > #parentPairs) do
-    print("Please type the number of the correct pair")
-    choice = io.read("*n")
+        print("Please type the number of the correct pair")
+        choice = io.read("*n")
     end
 
     print("Selected: " .. parentPairs[choice].allele1.name .. " + " .. parentPairs[choice].allele2.name)
@@ -355,13 +355,9 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         if #requirements == 1 and botPlaced then
             print("The robot dealt with all of the requirements! Proceeding.")
         else
-            print("type anything when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
+            print("Press enter when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
             local ans = io.read()
-            while type(ans) ~= "string" do
-                print("type anything when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
-                ans = io.read()
-            end
-            if ans:lower() == "skip" then
+            if type(ans) == "string" and ans:lower() == "skip" then
                 goto skip
             end
         end
