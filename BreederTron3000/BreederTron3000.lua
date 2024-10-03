@@ -187,7 +187,7 @@ elseif programMode:lower() == "imprint" then
         end
         local droneSlot = util.findBeeWithType(name, "Drone", sideConfig)
         local drone = transposer.getStackInSlot(sideConfig.storage, droneSlot)
-        if not (utility.isGeneticallyEquivalent(drone, templateDrone, templateDrone.individual.active)) then
+        if not (util.isGeneticallyEquivalent(drone, templateDrone, templateDrone.individual.active)) then
             util.convertPrincess(name, sideConfig)
             util.populateBee(name, sideConfig, 8)
             if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
