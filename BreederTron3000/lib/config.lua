@@ -46,6 +46,9 @@ config.geneWeights = {
     ["tolerantFlyer"] = 2,
     ["caveDwelling"] = 2,
 }
+config.breedWeights = {
+    ["species"] = 5,
+}
 config.activeBonus = 1.2
 
 config.weightSum = 0
