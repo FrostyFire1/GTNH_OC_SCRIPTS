@@ -245,7 +245,7 @@ function utility.populateBee(beeName, sideConfig, targetCount)
     safeTransfer(sideConfig.storage, sideConfig.breeder, 1, droneSlot, "storage", "breeder")
     local item = nil
     while(item == nil or item.size < targetCount) do
-        while(transposer.getStackInSlot(sideConfig.breeder,3) == nil) do --Wait until cycle is finished
+        while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do --Wait until cycle is finished
             os.sleep(1)
         end
         if droneOutput == nil then
