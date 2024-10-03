@@ -72,7 +72,6 @@ if princessCount == 0 then
 end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
-util.doCleanUp(sideConfig)
 
 if programMode == "breed" then
 
