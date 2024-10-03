@@ -19,7 +19,7 @@ Recommendations:
 - Maddening Frame of Frenzy (Requires T3 blood magic altar)
 - Arborist Frame (Or any other frame that completely stops mutations)
 - Witchery brews of shifting seasons (For climate changes)
-- Gentics acclimatizer (so you don't have to change the biome every cycle on some bees)  
+- Genetics acclimatizer (so you don't have to change the biome every cycle on some bees)  
 - Template drones in the last slot of the storage chest (The program will imprint their genes onto other bees as it goes)
 - World Accelerators
 ## BreederTron3000 installation guide:  
