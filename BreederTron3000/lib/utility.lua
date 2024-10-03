@@ -1010,6 +1010,38 @@ function utility.getOrCreateConfig()
     return newConfig
 end
 
+function utility.doCleanUp(sideConfig)
+    print("------------------------------")
+    print("CLEANING UP...")
+    print("------------------------------")
+    local containers = {"storage","breeder","scanner","output"}
+    local size = -1
+    for _,name in pairs(containers) do
+        print(string.format("Now cleaning: %s",name))
+        size = transposer.getInventorySize(side)
+        for i=1,size do
+            item = transposer.getStackInSlot(side, i)
+            if item ~= nil then
+                if bee.individual == nil then
+                    print(string.format("Item in slot %d is not a bee! Sending to garbage"))
+                    safeTransfer(sideConfig[name], sideConfig.garbage, 64, i, name, "garbage")
+                elseif bee.individual.active == nil and name ~= "scanner" then
+                    print(string.format("Bee in slot %d is not scanned! Sending to scanner."))
+                    safeTransfer(sideConfig[name], sideConfig.scanner, 64, i, name, "scanner")
+                end
+            end
+        end
+    end
+end
+
+function safeTransfer(sideIn, sideOut, amount, slot, sideInName, sideOutName)
+    if (transposer.transferItem(sideIn, sideOut, amount, slot) == 0) then
+        print(string.format("TRANSFER FROM SLOT %d OF CONTAINER: %s TO CONTAINER: %s FAILED! PLEASE DO IT MANUALLY OR CLEAN THE %s CONTAINER!", slot, sideInName:upper(), sideOutName:upper()))
+        while(transposer.getStackInSlot(sideIn, slot) ~= nil) do
+            os.sleep(1)
+        end
+    end
+end
 function indexInTable(tbl, target)
     for i,value in pairs(tbl) do
         if value == target then
