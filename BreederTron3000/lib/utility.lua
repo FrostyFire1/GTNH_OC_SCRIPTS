@@ -658,7 +658,7 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
         end
         ::continue::
     end
-    return false
+    return true
 end
 
 function getBestReserve(beeName, sideConfig, targetGenes)

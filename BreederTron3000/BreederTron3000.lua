@@ -167,8 +167,9 @@ elseif programMode:lower() == "imprint" then
             if count.Drone < 8 then
                 util.populateBee(name, sideConfig, 8)
             end
-            util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
-            util.populateBee(name, sideConfig, 32)
+            if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+                util.populateBee(name, sideConfig, 32)
+            end
             beeCount[name] = nil
         end
     end
