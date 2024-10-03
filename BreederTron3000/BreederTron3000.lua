@@ -74,6 +74,8 @@ print(string.format("Located %d princesses in the storage chest.", princessCount
 
 
 if programMode == "breed" then
+    local storageSize = transposer.getInventorySize(sideConfig.storage)
+    local hasTemplates = transposer.getStackInSlot(sideConfig.storage, storageSize) == nil
 
     if modem == nil or (not modem.isWireless()) then
         print("WARNING: No network card or card isn't wireless!")
@@ -98,7 +100,6 @@ if programMode == "breed" then
         print(beeName)
     end
 
-    local storageSize = transposer.getInventorySize(sideConfig.storage)
     while breedingChain[targetBee] ~= nil do
         local bredBee = false
         for beeName,breedData in pairs(breedingChain) do
@@ -124,7 +125,11 @@ if programMode == "breed" then
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
                     
-                    if transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil then
+                    if hasTemplates then
+                        while (transposer.getStackInSlot(sideConfig.storage, storageSize) == nil) do
+                            print("YOU RUN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
+                            os.sleep(5)
+                        end
                         util.populateBee(beeName, sideConfig, 8)
                         util.imprintFromTemplate(beeName, sideConfig)
                     end
