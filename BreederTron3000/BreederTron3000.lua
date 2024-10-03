@@ -183,8 +183,9 @@ elseif programMode:lower() == "imprint" then
         end
         util.convertPrincess(name, sideConfig)
         util.populateBee(name, sideConfig, 8)
-        util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active)
-        util.populateBee(name, sideConfig, 32)
+        if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+            util.populateBee(name, sideConfig, 32)
+        end
         ::continue::
     end
 end
