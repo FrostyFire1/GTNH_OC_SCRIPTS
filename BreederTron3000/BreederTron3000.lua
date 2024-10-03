@@ -163,6 +163,9 @@ elseif programMode:lower() == "imprint" then
     end
     local templateSpecies,_ = util.getItemName(templateDrone)
     for name,count in pairs(beeCount) do
+        if name == templateSpecies then
+            goto continue
+        end
         if count.Princess ~= nil and count.Drone ~= nil then
             if count.Drone < 8 then
                 util.populateBee(name, sideConfig, 8)
@@ -172,6 +175,7 @@ elseif programMode:lower() == "imprint" then
             end
             beeCount[name] = nil
         end
+        ::continue::
     end
     for name,count in pairs(beeCount) do
         if name == templateSpecies then
@@ -181,10 +185,14 @@ elseif programMode:lower() == "imprint" then
             print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
             goto continue
         end
-        util.convertPrincess(name, sideConfig)
-        util.populateBee(name, sideConfig, 8)
-        if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
-            util.populateBee(name, sideConfig, 32)
+        local droneSlot = util.findBeeWithType(name, "Drone", sideConfig)
+        local drone = transposer.getStackInSlot(sideConfig.storage, droneSlot)
+        if not (utility.isGeneticallyEquivalent(drone, templateDrone, templateDrone.individual.active)) then
+            util.convertPrincess(name, sideConfig)
+            util.populateBee(name, sideConfig, 8)
+            if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+                util.populateBee(name, sideConfig, 32)
+            end
         end
         ::continue::
     end
