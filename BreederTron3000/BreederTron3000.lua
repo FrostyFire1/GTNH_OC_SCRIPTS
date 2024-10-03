@@ -73,9 +73,9 @@ end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
 print("Populating underpopulated bee pairs...")
-for _,name in pairs(beeCount) do
-    if name["Princess"] ~= nil and name["Drone"] ~= nil then
-        if name["Drone"] < 16 then
+for name,data in pairs(beeCount) do
+    if data["Princess"] ~= nil and data["Drone"] ~= nil then
+        if data["Drone"] < 16 then
             util.populateBee(name, sideConfig, 16)
         end
     end
