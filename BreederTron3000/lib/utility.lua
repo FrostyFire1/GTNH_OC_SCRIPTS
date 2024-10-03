@@ -618,7 +618,9 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
             print("Looking for reserve drone...")
             bestReserveDrone = nil
             bestReserveScore, bestReserveSlot = getBestReserve(beeName, sideConfig, templateGenes)
-            bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
+            if bestReserveSlot ~= nil then
+                bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
+            end
             if bestReserveDrone ~= nil then
                 print("Found reserve drone with genetic score " .. bestReserveScore .. "/" .. config.targetSum)
                 safeTransfer(sideConfig.garbage, sideConfig.breeder, 1, bestReserveSlot, "garbage", "breeder")
