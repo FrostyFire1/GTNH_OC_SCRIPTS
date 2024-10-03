@@ -127,7 +127,7 @@ if programMode == "breed" then
                     
                     if hasTemplates then
                         while (transposer.getStackInSlot(sideConfig.storage, storageSize) == nil) do
-                            print("YOU RUN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
+                            print("YOU RAN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
                             os.sleep(5)
                         end
                         util.populateBee(beeName, sideConfig, 8)

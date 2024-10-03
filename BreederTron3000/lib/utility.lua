@@ -602,6 +602,10 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
                 continueImprinting(sideConfig, princessSlot, bestDroneSlot, scanCount)
             else
                 print("Target gene pool unreachable. substituting drone for template drone.")
+                while (transposer.getStackInSlot(sideConfig.storage, size) == nil) do
+                    print("YOU RAN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
+                    os.sleep(5)
+                end
                 safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, "output", "breeder")
                 safeTransfer(sideConfig.storage, sideConfig.breeder, 1, size, "storage", "breeder") -- Last slot in storage is reserved for template bees.
                 for i=1,scanCount do
