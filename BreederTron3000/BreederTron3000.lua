@@ -177,7 +177,7 @@ elseif programMode:lower() == "imprint" then
         if name == templateSpecies then
             goto continue
         end
-        if(count.Drone < 16) then
+        if(count.Drone == nil or count.Drone < 16) then
             print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
         end
         util.convertPrincess(name, sideConfig)
