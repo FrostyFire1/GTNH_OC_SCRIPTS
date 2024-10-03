@@ -180,8 +180,8 @@ function utility.convertPrincess(beeName, sideConfig)
 
     local princessConverted = false
     while(not princessConverted) do
-        --Cycle finished if slot 1 is empty
-        if transposer.getStackInSlot(sideConfig.breeder, 1) == nil then
+        --Cycle finished if slot 3 is not empty
+        if transposer.getStackInSlot(sideConfig.breeder, 3) ~= nil then
             for i=3,9 do
                 local item = transposer.getStackInSlot(sideConfig.breeder,i)
                 if item ~= nil then
