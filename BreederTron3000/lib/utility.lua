@@ -1015,6 +1015,7 @@ function safeTransfer(sideIn, sideOut, amount, slot, sideInName, sideOutName)
         print(string.format("TRANSFER FROM SLOT %d OF CONTAINER: %s TO CONTAINER: %s FAILED! PLEASE DO IT MANUALLY OR CLEAN THE %s CONTAINER!", slot, sideInName:upper(), sideOutName:upper(), sideOutName:upper()))
         while(transposer.getStackInSlot(sideIn, slot) ~= nil) do
             os.sleep(1)
+            transposer.transferItem(sideIn, sideOut, amount, slot)
         end
     end
 end
