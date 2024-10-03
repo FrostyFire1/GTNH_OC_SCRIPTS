@@ -683,7 +683,7 @@ end
 
 function dumpOutput(sideConfig, scanCount)
     for i=1,scanCount do
-        safeTransfer(sideConfig.output, sideConfig.garbage, 64, "output", "garbage")
+        safeTransfer(sideConfig.output, sideConfig.garbage, 64, i, "output", "garbage")
     end
 end
 function utility.hasTargetGenes(princess, drone, targetGenes)
