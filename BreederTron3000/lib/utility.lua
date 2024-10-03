@@ -718,6 +718,7 @@ function getBestBreedReserve(beeName, sideConfig)
                 local score = 0
                 if bee.individual.active.species.name == beeName then
                     score = score + 1
+                end
                 if bee.individual.inactive.species.name == beeName then
                     score = score + 1
                 end
@@ -735,6 +736,7 @@ function getBestBreedReserve(beeName, sideConfig)
     end
     return table.unpack({bestReserveScore, bestReserveSlot})
 end
+
 function utility.dumpDrones(beeName, sideConfig)
     local storageSize = transposer.getInventorySize(sideConfig.storage)
     for i=1,storageSize do
