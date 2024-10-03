@@ -462,7 +462,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
             end
             if bestReserveDrone ~= nil then
-                print("Found reserve drone with genetic score " .. bestReserveScore .. "/" .. config.targetSum)
+                print("Found reserve drone with pureness: " .. bestReserveScore .. "/" .. "2")
                 safeTransfer(sideConfig.garbage, sideConfig.breeder, 1, bestReserveSlot, "garbage", "breeder")
                 safeTransfer(sideConfig.output, sideConfig.breeder, 1, princessSlot, "output", "breeder")
                 dumpOutput(sideConfig, scanCount)
