@@ -75,7 +75,7 @@ print(string.format("Located %d princesses in the storage chest.", princessCount
 
 if programMode == "breed" then
     local storageSize = transposer.getInventorySize(sideConfig.storage)
-    local hasTemplates = transposer.getStackInSlot(sideConfig.storage, storageSize) == nil
+    local hasTemplates = transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil
 
     if modem == nil or (not modem.isWireless()) then
         print("WARNING: No network card or card isn't wireless!")
