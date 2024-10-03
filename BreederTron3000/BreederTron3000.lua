@@ -179,6 +179,7 @@ elseif programMode:lower() == "imprint" then
         end
         if(count.Drone == nil or count.Drone < 16) then
             print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
+            goto continue
         end
         util.convertPrincess(name, sideConfig)
         util.populateBee(name, sideConfig, 8)
