@@ -31,6 +31,8 @@ To run BreederTron3000 you must provide the mode and the target bee (if running 
 **Available modes: `breed` and `imprint`**   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
+If the bee name has spaces in it put the name in quotes. Example:  
+`BreederTron3000 breed "Infinity Catalyst"`  
 Imprint mode simply imprints template genes onto every bee in the storage chest. To run the program in imprint mode run:  
 `BreederTron3000 imprint`
 
