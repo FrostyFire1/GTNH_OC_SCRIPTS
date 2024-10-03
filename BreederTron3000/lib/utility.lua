@@ -355,8 +355,11 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         if #requirements == 1 and botPlaced then
             print("The robot dealt with all of the requirements! Proceeding.")
         else
-            print("Press enter when you've made sure the conditions are met.")
-            io.read()
+            print("Press enter when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
+            local ans = io.read()
+            if type(ans) == "string" and ans:lower() == "skip" then
+                goto skip
+            end
         end
         
     end
@@ -490,6 +493,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         end
     end
     print("Breeding finished. " .. beeName .. " princess and its drones moved to storage.")
+    ::skip::
 end
 
 function utility.ensureGeneticEquivalence(princessSlot, droneSlot, sideConfig)
@@ -1050,7 +1054,7 @@ function utility.getOrCreateConfig()
         end
         local answeredCorrectly = false
         while not answeredCorrectly do
-            local answer = io.read()
+            local answer = io.read("*n")
             if tonumber(answer) ~= nil then
                 answer = tonumber(answer)
                 if answer >= 1 and answer <= #directions then --Check if answer within bounds
