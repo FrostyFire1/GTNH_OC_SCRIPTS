@@ -1011,7 +1011,7 @@ function utility.getOrCreateConfig()
 end
 
 function safeTransfer(sideIn, sideOut, amount, slot, sideInName, sideOutName)
-    if (transposer.transferItem(sideIn, sideOut, amount, slot) == 0 and transposer.getStackInSlot(sideIn, slot) == nil) then
+    if (transposer.transferItem(sideIn, sideOut, amount, slot) == 0 and transposer.getStackInSlot(sideIn, slot) ~= nil) then
         print(string.format("TRANSFER FROM SLOT %d OF CONTAINER: %s TO CONTAINER: %s FAILED! PLEASE DO IT MANUALLY OR CLEAN THE %s CONTAINER!", slot, sideInName:upper(), sideOutName:upper(), sideOutName:upper()))
         while(transposer.getStackInSlot(sideIn, slot) ~= nil) do
             os.sleep(1)
