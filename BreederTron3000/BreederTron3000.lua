@@ -198,4 +198,6 @@ elseif programMode:lower() == "imprint" then
         end
         ::continue::
     end
+else
+    printUsage()
 end
