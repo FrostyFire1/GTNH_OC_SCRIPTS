@@ -457,7 +457,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
             print("TARGET SPECIES LOST!")
             print("Looking for reserve drone...")
             bestReserveDrone = nil
-            bestReserveScore, bestReserveSlot = getBestReserve(beeName, sideConfig, templateGenes, config.breedWeights)
+            bestReserveScore, bestReserveSlot = getBestBreedReserve(beeName, sideConfig)
             if bestReserveSlot ~= nil then
                 bestReserveDrone = transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot)
             end
@@ -683,6 +683,43 @@ function getBestReserve(beeName, sideConfig, targetGenes)
                     score = utility.getGeneticScore(bee, targetGenes, bee.individual.active.species, config.geneWeights)
                 elseif bee.individual.inactive.species.name == beeName then
                     score = utility.getGeneticScore(bee, targetGenes, bee.individual.inactive.species, config.geneWeights)
+                end
+                if score > bestReserveScore then
+                    bestReserveScore = score
+                    bestReserveSlot = i
+                end
+            end
+        end
+        ::continue::
+    end
+    if bestReserveSlot ~= nil and transposer.getStackInSlot(sideConfig.garbage, bestReserveSlot) == nil then
+        print("BEST RESERVE DRONE DISAPPEARED! TRYING AGAIN...")
+        return getBestReserve(beeName, sideConfig, targetGenes, config.geneWeights)
+    end
+    return table.unpack({bestReserveScore, bestReserveSlot})
+end
+
+function getBestBreedReserve(beeName, sideConfig)
+    local bestReserveScore = -1
+    local bestReserveSlot = nil
+    local nilCounter = 0
+    for i=1,reserveSize do
+        local bee = transposer.getStackInSlot(sideConfig.garbage, i)
+        if bee == nil then
+            nilCounter = nilCounter + 1
+            if nilCounter > 10 then
+                return table.unpack({bestReserveScore, bestReserveSlot})
+            end
+        else
+            if bee.individual == nil or bee.individual.active == nil then
+                goto continue
+            end
+            if bee.individual.active ~= nil then
+                local score = 0
+                if bee.individual.active.species.name == beeName then
+                    score = score + 1
+                if bee.individual.inactive.species.name == beeName then
+                    score = score + 1
                 end
                 if score > bestReserveScore then
                     bestReserveScore = score
