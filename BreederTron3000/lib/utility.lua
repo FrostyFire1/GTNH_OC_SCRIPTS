@@ -357,10 +357,11 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         else
             print("Type anything when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
             local ans = io.read()
-            while type(ans) ~= "string" do
+            while type(ans) ~= "string" or ans == "" do
                 print("Type \"ok\" when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
                 ans = io.read()
             end
+            print(ans)
             if ans == "skip" then
                 goto skip
             end
