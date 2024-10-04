@@ -209,7 +209,7 @@ elseif programMode:lower() == "imprint" then
 elseif programMode:lower() == "convert" then
     if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
         print(string.format("You don't have the drones to convert a princess to %s!",targetBee))
-    elseif beeCount[targetBee].Drone < 16 then
+    elseif beeCount[targetBee].Drone < config.convertDroneReq then
         print(string.format("You only have %d %s drones. Would you like to proceed anyway? (This could crash the program) Y/N", beeCount[targetBee].Drone, targetBee))
         local ans = io.read()
         if ans ~= nil and ans:upper() == "Y" then
