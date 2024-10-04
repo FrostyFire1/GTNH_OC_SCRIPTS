@@ -65,7 +65,7 @@ config.devConfig = {
     ["output"] = 3,
 }
 
-config.droneReq = 16
+config.convertDroneReq = 16
 
 config.port = 3001
 config.robotPort = 3000
