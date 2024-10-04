@@ -51,6 +51,12 @@ for i=0,5 do
     end
 end
 
+if flags["noFinalImprint"] == true then
+    print("------------------------------")
+    print(string.format("The program will skip imprinting of the %s bee", targetBee))
+    print("------------------------------")
+end
+
 print("Checking storage for existing bees...")
 local beeCount = util.listBeesInStorage(sideConfig)
 print("Done!")

@@ -355,7 +355,7 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
         if #requirements == 1 and botPlaced then
             print("The robot dealt with all of the requirements! Proceeding.")
         else
-            print("Type anything when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
+            print("Type \"ok\" when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
             local ans = io.read()
             while type(ans) ~= "string" or ans == "" do
                 print("Type \"ok\" when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
