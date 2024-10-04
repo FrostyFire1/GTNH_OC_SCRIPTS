@@ -127,7 +127,7 @@ end
 
 --Converts a princess to the given bee type
 --Assumes bee is scanned (Only scanned bees expose genes)
-function utility.convertPrincess(beeName, sideConfig)
+function utility.convertPrincess(beeName, sideConfig, droneReq)
     print("Converting princess to " .. beeName)
     local droneSlot = nil
     local targetGenes = nil
@@ -138,6 +138,9 @@ function utility.convertPrincess(beeName, sideConfig)
         local species,_ = utility.getItemName(princess)
         princessName = species
     end
+    if droneReq == nil then
+        droneReq = config.convertDroneReq
+    end
     local size = transposer.getInventorySize(sideConfig.storage)
     --Since frame slots are slots 10,11,12 for the apiary there is no need to make any offsets
 
@@ -146,7 +149,7 @@ function utility.convertPrincess(beeName, sideConfig)
             local bee = transposer.getStackInSlot(sideConfig.storage,i)
             if bee ~= nil then
                 local species,type = utility.getItemName(bee)
-                if species == beeName and type == "Drone" and bee.size >= 16 and droneSlot == nil then
+                if species == beeName and type == "Drone" and bee.size >= droneReq and droneSlot == nil then
                     droneSlot = i
                     targetGenes = bee.individual
                 elseif type == "Princess" and princess == nil then
@@ -158,7 +161,7 @@ function utility.convertPrincess(beeName, sideConfig)
         end
     end
     if droneSlot == nil then
-        print("Can't find drone or you don't have the required amount of drones (16)! Aborting.")
+        print(string.format("Can't find drone or you don't have the required amount of drones (%d)! Aborting.", droneReq))
         return
     end
     if targetGenes == nil or targetGenes.active == nil then

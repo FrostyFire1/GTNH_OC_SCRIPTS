@@ -9,8 +9,8 @@ local programMode = args[1]
 local targetBee = args[2]
 function printUsage()
     print("Usage: BreederTron3000 ProgramMode TargetBee")
-    print("TargetBee only needed in ProgramMode \"breed\"")
-    print("Available Modes: breed, imprint")
+    print("TargetBee needed in ProgramMode \"breed\" and \"convert\"")
+    print("Available Modes: breed, imprint, convert")
 end
 if programMode == nil then
     print("PROGRAM MODE NOT PROVIDED! TERMINATING!")
@@ -78,16 +78,18 @@ if princessCount == 0 then
 end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
-print("Populating underpopulated bee pairs...")
-for name,data in pairs(beeCount) do
-    if data["Princess"] ~= nil and data["Drone"] ~= nil then
-        if data["Drone"] < 16 then
-            util.populateBee(name, sideConfig, 16)
+if programMode:lower() == "breed" or programMode:lower() == "imprint" then
+    print("Populating underpopulated bee pairs...")
+    for name,data in pairs(beeCount) do
+        if data["Princess"] ~= nil and data["Drone"] ~= nil then
+            if data["Drone"] < 16 then
+                util.populateBee(name, sideConfig, 16)
+            end
         end
     end
 end
 
-if programMode == "breed" then
+if programMode:lower() == "breed" then
     local storageSize = transposer.getInventorySize(sideConfig.storage)
     local hasTemplates = transposer.getStackInSlot(sideConfig.storage, storageSize) ~= nil
 
@@ -203,6 +205,20 @@ elseif programMode:lower() == "imprint" then
             print(string.format("%s bee already has template genes. skipping.", name))
         end
         ::continue::
+    end
+elseif programMode:lower() == "convert" then
+    if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
+        print(string.format("You don't have the drones to convert a princess to %s!",targetBee))
+    elseif beeCount[targetBee].Drone < 16 then
+        print(string.format("You only have %d %s drones. Would you like to proceed anyway? (This could crash the program) Y/N", beeCount[targetBee].Drone, targetBee))
+        local ans = io.read()
+        if ans ~= nil and ans:upper() == "Y" then
+            util.convertPrincess(targetBee, sideConfig)
+            util.populateBee(targetBee, sideConfig, 16)
+        end
+    else
+        util.convertPrincess(targetBee, sideConfig)
+        util.populateBee(targetBee, sideConfig, 16)
     end
 else
     printUsage()
