@@ -213,7 +213,7 @@ elseif programMode:lower() == "convert" then
         print(string.format("You only have %d %s drones. Would you like to proceed anyway? (This could crash the program) Y/N", beeCount[targetBee].Drone, targetBee))
         local ans = io.read()
         if ans ~= nil and ans:upper() == "Y" then
-            util.convertPrincess(targetBee, sideConfig)
+            util.convertPrincess(targetBee, sideConfig, 0)
             util.populateBee(targetBee, sideConfig, 16)
         end
     else
