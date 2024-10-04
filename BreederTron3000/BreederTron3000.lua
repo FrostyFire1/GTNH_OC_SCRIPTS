@@ -2,7 +2,7 @@ local util = require("lib.utility")
 local component = require("component")
 local config = require("lib.config")
 local shell = require("shell")
-local args,_ = shell.parse(...)
+local args,flags = shell.parse(...)
 local event = require("event")
 
 local programMode = args[1]
@@ -133,7 +133,7 @@ if programMode == "breed" then
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
                     
-                    if hasTemplates then
+                    if hasTemplates and not (beeName == targetBee and flags["noFinalImprint"] == true) then
                         while (transposer.getStackInSlot(sideConfig.storage, storageSize) == nil) do
                             print("YOU RAN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
                             os.sleep(5)
