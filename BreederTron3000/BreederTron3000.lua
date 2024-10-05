@@ -7,6 +7,7 @@ local event = require("event")
 
 local programMode = args[1]
 local targetBee = args[2]
+local convertCount = args[3]
 function printUsage()
     print("Usage: BreederTron3000 ProgramMode TargetBee [Flags]")
     print("TargetBee needed in ProgramMode \"breed\" and \"convert\". Imprint mode accepts it as an optional argument")
@@ -222,18 +223,27 @@ elseif programMode:lower() == "imprint" then
     end
     
 elseif programMode:lower() == "convert" then
-    if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
-        print(string.format("You don't have the drones to convert a princess to %s!",targetBee))
-    elseif beeCount[targetBee].Drone < config.convertDroneReq then
-        print(string.format("You only have %d %s drones. Would you like to proceed anyway? (This could crash the program) Y/N", beeCount[targetBee].Drone, targetBee))
-        local ans = io.read()
-        if ans ~= nil and ans:upper() == "Y" then
-            util.convertPrincess(targetBee, sideConfig, 0)
+    if convertCount == nil then
+        convertCount = 1
+    else
+        convertCount = tonumber(convertCount)
+    end
+    for i=1,convertCount do
+        if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
+            print(string.format("You don't have the drones to convert a princess to %s!",targetBee))
+            os.exit()
+        elseif beeCount[targetBee].Drone < config.convertDroneReq then
+            print(string.format("You only have %d %s drones. Would you like to proceed anyway? (This could crash the program) Y/N", beeCount[targetBee].Drone, targetBee))
+            local ans = io.read()
+            if ans ~= nil and ans:upper() == "Y" then
+                util.convertPrincess(targetBee, sideConfig, 0)
+                util.populateBee(targetBee, sideConfig, 16)
+            end
+        else
+            util.convertPrincess(targetBee, sideConfig)
             util.populateBee(targetBee, sideConfig, 16)
         end
-    else
-        util.convertPrincess(targetBee, sideConfig)
-        util.populateBee(targetBee, sideConfig, 16)
+        beeCount = util.listBeesInStorage(sideConfig)
     end
 else
     printUsage()

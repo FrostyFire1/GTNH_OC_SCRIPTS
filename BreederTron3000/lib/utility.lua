@@ -152,7 +152,7 @@ function utility.convertPrincess(beeName, sideConfig, droneReq)
                 if species == beeName and type == "Drone" and bee.size >= droneReq and droneSlot == nil then
                     droneSlot = i
                     targetGenes = bee.individual
-                elseif type == "Princess" and princess == nil then
+                elseif type == "Princess" and princess == nil and species ~= beeName then
                     princess = bee
                     princessSlot = i
                     princessName = species
