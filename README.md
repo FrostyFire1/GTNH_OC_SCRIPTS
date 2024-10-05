@@ -31,14 +31,15 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 3. Output (Of the scanner)
 4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee. PREVENT IT FROM FILLING UP BECAUSE THE PROGRAM WILL CRASH)
    
-To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument. Please note that the bee name is case sensitive.    
+To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument. Please note that the bee name is case sensitive. The general command is as follows:  
+`BreederTron3000 programMode targetBee [Flags]`  
 **Available modes: `breed`, `imprint` and `convert` **   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
 If the bee name has spaces in it put the name in quotes. Example:  
 `BreederTron3000 breed "Infinity Catalyst"`  
 Breed mode supports the `--noFinalImprint` flag. If used the target bee won't have its genes replaced with the template genes (in case you want a gene this bee provides). To run breedertron with this flag simply add it at the end of the command.  
-Imprint mode simply imprints template genes onto every bee in the storage chest. To run the program in imprint mode run:  
+Imprint mode simply imprints template genes onto every bee in the storage chest unless you provide the TargetBee argument, in which case it will only imprint that specific bee. To run the program in imprint mode run:  
 `BreederTron3000 imprint`
 Convert mode converts the first princess it finds in the storage chest to the target species. To run:  
 `BreederTron3000 convert beeName`
