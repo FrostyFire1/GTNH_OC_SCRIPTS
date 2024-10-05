@@ -9,7 +9,7 @@ local programMode = args[1]
 local targetBee = args[2]
 function printUsage()
     print("Usage: BreederTron3000 ProgramMode TargetBee [Flags]")
-    print("TargetBee needed in ProgramMode \"breed\" and \"convert\"")
+    print("TargetBee needed in ProgramMode \"breed\" and \"convert\". Imprint mode accepts it as an optional argument")
     print("Available Modes: breed, imprint, convert")
     print("Supported flags: --noFinalImprint || If used in breed mode the final bee won't have its genes imprinted (in case you want a gene from this bee)")
 end
