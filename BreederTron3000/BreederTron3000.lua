@@ -177,9 +177,9 @@ elseif programMode:lower() == "imprint" then
         else
             if beeCount[targetBee].Drone < 8 then
                 util.populateBee(targetBee, sideConfig, 8)
-                if (util.imprintFromTemplate(targetBee, sideConfig, templateDrone.individual.active) == true) then
-                    util.populateBee(targetBee, sideConfig, 32)
-                end
+            end
+            if (util.imprintFromTemplate(targetBee, sideConfig, templateDrone.individual.active) == true) then
+                util.populateBee(targetBee, sideConfig, 32)
             end
         end
     else
