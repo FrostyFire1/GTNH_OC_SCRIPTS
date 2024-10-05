@@ -846,7 +846,7 @@ function utility.dumpBreeder(sideConfig, scanDrones)
         local item = transposer.getStackInSlot(sideConfig.breeder, i)
         if item ~= nil then
             local name,type = utility.getItemName(item)
-            if type == "Comb" then
+            if type ~= "Princess" and type ~= "Drone" then
                 safeTransfer(sideConfig.breeder, sideConfig.garbage, 64, i, "breeder", "garbage")
             else
                 if scanDrones or type == "Princess" then
