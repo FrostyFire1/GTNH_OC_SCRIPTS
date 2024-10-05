@@ -33,7 +33,7 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
    
 To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument. Please note that the bee name is case sensitive. The general command is as follows:  
 `BreederTron3000 programMode targetBee [Flags]`  
-**Available modes: `breed`, `imprint` and `convert` **   
+**Available modes: `breed`, `imprint` and `convert`**   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
 If the bee name has spaces in it put the name in quotes. Example:  
