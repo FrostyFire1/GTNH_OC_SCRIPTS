@@ -242,10 +242,11 @@ elseif programMode:lower() == "convert" then
             local ans = io.read()
             if ans ~= nil and ans:upper() == "Y" then
                 util.convertPrincess(targetBee, sideConfig, 0)
-                util.populateBee(targetBee, sideConfig, 16)
             end
         else
             util.convertPrincess(targetBee, sideConfig)
+        end
+        if beeCount[targetBee].Drone < config.convertDroneReq * 2 then
             util.populateBee(targetBee, sideConfig, 16)
         end
         print("Updating bee count...")
