@@ -171,42 +171,56 @@ elseif programMode:lower() == "imprint" then
         os.exit()
     end
     local templateSpecies,_ = util.getItemName(templateDrone)
-    for name,count in pairs(beeCount) do
-        if name == templateSpecies then
-            goto continue
-        end
-        if count.Princess ~= nil and count.Drone ~= nil then
-            if count.Drone < 8 then
-                util.populateBee(name, sideConfig, 8)
-            end
-            if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
-                util.populateBee(name, sideConfig, 32)
-            end
-            beeCount[name] = nil
-        end
-        ::continue::
-    end
-    for name,count in pairs(beeCount) do
-        if name == templateSpecies then
-            goto continue
-        end
-        if(count.Drone == nil or count.Drone < 16) then
-            print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
-            goto continue
-        end
-        local droneSlot = util.findBeeWithType(name, "Drone", sideConfig)
-        local drone = transposer.getStackInSlot(sideConfig.storage, droneSlot)
-        if not (util.isGeneticallyEquivalent(drone, templateDrone, templateDrone.individual.active, true)) then
-            util.convertPrincess(name, sideConfig)
-            util.populateBee(name, sideConfig, 8)
-            if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
-                util.populateBee(name, sideConfig, 32)
-            end
+    if targetBee ~= nil then
+        if beeCount[targetBee].Princess == nil then
+            util.convertPrincess(targetBee, sideConfig)
         else
-            print(string.format("%s bee already has template genes. skipping.", name))
+            if beeCount[targetBee].Drone < 8 then
+                util.populateBee(targetBee, sideConfig, 8)
+                if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+                    util.populateBee(name, sideConfig, 32)
+                end
+            end
         end
-        ::continue::
+    else
+        for name,count in pairs(beeCount) do
+            if name == templateSpecies then
+                goto continue
+            end
+            if count.Princess ~= nil and count.Drone ~= nil then
+                if count.Drone < 8 then
+                    util.populateBee(name, sideConfig, 8)
+                end
+                if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+                    util.populateBee(name, sideConfig, 32)
+                end
+                beeCount[name] = nil
+            end
+            ::continue::
+        end
+        for name,count in pairs(beeCount) do
+            if name == templateSpecies then
+                goto continue
+            end
+            if(count.Drone == nil or count.Drone < 16) then
+                print(string.format("THERE ARE LESS THAN 16 %s DRONES IN STORAGE. SKIPPING IMPRINT.", name))
+                goto continue
+            end
+            local droneSlot = util.findBeeWithType(name, "Drone", sideConfig)
+            local drone = transposer.getStackInSlot(sideConfig.storage, droneSlot)
+            if not (util.isGeneticallyEquivalent(drone, templateDrone, templateDrone.individual.active, true)) then
+                util.convertPrincess(name, sideConfig)
+                util.populateBee(name, sideConfig, 8)
+                if (util.imprintFromTemplate(name, sideConfig, templateDrone.individual.active) == true) then
+                    util.populateBee(name, sideConfig, 32)
+                end
+            else
+                print(string.format("%s bee already has template genes. skipping.", name))
+            end
+            ::continue::
+        end
     end
+    
 elseif programMode:lower() == "convert" then
     if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
         print(string.format("You don't have the drones to convert a princess to %s!",targetBee))
