@@ -11,6 +11,8 @@ Requirements:
 6. Drones and princesses. Queens won't be recognized by the program. Any unscanned bees will automatically be scanned when the program starts.
    Any bees that have both a drone and a princess will automatically be populated up to a minimum of 16 drones if they're not already.
    If a species is required for the breeding chain but you don't have drones of that species the program will not detect the bee.
+### Note: You can have literally any princess in your storage chest. The program will convert it to the required species if necessary.
+   
    
 ![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
 ![2024-09-08_11 04 52](https://github.com/user-attachments/assets/e8c580b6-09be-4ed8-b700-650e24e43b88)
