@@ -32,7 +32,7 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee. PREVENT IT FROM FILLING UP BECAUSE THE PROGRAM WILL CRASH)
    
 To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument. Please note that the bee name is case sensitive. The general command is as follows:  
-`BreederTron3000 programMode targetBee [Flags]`  
+`BreederTron3000 programMode targetBee [OptionalArguments] [Flags]`  
 **Available modes: `breed`, `imprint` and `convert`**   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
