@@ -248,6 +248,7 @@ elseif programMode:lower() == "convert" then
             util.convertPrincess(targetBee, sideConfig)
             util.populateBee(targetBee, sideConfig, 16)
         end
+        print("Updating bee count...")
         beeCount = util.listBeesInStorage(sideConfig)
     end
 else
