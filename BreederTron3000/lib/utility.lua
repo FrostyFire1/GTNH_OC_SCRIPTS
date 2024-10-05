@@ -364,7 +364,6 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 print("Type \"ok\" when you've made sure the conditions are met or type \"skip\" to skip this breed (You made this bee somewhere else).")
                 ans = io.read()
             end
-            print(ans)
             if ans == "skip" then
                 goto skip
             end
