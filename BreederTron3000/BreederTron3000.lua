@@ -12,7 +12,9 @@ function printUsage()
     print("Usage: BreederTron3000 ProgramMode TargetBee [Flags]")
     print("TargetBee needed in ProgramMode \"breed\" and \"convert\". Imprint mode accepts it as an optional argument")
     print("Available Modes: breed, imprint, convert")
-    print("Supported flags: --noFinalImprint || If used in breed mode the final bee won't have its genes imprinted (in case you want a gene from this bee)")
+    print("Supported flags:")
+    print("--noFinalImprint || If used in breed mode the final bee won't have its genes imprinted (in case you want a gene from this bee)")
+    print("--swarm || If used in convert mode the conversion will happen to every princess.")
 end
 if programMode == nil then
     print("PROGRAM MODE NOT PROVIDED! TERMINATING!")
@@ -226,7 +228,10 @@ elseif programMode:lower() == "convert" then
     if convertCount == nil then
         convertCount = 1
     else
-        convertCount = tonumber(convertCount)
+        convertCount = math.max(tonumber(convertCount))
+    end
+    if flags["swarm"] == true then
+        convertCount = princessCount
     end
     for i=1,convertCount do
         if beeCount[targetBee] == nil or beeCount[targetBee].Drone == nil then
