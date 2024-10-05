@@ -41,9 +41,9 @@ If the bee name has spaces in it put the name in quotes. Example:
 Breed mode supports the `--noFinalImprint` flag. If used the target bee won't have its genes replaced with the template genes (in case you want a gene this bee provides). To run breedertron with this flag simply add it at the end of the command.  
 Imprint mode simply imprints template genes onto every bee in the storage chest unless you provide the TargetBee argument, in which case it will only imprint that specific bee. To run the program in imprint mode run:  
 `BreederTron3000 imprint`
-Convert mode converts the first princess it finds in the storage chest to the target species. To run:  
-`BreederTron3000 convert beeName`
-
+Convert mode converts the first princess it finds in the storage chest to the target species. Optionally supports convertCount as an argument to specify how many princesses to make. To run:  
+`BreederTron3000 convert beeName [convertCount]`
+Convert mode supports the `--swarm` flag. If used the conversion will be performed on every princess in your storage chest.
 ## BreederTron3000 Robot Mode
 THIS MODE REQUIRES A WIRELESS NETWORK CARD (T2) IN THE OC COMPUTER  
 If you are too lazy to place the required foundation blocks by yourself you can make an OC robot do it for you! 
