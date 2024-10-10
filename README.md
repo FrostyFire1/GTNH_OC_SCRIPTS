@@ -18,12 +18,12 @@ Requirements:
 ![2024-09-08_11 04 52](https://github.com/user-attachments/assets/e8c580b6-09be-4ed8-b700-650e24e43b88)
 
 Recommendations:
-- Maddening Frame of Frenzy (Requires T3 blood magic altar)
+- Maddening Frame of Frenzy (For mutations; Requires T3 blood magic altar; If you dont't want to make those you can use a mutation alveary instead (not compatible with world accelerators))
 - Arborist Frame (Or any other frame that completely stops mutations)
 - Witchery brews of shifting seasons (For climate changes)
 - Genetics acclimatizer (so you don't have to change the biome every cycle on some bees)  
 - Template drones in the last slot of the storage chest (The program will imprint their genes onto other bees as it goes)
-- World Accelerators
+- World Accelerators (drastically speeds up the bee cycles)
 ## BreederTron3000 installation guide:  
 in your OpenComputers PC run the following command:  
 ```wget https://raw.githubusercontent.com/FrostyFire1/GTNH_OC_SCRIPTS/main/BreederTron3000/setup.lua && setup```  
