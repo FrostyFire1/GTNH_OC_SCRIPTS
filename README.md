@@ -38,8 +38,12 @@ To run BreederTron3000 you must provide the mode and the target bee (if running 
 **Available modes: `breed`, `imprint` and `convert`**   
 Breed mode breeds bees up to the given bee. Example:  
 `BreederTron3000 breed Clay` will breed up to the Clay bee.  
-If the bee name has spaces in it put the name in quotes. Example:  
-`BreederTron3000 breed "Infinity Catalyst"`  
+If the bee name has spaces in it type the whole name without spaces. Example:  
+`BreederTron3000 breed Infinitycatalyst`  
+**Bees that have a different internal name (you need to use the internal name for the program to work):**  
+- Wither -> Sparkeling
+- Ender Shard -> Endshard  
+
 Breed mode supports the `--noFinalImprint` flag. If used the target bee won't have its genes replaced with the template genes (in case you want a gene this bee provides). To run breedertron with this flag simply add it at the end of the command.  
 Imprint mode simply imprints template genes onto every bee in the storage chest unless you provide the TargetBee argument, in which case it will only imprint that specific bee. To run the program in imprint mode run:  
 `BreederTron3000 imprint`  
