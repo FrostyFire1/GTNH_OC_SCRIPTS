@@ -714,6 +714,8 @@ function getBestBreedReserve(beeName, sideConfig)
     local bestReserveScore = -1
     local bestReserveSlot = nil
     local nilCounter = 0
+    local reserveSize = transposer.getInventorySize(sideConfig.garbage)
+
     for i=1,reserveSize do
         local bee = transposer.getStackInSlot(sideConfig.garbage, i)
         if bee == nil then

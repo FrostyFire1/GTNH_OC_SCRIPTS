@@ -11,6 +11,8 @@ Requirements:
 6. Drones and princesses. Queens won't be recognized by the program. Any unscanned bees will automatically be scanned when the program starts.
    Any bees that have both a drone and a princess will automatically be populated up to a minimum of 16 drones if they're not already.
    If a species is required for the breeding chain but you don't have drones of that species the program will not detect the bee.
+### Note: You can have literally any princess in your storage chest. The program will convert it to the required species if necessary.
+   
    
 ![image](https://github.com/user-attachments/assets/8157da10-1120-446f-91f4-447c46d2a60e)
 ![2024-09-08_11 04 52](https://github.com/user-attachments/assets/e8c580b6-09be-4ed8-b700-650e24e43b88)
@@ -29,7 +31,7 @@ When you first run BreederTron3000 you will be asked to provide the spots for al
 1. Storage (that's where your bees go)
 2. Scanner (Where you send your bees to be scanned)
 3. Output (Of the scanner)
-4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genese from a template bee.  
+4. Garbage (Trash can not recommended. The program will look for reserve drones here when imprinting genes from a template bee or breeding new species.  
    
 To run BreederTron3000 you must provide the mode and the target bee (if running breed mode) as an argument. Please note that the bee name is case sensitive. The general command is as follows:  
 `BreederTron3000 programMode targetBee [OptionalArguments] [Flags]`  
