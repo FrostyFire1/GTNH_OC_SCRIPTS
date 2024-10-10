@@ -36,7 +36,7 @@ config.geneWeights = {
     ["speed"] = 1,
     ["flowering"] = 1,
     ["flowerProvider"] = 1,
-    ["fertility"] = 7,
+    ["fertility"] = 10,
     ["territory"] = 1,
     ["effect"] = 1,
 
