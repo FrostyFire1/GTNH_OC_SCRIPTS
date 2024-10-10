@@ -31,12 +31,12 @@ config.preference = {
 
 }
 config.geneWeights = {
-    ["species"] = 5,
+    ["species"] = 7,
     ["lifespan"] = 1,
     ["speed"] = 1,
     ["flowering"] = 1,
     ["flowerProvider"] = 1,
-    ["fertility"] = 10,
+    ["fertility"] = 13,
     ["territory"] = 1,
     ["effect"] = 1,
 
@@ -49,7 +49,7 @@ config.geneWeights = {
 config.breedWeights = {
     ["species"] = 5,
 }
-config.activeBonus = 1.2
+config.activeBonus = 1.3
 
 config.weightSum = 0
 for _,value in pairs(config.geneWeights) do
