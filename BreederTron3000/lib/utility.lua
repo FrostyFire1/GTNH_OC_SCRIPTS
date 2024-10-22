@@ -711,7 +711,7 @@ function getBestReserve(beeName, sideConfig, targetGenes)
 end
 
 function getBestBreedReserve(beeName, sideConfig)
-    local bestReserveScore = -1
+    local bestReserveScore = 0
     local bestReserveSlot = nil
     local nilCounter = 0
     local reserveSize = transposer.getInventorySize(sideConfig.garbage)
