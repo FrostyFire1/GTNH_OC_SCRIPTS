@@ -146,7 +146,7 @@ if programMode:lower() == "breed" then
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
                     
-                    if hasTemplates and not (beeName == targetBee and flags["noFinalImprint"] == true) then
+                    if hasTemplates and (not (beeName == targetBee and flags["noFinalImprint"] == true) and not (beeName ~= targetBee and flags["onlyFinalImprint"] == true)) then
                         while (transposer.getStackInSlot(sideConfig.storage, storageSize) == nil) do
                             print("YOU RAN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
                             os.sleep(5)
