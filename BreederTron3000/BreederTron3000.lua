@@ -83,6 +83,7 @@ end
 print(string.format("Located %d princesses in the storage chest.", princessCount))
 
 if programMode:lower() == "breed" or programMode:lower() == "imprint" then
+    
     print("Populating underpopulated bee pairs...")
     for name,data in pairs(beeCount) do
         if data["Princess"] ~= nil and data["Drone"] ~= nil then

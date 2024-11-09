@@ -183,8 +183,8 @@ function utility.convertPrincess(beeName, sideConfig, droneReq)
 
     local princessConverted = false
     while(not princessConverted) do
-        --Cycle finished if slot 3 is not empty
-        if transposer.getStackInSlot(sideConfig.breeder, 3) ~= nil then
+        --Cycle finished if slot 1 is empty
+        if transposer.getStackInSlot(sideConfig.breeder, 1) == nil then
             for i=3,9 do
                 local item = transposer.getStackInSlot(sideConfig.breeder,i)
                 if item ~= nil then
@@ -386,14 +386,17 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
     local scanCount = 0
 
     while(not isPure) or (not isGeneticallyPerfect) do
-        while(transposer.getStackInSlot(sideConfig.breeder,3) == nil) do
+        while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
             os.sleep(1)
         end
         print("Scanning bees...")
         scanCount = utility.dumpBreeder(sideConfig, true)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
-            while(transposer.getStackInSlot(sideConfig.breeder,3) == nil) do
+            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
+                os.sleep(1)
+            end
+            while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
                 os.sleep(1)
             end
             print("Continuing...")
@@ -576,7 +579,10 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
         scanCount = utility.dumpBreeder(sideConfig, true)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
-            while(transposer.getStackInSlot(sideConfig.breeder,3) == nil) do
+            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
+                os.sleep(1)
+            end
+            while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
                 os.sleep(1)
             end
             print("Continuing...")
