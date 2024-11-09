@@ -6,7 +6,7 @@ Requirements:
 2. Adapter connected to an apiary/alveary
 3. Transposer
 4. Four (4) chests and an apiary/alveary adjacent to the transposer  
- ### WARNING: Alveary adapter cannot be on the edge of the alveary. If the program doesn't detect it: break and replace the alveary
+ ### WARNING: Alveary adapter has to be adjacent to one of the middle blocks of the alveary. If the program doesn't detect it: break and replace the alveary
 5. Forestry Analyzer or GT singleblock scanner (tier doesn't matter)
 6. Drones and princesses (the species gene must be the same in the active and inactive trait [a.k.a pure breed]). Queens won't be recognized by the program. Any unscanned bees will automatically be scanned when the program starts.
    Any bees that have both a drone and a princess will automatically be populated up to a minimum of 16 drones if they're not already.
