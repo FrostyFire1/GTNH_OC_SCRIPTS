@@ -386,17 +386,14 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
     local scanCount = 0
 
     while(not isPure) or (not isGeneticallyPerfect) do
-        while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
+        while(not cycleIsDone(sideConfig)) do
             os.sleep(1)
         end
         print("Scanning bees...")
         scanCount = utility.dumpBreeder(sideConfig, true)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
-            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
-                os.sleep(1)
-            end
-            while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
+            while(not cycleIsDone(sideConfig)) do
                 os.sleep(1)
             end
             print("Continuing...")
@@ -573,16 +570,13 @@ function utility.imprintFromTemplate(beeName, sideConfig, templateGenes)
         bestDronePureness = 0
         bestDroneSlot = nil
         scanCount = 0
-        while transposer.getStackInSlot(sideConfig.breeder, 1) ~= nil do --Wait for cycle finish
+        while(not cycleIsDone(sideConfig)) do
             os.sleep(1)
         end
         scanCount = utility.dumpBreeder(sideConfig, true)
         if scanCount == 0 then
             print("HEY! YOU TOOK OUT THE BEE! PUT A PRINCESS + DRONE IN THE BREEDER!")
-            while(transposer.getStackInSlot(sideConfig.breeder,1) == nil) do
-                os.sleep(1)
-            end
-            while(transposer.getStackInSlot(sideConfig.breeder,1) ~= nil) do
+            while(not cycleIsDone(sideConfig)) do
                 os.sleep(1)
             end
             print("Continuing...")
@@ -1121,5 +1115,17 @@ function indexInTable(tbl, target)
     return 0
 end
 
+function cycleIsDone(sideConfig)
+    for i=3,10 do
+        local item = transposer.getStackInSlot(sideConfig.breeder, i)
+        if item ~= nil then
+            local _,type = getItemName(item)
+            if type == "Princess" then
+                return true
+            end
+        end
+    end 
+    return false
+end
 return utility
 
