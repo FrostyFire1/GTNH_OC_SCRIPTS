@@ -1119,7 +1119,7 @@ function cycleIsDone(sideConfig)
     for i=3,10 do
         local item = transposer.getStackInSlot(sideConfig.breeder, i)
         if item ~= nil then
-            local _,type = getItemName(item)
+            local _,type = utility.getItemName(item)
             if type == "Princess" then
                 return true
             end
