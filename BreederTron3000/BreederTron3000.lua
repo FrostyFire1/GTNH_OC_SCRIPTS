@@ -145,7 +145,7 @@ if programMode:lower() == "breed" then
                         end
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
-                    if flags["completionist"] then
+                    if flags["completionist"] == true then
                         print("Your " .. beeName .. " bee is ready! Complete your quest, put the bee back then type ok to proceed!")
                             local ans = io.read()
                             while type(ans) ~= "string" or ans ~= "ok" do
