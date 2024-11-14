@@ -365,6 +365,8 @@ function utility.breed(beeName, breedData, sideConfig, robotMode)
                 ans = io.read()
             end
             if ans == "skip" then
+                print("Updating the bee list...")
+                utility.listBeesInStorage(sideConfig)
                 goto skip
             end
         end
