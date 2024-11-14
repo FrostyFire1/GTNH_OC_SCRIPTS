@@ -48,7 +48,7 @@ If the bee name has spaces in it type the whole name without spaces. Example:
 Breed mode supports the following flags:  
 `--noFinalImprint` - If used the target bee won't have its genes replaced with the template genes (in case you want a gene this bee provides). To run breedertron with this flag simply add it at the end of the command.  
 `--onlyFinalImprint` - Direct opposite of `--noFinalImprint`. Only imprints the target bee. If used in combination with `--noFinalImprint` none of the bees will be imprinted (unsure why you would want to do that).  
-`--completionist` - Stops the program after every successful breed to allow you to complete the relevant quests. Put the bee back in the storage chest after completing it then type ok to proceed.
+`--completionist` - Stops the program after every successful breed to allow you to complete the relevant quests. Put the bee back in the storage chest after completing it then type ok to proceed.  
 Imprint mode simply imprints template genes onto every bee in the storage chest unless you provide the TargetBee argument, in which case it will only imprint that specific bee. To run the program in imprint mode run:  
 `BreederTron3000 imprint`  
 Convert mode converts the first princess it finds in the storage chest to the target species. Optionally supports convertCount as an argument to specify how many princesses to make. To run:  
