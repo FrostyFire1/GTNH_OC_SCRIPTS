@@ -145,7 +145,14 @@ if programMode:lower() == "breed" then
                         end
                     end
                     util.breed(beeName, breedData, sideConfig, robotMode)
-                    
+                    if flags["completionist"] then
+                        print("Your " .. beeName .. " bee is ready! Complete your quest, put the bee back then type ok to proceed!")
+                            local ans = io.read()
+                            while type(ans) ~= "string" or ans ~= "ok" do
+                                print("Your " .. beeName .. " bee is ready! Complete your quest, put the bee back then type ok to proceed!")
+                                ans = io.read()
+                            end
+                    end
                     if hasTemplates and (not (beeName == targetBee and flags["noFinalImprint"] == true) and not (beeName ~= targetBee and flags["onlyFinalImprint"] == true)) then
                         while (transposer.getStackInSlot(sideConfig.storage, storageSize) == nil) do
                             print("YOU RAN OUT OF TEMPLATE DRONES! PLEASE PROVIDE MORE!")
