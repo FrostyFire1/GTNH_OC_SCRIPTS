@@ -1118,7 +1118,7 @@ function indexInTable(tbl, target)
 end
 
 function cycleIsDone(sideConfig)
-    for i=3,10 do
+    for i=3,9 do
         local item = transposer.getStackInSlot(sideConfig.breeder, i)
         if item ~= nil then
             local _,type = utility.getItemName(item)
