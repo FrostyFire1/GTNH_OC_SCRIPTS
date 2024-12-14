@@ -1,4 +1,5 @@
 # Collection of scripts of random usefulness.  
+## For contact you can reach me on discord -> FrostyFire1
 ## BreederTron3000
 The breeder of all breeders. Breeds from whatever you have in your bee chest up to the specified bee. Gene imprinting included but optional.
 Requirements:
