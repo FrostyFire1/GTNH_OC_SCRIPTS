@@ -49,6 +49,7 @@ If the bee name has spaces in it type the whole name without spaces. Example:
 - Ender Shard -> Endshard
 - Thaumic Shard -> Thaumiumshard
 - Unstable (The one that makes divided combs for unstable nuggets) -> Divided
+- Dragon Blood -> "Dragon Blood" (yes the internal name has a space in it don't ask me why)
 
 Breed mode supports the following flags:  
 `--noFinalImprint` - If used the target bee won't have its genes replaced with the template genes (in case you want a gene this bee provides). To run breedertron with this flag simply add it at the end of the command.  
